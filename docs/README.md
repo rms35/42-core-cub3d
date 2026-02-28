@@ -32,5 +32,8 @@ The engine shoots rays from the player's position across the FOV. For each ray, 
 - [Wikipedia Raycasting](https://es.wikipedia.org/wiki/Ray_casting)
 - [Wikipedia Digital Diferential Analyzer](https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm))
 - [Rotation Matrix](https://es.wikipedia.org/wiki/Matriz_de_rotaci%C3%B3n)
+- [javidx9 Youtube DDA & Raycasting](https://youtu.be/NbSee-XM7WA?si=Yj74O55iTt4D1CEB)
+- [javidx9 YouTube Math for Game Developing](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
+
 ### AI Usage
 *Describe here how AI was used, specifying for which tasks and which parts of the project.*
