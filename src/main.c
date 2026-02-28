@@ -43,58 +43,69 @@ int	destroy_notify(const int keysym, void *data)
 	return (close_win(win, keysym));
 }
 
-// int	put_wall(char *wall, const int height, const int length)
-// {
-// 	int	i;
-// 	int	j;
-//
-// 	i = 0;
-// 	while (i < length)
-// 	{
-// 		j = 0;
-// 		while (j < height)
-// 		{
-// 			wall[i + j] = 0xFF;
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
-
 void	init_data(t_win *win)
 {
 	win->mlxptr = NULL;
 	win->winptr = NULL;
-	// win->img = NULL;
-	// win->addr = NULL;
 }
 
-void	my_mlx_pixel_put(const t_wall *wall, const int x, const int y, const int color)
+void	my_mlx_pixel_put(const t_img *img, const int x, const int y, const int
+	color)
 {
 	char	*dst;
 
-	dst = wall->addr + (y * wall->line_len + x * (wall->bpp / 8));
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
 	*(unsigned int*)dst = color;
 }
 
-// void set_wall(const t_wall *wall, const int margin)
-// {
-// 	int	x;
-// 	int	y;
-//
-// 	x = 0;
-// 	while (x < wall->width - (margin * 2))
-// 	{
-// 		y = 0;
-// 		while (y < wall->heigth - (margin * 2))
-// 		{
-// 			my_mlx_pixel_put(wall, x + margin, y + margin, 0x00FF0000);
-// 			y++;
-// 			// printf("%d, %d\n", x, y);
-// 		}
-// 		x++;
-// 	}
-// }
+void	set_cell(const t_img *img, const int x, const int y, const int color)
+{
+	int	i;
+	int	j;
+
+	printf("x2 = %d; y2 = %d\n", x, y);
+	i = 0;
+	while (i < FACTOR)
+	{
+		j = 0;
+		while (j < FACTOR)
+		{
+			my_mlx_pixel_put(img, x + i, y + j, color);
+			j++;
+		}
+		i ++;
+	}
+}
+
+void	twod_map(const t_map *map, const t_img *img)
+{
+		int	x;
+		int	y;
+		int	total;
+
+		total = map->width * map ->height;
+		x = 0;
+		while (x < total)
+		{
+			y = 0;
+			while (y < map->height)
+			{
+				printf("x = %d; y = %d;x + y = %d; char = %c\n",x, y, x + y,
+					map->grid[x + y]);
+				if (map->grid[x + y] == '1')
+					set_cell(img, (x / map->width) * FACTOR, y * FACTOR,
+						0x000000FF);
+				if (map->grid[x + y] == 'N')
+					set_cell(img, (x / map->width) * FACTOR, y * FACTOR, 0x00FF0000);
+				if (map->grid[x + y] == '0')
+					set_cell(img, (x / map->width) * FACTOR, y * FACTOR, 0x00F00FF00);
+				y++;
+			}
+			printf("\n");
+			x += map->width;
+		}
+}
+
 void init_player(t_player *p)
 {
 	p->pos_x = 2.0;
@@ -105,36 +116,54 @@ void init_player(t_player *p)
 	p->camp_x = 0.0;
 	p->camp_y = p->camp_mod;
 }
-int	main(const int argc, char **argv)
+
+// void	check_map(const t_map *map)
+// {
+// 	int	i;
+// 	int	total;
+//
+// 	total = map->height * map->width;
+// 	i = 0;
+// 	while (i < total)
+// 	{
+// 		printf("|%d = %c| ", i, map->grid[i]);
+// 		if (i != 0 && (i + 1) % map->width == 0)
+// 			printf("\n");
+// 		i++;
+// 	}
+// 	write(1, "\n", 1);
+// }
+
+int	main(void)
 {
 	t_win	win;
-	t_wall	wall;
+	t_img	img;
+	t_map	*map;
 
-	if (argc != 3)
-		return (write(2, "Error: width and length required\n", 34), 1);
 	init_data(&win);
+	map = get_mock_map();
+	// check_map(map);
 	win.mlxptr = mlx_init();
 	if (!win.mlxptr)
 		return (1);
-	wall.line_len = 0;
-
-	win.winptr = mlx_new_window(win.mlxptr, wall.width, wall.heigth, "cub3d");
+	img.line_len = 0;
+	img.bpp = 4;
+	win.winptr = mlx_new_window(win.mlxptr, WIDTH, HEIGHT, "cub3d");
 	if (!win.winptr)
 	{
 		free(win.mlxptr);
 		return (1);
 	}
-	wall.total = wall.heigth * wall.width;
-	wall.bpp = 4;
 	mlx_hook(win.winptr, KeyPress, KeyPressMask, escape, &win);
 	mlx_hook(win.winptr, DestroyNotify, 0, close_win, &win);
-	wall.img = mlx_new_image(win.mlxptr, wall.width, wall.heigth);
-	if (!wall.img)
+	img.img = mlx_new_image(win.mlxptr, WIDTH, HEIGHT);
+	if (!img.img)
 		return (write(2, "!Error img\n", 11), close_win(&win, EXIT_FAILURE), 1);
-	wall.addr = mlx_get_data_addr(wall.img, &wall.bpp, &wall.line_len, &wall.endian);
-	if (!wall.addr)
-		return (write(2, "Error addr\n", 12), free(wall.img), close_win(&win, EXIT_FAILURE), 1);
-	mlx_put_image_to_window(win.mlxptr, win.winptr, wall.img, 0, 0);
+	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	if (!img.addr)
+		return (write(2, "Error addr\n", 12), free(img.img), close_win(&win, EXIT_FAILURE), 1);
+	twod_map(map, &img);
+	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);
 	mlx_loop(win.mlxptr);
 	close_win(&win, EXIT_FAILURE);
 	return (0);

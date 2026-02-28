@@ -20,6 +20,9 @@
 # include <math.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
+# define WIDTH 600
+# define HEIGHT 600
+# define FACTOR 100
 
 typedef struct s_map
 {
