@@ -49,6 +49,7 @@ Common types:
 - [javidx9 Youtube Super Fast Ray Casting in Tiled Worlds using DDA](https://youtu.be/NbSee-XM7WA?si=Yj74O55iTt4D1CEB)
 - [javidx9 YouTube Essential Mathematics For Aspiring Game Developers](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
 - [ferxchot YouTube Cómo hacer un raycaster](https://www.youtube.com/watch?v=IzimG4VuW0Q)
+- [Itchio texures and sprites](https://itch.io/game-assets/free/tag-sprites)
 
 ### AI Usage
 Used to investigate about algorithms, create good commit messages folloeing the convention.
