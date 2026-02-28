@@ -22,25 +22,40 @@ int	close_win(const t_win *win, const int keysym)
 		mlx_destroy_display(win->mlxptr);
 		free(win->mlxptr);
 	}
+	if (win->map)
+	{
+		free(win->map->grid);
+		free(win->map->no_path);
+		free(win->map->so_path);
+		free(win->map->we_path);
+		free(win->map->ea_path);
+		free(win->map);
+	}
 	exit(keysym);
 }
 
-int	escape(const int keysym, void *data)
+int handle_keypress(const int keysym, void *data)
 {
-	t_win	*win;
+	const t_win *win = (t_win *)data;
+	int	render;
 
-	win = (t_win *)data;
+	render = 0;
 	if (keysym == XK_Escape)
 		close_win(win, EXIT_SUCCESS);
+	if (keysym == XK_w)
+		render = move_up(win->map);
+	if (keysym == XK_a)
+		render = move_left(win->map);
+	if (keysym == XK_s)
+		render = move_down(win->map);
+	if (keysym == XK_d)
+		render = move_right(win->map);
+	if (render)
+	{
+		twod_map(win->map, win->img);
+		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
+	}
 	return (0);
-}
-
-int	destroy_notify(const int keysym, void *data)
-{
-	t_win	*win;
-
-	win = (t_win *)data;
-	return (close_win(win, keysym));
 }
 
 void	init_data(t_win *win)
@@ -63,7 +78,7 @@ void	set_cell(const t_img *img, const int x, const int y, const int color)
 	int	i;
 	int	j;
 
-	printf("x2 = %d; y2 = %d\n", x, y);
+	// printf("x2 = %d; y2 = %d\n", x, y);
 	i = 0;
 	while (i < FACTOR)
 	{
@@ -90,18 +105,18 @@ void	twod_map(const t_map *map, const t_img *img)
 			y = 0;
 			while (y < map->height)
 			{
-				printf("x = %d; y = %d;x + y = %d; char = %c\n",x, y, x + y,
-					map->grid[x + y]);
+				// printf("x = %d; y = %d;x + y = %d; char = %c\n",x, y, x + y,
+					// map->grid[x + y]);
 				if (map->grid[x + y] == '1')
-					set_cell(img, (x / map->width) * FACTOR, y * FACTOR,
+					set_cell(img,y * FACTOR, (x / map->width) * FACTOR,
 						0x000000FF);
 				if (map->grid[x + y] == 'N')
-					set_cell(img, (x / map->width) * FACTOR, y * FACTOR, 0x00FF0000);
+					set_cell(img, y * FACTOR, (x / map->width) * FACTOR, 0x00FF0000);
 				if (map->grid[x + y] == '0')
-					set_cell(img, (x / map->width) * FACTOR, y * FACTOR, 0x00F00FF00);
+					set_cell(img, y * FACTOR, (x / map->width) * FACTOR, 0x00F00FF00);
 				y++;
 			}
-			printf("\n");
+			// printf("\n");
 			x += map->width;
 		}
 }
@@ -117,22 +132,22 @@ void init_player(t_player *p)
 	p->camp_y = p->camp_mod;
 }
 
-// void	check_map(const t_map *map)
-// {
-// 	int	i;
-// 	int	total;
-//
-// 	total = map->height * map->width;
-// 	i = 0;
-// 	while (i < total)
-// 	{
-// 		printf("|%d = %c| ", i, map->grid[i]);
-// 		if (i != 0 && (i + 1) % map->width == 0)
-// 			printf("\n");
-// 		i++;
-// 	}
-// 	write(1, "\n", 1);
-// }
+void	check_map(const t_map *map)
+{
+	int	i;
+	int	total;
+
+	total = map->height * map->width;
+	i = 0;
+	while (i < total)
+	{
+		printf("%c ", map->grid[i]);
+		if (i != 0 && (i + 1) % map->width == 0)
+			printf("\n");
+		i++;
+	}
+	write(1, "\n", 1);
+}
 
 int	main(void)
 {
@@ -142,7 +157,9 @@ int	main(void)
 
 	init_data(&win);
 	map = get_mock_map();
-	// check_map(map);
+	win.map = map;
+	win.img = &img;
+	check_map(map);
 	win.mlxptr = mlx_init();
 	if (!win.mlxptr)
 		return (1);
@@ -154,7 +171,7 @@ int	main(void)
 		free(win.mlxptr);
 		return (1);
 	}
-	mlx_hook(win.winptr, KeyPress, KeyPressMask, escape, &win);
+	mlx_hook(win.winptr, KeyPress, KeyPressMask, handle_keypress, &win);
 	mlx_hook(win.winptr, DestroyNotify, 0, close_win, &win);
 	img.img = mlx_new_image(win.mlxptr, WIDTH, HEIGHT);
 	if (!img.img)

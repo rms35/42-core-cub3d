@@ -32,7 +32,7 @@ MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
-SRCS_FILES  = main.c map_mock.c dda.c
+SRCS_FILES  = main.c map_mock.c dda.c move_player.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
