@@ -12,7 +12,7 @@
 
 NAME        = build/cub3D
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -g3
+CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3
 RM          = rm -rf
 
 # Directories
@@ -32,7 +32,7 @@ MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
-SRCS_FILES  = main.c
+SRCS_FILES  = main.c map_mock.c dda.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -48,18 +48,19 @@ MAGENTA     = \033[0;95m
 CYAN        = \033[0;96m
 WHITE       = \033[0;97m
 
+# Rules
 all: $(LIBFT) $(MLX) $(NAME)
 
 $(NAME): $(OBJS)
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
-	@echo "$(GREEN)cub3D compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
+	@echo -e "$(GREEN)cub3D compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	@make -s -C $(LIBFT_DIR)
 
 $(MLX):
-	@make -C $(MLX_DIR)
+	@make -s -C $(MLX_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
@@ -67,17 +68,26 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 	@$(RM) $(OBJ_DIR)
-	@make -C $(LIBFT_DIR) clean
-	@make -C $(MLX_DIR) clean
-	@echo "$(BLUE)cub3D objects cleaned!$(DEF_COLOR)"
+	@make -s -C $(LIBFT_DIR) clean
+	@make -s -C $(MLX_DIR) clean
+	@echo -e "$(BLUE)cub3D objects cleaned!$(DEF_COLOR)"
 
 fclean: clean
 	@$(RM) $(BUILD_DIR)
-	@make -C $(LIBFT_DIR) fclean
-	@echo "$(CYAN)cub3D build directory cleaned!$(DEF_COLOR)"
+	@make -s -C $(LIBFT_DIR) fclean
+	@echo -e "$(CYAN)cub3D build directory cleaned!$(DEF_COLOR)"
 
 re: fclean all
 
+# Debugging builds
+debug: CFLAGS += -fsanitize=address,leak -O0
+debug: re
+	@echo -e "$(YELLOW)Address Sanitizer enabled!$(DEF_COLOR)"
+
+thread: CFLAGS += -fsanitize=thread -O0
+thread: re
+	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
+
 bonus: all
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re bonus debug thread
