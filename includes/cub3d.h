@@ -35,7 +35,6 @@ typedef struct s_map
 	char	*ea_path;
 	int		floor_color;
 	int		ceil_color;
-	int		player_pos;
 }	t_map;
 
 typedef struct s_img
@@ -47,14 +46,6 @@ typedef struct s_img
 	int		endian;
 }	t_img;
 
-typedef struct s_win
-{
-	void    *winptr;
-	void    *mlxptr;
-	t_img	*img;
-	t_map	*map;
-}	t_win;
-
 typedef struct s_player
 {
 	double	pos_x;
@@ -64,7 +55,18 @@ typedef struct s_player
 	double	camp_x;
 	double	camp_y;
 	double	camp_mod;
+	double	speed;
+	int		grid_pos;
 }	t_player;
+
+typedef struct s_win
+{
+	void		*winptr;
+	void	    *mlxptr;
+	t_img		*img;
+	t_map		*map;
+	t_player	*player;
+}	t_win;
 
 typedef struct s_ray
 {
@@ -72,27 +74,16 @@ typedef struct s_ray
 	double	y;
 }	t_ray;
 
-
-typedef struct s_wall
-{
-	void    *img;
-	char    *addr;
-	int		line_len;
-	int		total;
-	int		bpp;
-	int		endian;
-}	t_wall;
-
 // Mapping
 
 t_map	*get_mock_map(void);
 
 // Player movement
 
-int	move_up(t_map *map);
-int	move_down(t_map *map);
-int	move_left(t_map *map);
-int	move_right(t_map *map);
+int		move_up(char *grid, int width, t_player *player);
+int		move_down(char *grid, int width, t_player *player);
+int		move_left(char *grid, int width, t_player *player);
+int		move_right(char *grid, int width, t_player *player);
 
 // Rendering
 void	twod_map(const t_map *map, const t_img *img);

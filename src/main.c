@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/02/13 12:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/02/28 21:22:14 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,93 +43,25 @@ int handle_keypress(const int keysym, void *data)
 	if (keysym == XK_Escape)
 		close_win(win, EXIT_SUCCESS);
 	if (keysym == XK_w)
-		render = move_up(win->map);
+		render = move_up(win->map->grid, win->map->width, win->player);
 	if (keysym == XK_a)
-		render = move_left(win->map);
+		render = move_left(win->map->grid, win->map->width, win->player);
 	if (keysym == XK_s)
-		render = move_down(win->map);
+		render = move_down(win->map->grid, win->map->width, win->player);
 	if (keysym == XK_d)
-		render = move_right(win->map);
+		render = move_right(win->map->grid, win->map->width, win->player);
 	if (render)
 	{
 		twod_map(win->map, win->img);
 		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
 	}
+	check_map(win->map);
 	return (0);
 }
 
 void	init_data(t_win *win)
 {
-	win->mlxptr = NULL;
-	win->winptr = NULL;
-}
-
-void	my_mlx_pixel_put(const t_img *img, const int x, const int y, const int
-	color)
-{
-	char	*dst;
-
-	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(unsigned int*)dst = color;
-}
-
-void	set_cell(const t_img *img, const int x, const int y, const int color)
-{
-	int	i;
-	int	j;
-
-	// printf("x2 = %d; y2 = %d\n", x, y);
-	i = 0;
-	while (i < FACTOR)
-	{
-		j = 0;
-		while (j < FACTOR)
-		{
-			my_mlx_pixel_put(img, x + i, y + j, color);
-			j++;
-		}
-		i ++;
-	}
-}
-
-void	twod_map(const t_map *map, const t_img *img)
-{
-		int	x;
-		int	y;
-		int	total;
-
-		total = map->width * map ->height;
-		x = 0;
-		while (x < total)
-		{
-			y = 0;
-			while (y < map->height)
-			{
-				// printf("x = %d; y = %d;x + y = %d; char = %c\n",x, y, x + y,
-					// map->grid[x + y]);
-				if (map->grid[x + y] == '1')
-					set_cell(img,y * FACTOR, (x / map->width) * FACTOR,
-						0x000000FF);
-				if (map->grid[x + y] == 'N')
-					set_cell(img, y * FACTOR, (x / map->width) * FACTOR, 0x00FF0000);
-				if (map->grid[x + y] == '0')
-					set_cell(img, y * FACTOR, (x / map->width) * FACTOR, 0x00F00FF00);
-				y++;
-			}
-			// printf("\n");
-			x += map->width;
-		}
-}
-
-void init_player(t_player *p)
-{
-	p->pos_x = 2.0;
-	p->pos_y = 1.0;
-	p->dir_x = 0.0;
-	p->dir_y = 1.0;
-	p->camp_mod = 0.66;
-	p->camp_x = 0.0;
-	p->camp_y = p->camp_mod;
+	ft_memset(win, 0, sizeof(t_win));
 }
 
 void	check_map(const t_map *map)
@@ -149,16 +81,37 @@ void	check_map(const t_map *map)
 	write(1, "\n", 1);
 }
 
+void	init_player(t_player *player, const char *grid, const int width, const int total)
+{
+	int	i;
+
+	i = 0;
+	while (i < total && (grid[i] == '1' || grid[i] == '0'))
+		i++;
+	player->grid_pos = i;
+	player->pos_x = (double)(i % width) + 0.5;
+	player->pos_y = (double)(i / width) + 0.5;
+	player->dir_x = 0.0;
+	player->dir_y = 1.0;
+	player->camp_mod = 0.66;
+	player->camp_x = 0.0;
+	player->camp_y = player->camp_mod;
+	player->speed = 0.25;
+}
+
 int	main(void)
 {
-	t_win	win;
-	t_img	img;
-	t_map	*map;
+	t_win		win;
+	t_img		img;
+	t_map		*map;
+	t_player	player;
 
-	init_data(&win);
+	ft_memset(&win, 0, sizeof(t_win));
 	map = get_mock_map();
 	win.map = map;
 	win.img = &img;
+	win.player = &player;
+	init_player(&player, map->grid, map->width, map->width * map->height);
 	check_map(map);
 	win.mlxptr = mlx_init();
 	if (!win.mlxptr)

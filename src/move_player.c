@@ -1,66 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_player.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
+/*   Updated: 2026/03/01 12:00:00 by rafael-m         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
-int	move_up(t_map *map)
+int	move_up(char *grid, const int width, t_player *player)
 {
-	int	new_pos;
+	double	nx;
+	double	ny;
 
-	new_pos = map->player_pos - map->width;
-	// printf("new_pos = %d\n", new_pos);
-	if (new_pos > 0 && map->grid[new_pos] != '1')
-	{
-		map->grid[map->player_pos] = '0';
-		map->grid[new_pos] = 'N';
-		map->player_pos = new_pos;
-		return (1);
-	}
-	check_map(map);
-	return (0);
+	nx = player->pos_x - player->dir_x * player->speed;
+	ny = player->pos_y - player->dir_y * player->speed;
+	if (grid[(int)player->pos_y * width + (int)nx] != '1')
+		player->pos_x = nx;
+	if (grid[(int)ny * width + (int)player->pos_x] != '1')
+		player->pos_y = ny;
+	grid[player->grid_pos] = '0';
+	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
+	grid[player->grid_pos] = 'P';
+	return (1);
 }
 
-int	move_down(t_map *map)
+int	move_down(char *grid, const int width, t_player *player)
 {
-	int	new_pos;
+	double	nx;
+	double	ny;
 
-	new_pos = map->player_pos + map->width;
-	if (map->grid[new_pos] != '1')
-	{
-		map->grid[map->player_pos] = '0';
-		map->grid[new_pos] = 'N';
-		map->player_pos = new_pos;
-		return (1);
-	}
-	check_map(map);
-	return (0);
+	nx = player->pos_x + player->dir_x * player->speed;
+	ny = player->pos_y + player->dir_y * player->speed;
+	if (grid[(int)player->pos_y * width + (int)nx] != '1')
+		player->pos_x = nx;
+	if (grid[(int)ny * width + (int)player->pos_x] != '1')
+		player->pos_y = ny;
+	grid[player->grid_pos] = '0';
+	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
+	grid[player->grid_pos] = 'P';
+	return (1);
 }
 
-int	move_left(t_map *map)
+int	move_left(char *grid, const int width, t_player *player)
 {
-	int	new_pos;
+	double	nx;
+	double	ny;
 
-	new_pos = map->player_pos - 1;
-	if (map->grid[new_pos] != '1')
-	{
-		map->grid[map->player_pos] = '0';
-		map->grid[new_pos] = 'N';
-		map->player_pos = new_pos;
-		return (1);
-	}
-	check_map(map);
-	return (0);
+	nx = player->pos_x - player->dir_y * player->speed;
+	ny = player->pos_y + player->dir_x * player->speed;
+	if (grid[(int)player->pos_y * width + (int)nx] != '1')
+		player->pos_x = nx;
+	if (grid[(int)ny * width + (int)player->pos_x] != '1')
+		player->pos_y = ny;
+	grid[player->grid_pos] = '0';
+	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
+	grid[player->grid_pos] = 'P';
+	return (1);
 }
 
-int	move_right(t_map *map)
+int	move_right(char *grid, const int width, t_player *player)
 {
-	int	new_pos;
+	double	nx;
+	double	ny;
 
-	new_pos = map->player_pos + 1;
-	if (map->grid[new_pos] != '1')
-	{
-		map->grid[map->player_pos] = '0';
-		map->grid[new_pos] = 'N';
-		map->player_pos = new_pos;
-		return (1);
-	}
-	check_map(map);
-	return (0);
+	nx = player->pos_x + player->dir_y * player->speed;
+	ny = player->pos_y - player->dir_x * player->speed;
+	if (grid[(int)player->pos_y * width + (int)nx] != '1')
+		player->pos_x = nx;
+	if (grid[(int)ny * width + (int)player->pos_x] != '1')
+		player->pos_y = ny;
+	grid[player->grid_pos] = '0';
+	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
+	grid[player->grid_pos] = 'P';
+	return (1);
 }

@@ -33,6 +33,5 @@ t_map	*get_mock_map(void)
 	map->ea_path = ft_strdup("./textures/east.xpm");
 	map->floor_color = 0x4B4B4B;
 	map->ceil_color = 0x87CEEB;
-	map->player_pos = 26;
 	return (map);
 }
