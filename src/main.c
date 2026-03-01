@@ -50,6 +50,10 @@ int handle_keypress(const int keysym, void *data)
 		render = move_down(win->map->grid, win->map->width, win->player);
 	if (keysym == XK_d)
 		render = move_right(win->map->grid, win->map->width, win->player);
+	if (keysym == XK_Left)
+		render = rotate_left(win->player);
+	if (keysym == XK_Right)
+		render = rotate_right(win->player);
 	if (render)
 	{
 		twod_map(win->map, win->img);
@@ -97,6 +101,11 @@ void	init_player(t_player *player, const char *grid, const int width, const int 
 	player->camp_x = 0.0;
 	player->camp_y = player->camp_mod;
 	player->speed = 0.25;
+	player->turn_speed = 0.05;
+	player->cos_r = cos(player->turn_speed);
+	player->sin_r = sin(player->turn_speed);
+	player->cos_l = cos(-player->turn_speed);
+	player->sin_l = sin(-player->turn_speed);
 }
 
 int	main(void)

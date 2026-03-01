@@ -56,7 +56,12 @@ typedef struct s_player
 	double	camp_y;
 	double	camp_mod;
 	double	speed;
+	double	turn_speed;
 	int		grid_pos;
+	double    cos_l;
+	double    sin_l;
+	double    cos_r;
+	double    sin_r;
 }	t_player;
 
 typedef struct s_win
@@ -84,6 +89,8 @@ int		move_up(char *grid, int width, t_player *player);
 int		move_down(char *grid, int width, t_player *player);
 int		move_left(char *grid, int width, t_player *player);
 int		move_right(char *grid, int width, t_player *player);
+int		rotate_left(t_player *player);
+int		rotate_right(t_player *player);
 
 // Rendering
 void	twod_map(const t_map *map, const t_img *img);
