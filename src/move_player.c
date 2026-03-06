@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/01 14:15:00 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/06 18:55:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,12 @@ int	move_right(char *grid, const int width, t_player *player)
 		player->pos_y = ny;
 	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
 	return (1);
+}
+
+int	move_player(t_win *win, double dx, double dy)
+{
+	(void)win;
+	(void)dx;
+	(void)dy;
+	return (0);
 }

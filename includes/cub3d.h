@@ -109,6 +109,7 @@ int				move_up(char *grid, int width, t_player *player);
 int				move_down(char *grid, int width, t_player *player);
 int				move_left(char *grid, int width, t_player *player);
 int				move_right(char *grid, int width, t_player *player);
+int				move_player(t_win *win, double dx, double dy);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
