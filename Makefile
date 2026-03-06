@@ -33,7 +33,7 @@ INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
 SRCS_FILES  = main.c map_mock.c render.c move_player.c player_dir.c \
-              init.c input.c hooks.c utils.c
+              init.c input.c hooks.c utils.c ray.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

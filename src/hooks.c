@@ -12,10 +12,24 @@
 
 #include "../includes/cub3d.h"
 
+static void	free_tex(const t_win *win)
+{
+	int	i;
+
+	i = 0;
+	while (i < 5)
+	{
+		if (win->tex[i].img)
+			mlx_destroy_image(win->mlxptr, win->tex[i].img);
+		i++;
+	}
+}
+
 int	close_win(const t_win *win, const int keysym)
 {
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
+	free_tex(win);
 	if (win->mlxptr)
 	{
 		mlx_destroy_display(win->mlxptr);
@@ -33,17 +47,11 @@ int	close_win(const t_win *win, const int keysym)
 	exit(keysym);
 }
 
-int	game_loop(const t_win *win)
+int	game_loop(t_win *win)
 {
 	int		render;
-	double	old_speed;
 
-	render = 0;
-	old_speed = win->player->speed;
-	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
-		win->player->speed *= 2.5;
 	render = handle_input(win);
-	win->player->speed = old_speed;
 	if (render)
 	{
 		render_frame(win);

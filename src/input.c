@@ -28,11 +28,15 @@ int	key_release(const int keysym, t_win *win)
 	return (0);
 }
 
-int	handle_input(const t_win *win)
+int	handle_input(t_win *win)
 {
-	int	r;
+	int		r;
+	double	old_speed;
 
 	r = 0;
+	old_speed = win->player->speed;
+	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
+		win->player->speed *= 2.5;
 	if (win->keys[XK_w])
 		r |= move_up(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_s])
@@ -45,5 +49,6 @@ int	handle_input(const t_win *win)
 		r |= rotate_left(win->player);
 	if (win->keys[XK_Right])
 		r |= rotate_right(win->player);
+	win->player->speed = old_speed;
 	return (r);
 }
