@@ -6,28 +6,11 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
-
-void	check_map(const t_map *map)
-{
-	int	i;
-	int	total;
-
-	total = map->height * map->width;
-	i = 0;
-	while (i < total)
-	{
-		printf("%c ", map->grid[i]);
-		if (i != 0 && (i + 1) % map->width == 0)
-			printf("\n");
-		i++;
-	}
-	write(1, "\n", 1);
-}
 
 void	init_player(t_player *p, char *grid, int width, int total)
 {
@@ -53,18 +36,27 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->sin_l = sin(-p->turn_speed);
 }
 
-int	key_press(const int keysym, t_win *win)
+void	setup_mlx(t_win *win, t_img *img)
 {
-	if (keysym == XK_Escape)
-		close_win(win, EXIT_SUCCESS);
-	if (keysym < 65536)
-		win->keys[keysym] = 1;
-	return (0);
-}
-
-int	key_release(const int keysym, t_win *win)
-{
-	if (keysym < 65536)
-		win->keys[keysym] = 0;
-	return (0);
+	win->mlxptr = mlx_init();
+	if (!win->mlxptr)
+		exit(1);
+	img->line_len = 0;
+	img->bpp = 4;
+	win->winptr = mlx_new_window(win->mlxptr, WIDTH, HEIGHT, "cub3d");
+	if (!win->winptr)
+	{
+		free(win->mlxptr);
+		exit(1);
+	}
+	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
+	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
+	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
+	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
+	if (!img->img)
+		close_win(win, EXIT_FAILURE);
+	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
+			&img->endian);
+	if (!img->addr)
+		close_win(win, EXIT_FAILURE);
 }

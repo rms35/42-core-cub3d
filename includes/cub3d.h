@@ -99,6 +99,7 @@ typedef struct s_win
 t_map	*get_mock_map(void);
 void	check_map(const t_map *map);
 void	init_player(t_player *p, char *grid, int width, int total);
+void	setup_mlx(t_win *win, t_img *img);
 int		close_win(const t_win *win, const int keysym);
 
 // Player movement
@@ -114,6 +115,7 @@ int		rotate_right(t_player *player);
 void	render_frame(const t_win *win);
 int		key_press(int keysym, t_win *win);
 int		key_release(int keysym, t_win *win);
+int		handle_input(const t_win *win);
 int		game_loop(const t_win *win);
 
 #endif

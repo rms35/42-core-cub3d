@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
+/*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
 /*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	main(void)
+void	check_map(const t_map *map)
 {
-	t_win		win;
-	t_img		img;
-	t_player	player;
+	int	i;
+	int	total;
 
-	ft_memset(&win, 0, sizeof(t_win));
-	win.map = get_mock_map();
-	win.img = &img;
-	win.player = &player;
-	init_player(&player, win.map->grid, win.map->width,
-		win.map->width * win.map->height);
-	setup_mlx(&win, &img);
-	render_frame(&win);
-	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);
-	mlx_loop_hook(win.mlxptr, game_loop, &win);
-	mlx_loop(win.mlxptr);
-	return (0);
+	total = map->height * map->width;
+	i = 0;
+	while (i < total)
+	{
+		printf("%c ", map->grid[i]);
+		if (i != 0 && (i + 1) % map->width == 0)
+			printf("\n");
+		i++;
+	}
+	write(1, "\n", 1);
 }
