@@ -37,13 +37,13 @@ int	handle_input(t_win *win)
 	old_speed = win->player->speed;
 	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
 		win->player->speed *= 2.5;
-	if (win->keys[XK_w])
+	if (win->keys[XK_w] || win->keys[XK_W])
 		r |= move_up(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_s])
+	if (win->keys[XK_s] || win->keys[XK_S])
 		r |= move_down(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_a])
+	if (win->keys[XK_a] || win->keys[XK_A])
 		r |= move_left(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_d])
+	if (win->keys[XK_d] || win->keys[XK_D])
 		r |= move_right(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_Left])
 		r |= rotate_left(win->player);
