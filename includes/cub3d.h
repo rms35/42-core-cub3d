@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 19:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:15:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,8 @@ int				rotate_right(t_player *player);
 
 // Rendering
 void			render_frame(const t_win *win);
-void			render_floor(const t_win *win, const t_ray *ray, int x,
-					double p);
-void			render_ceil(const t_win *win, const t_ray *ray, int x,
-					double p);
+void			render_env(const t_win *win, const t_ray *ray, int x,
+					double p[2]);
 unsigned int	apply_fog(unsigned int color, double dist, double p);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
