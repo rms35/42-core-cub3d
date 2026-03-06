@@ -37,23 +37,43 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 	int		y;
 	double	d;
 	int		t[2];
-	char	*c_ptr;
-	char	*f_ptr;
 
-	y = 0;
-	c_ptr = win->img->addr + (x * 4);
-	f_ptr = win->img->addr + ((HEIGHT - 1) * win->img->line_len + x * 4);
-	while (y < ray->draw_start && (HEIGHT - 1 - y) > ray->draw_end)
+	y = -1;
+	while (++y < HEIGHT)
 	{
-		d = HEIGHT / (double)(HEIGHT - 2 * y);
+		if (y >= ray->draw_start && y <= ray->draw_end)
+			continue ;
+		d = (double)HEIGHT / fabs(HEIGHT - 2.0 * (y - win->player->pitch));
 		t[0] = (int)(64 * (win->player->pos_x + d * ray->dir_x)) & 63;
 		t[1] = (int)(64 * (win->player->pos_y + d * ray->dir_y)) & 63;
-		*(unsigned int *)c_ptr = apply_fog(*(unsigned int *)(win->tex[5].addr
-					+ (t[1] * win->tex[5].line_len + t[0] * 4)), d, p[1]);
-		*(unsigned int *)f_ptr = apply_fog(*(unsigned int *)(win->tex[4].addr
-					+ (t[1] * win->tex[4].line_len + t[0] * 4)), d, p[0]);
-		c_ptr += win->img->line_len;
-		f_ptr -= win->img->line_len;
-		y++;
+		if (y < ray->draw_start)
+			*(unsigned int *)(win->img->addr + (y * win->img->line_len + x * 4))
+				= apply_fog(*(unsigned int *)(win->tex[5].addr
+						+ (t[1] * win->tex[5].line_len + t[0] * 4)), d, p[1]);
+		else
+			*(unsigned int *)(win->img->addr + (y * win->img->line_len + x * 4))
+				= apply_fog(*(unsigned int *)(win->tex[4].addr
+						+ (t[1] * win->tex[4].line_len + t[0] * 4)), d, p[0]);
 	}
+}
+
+void	get_pulses(const t_win *win, double p[6])
+{
+	p[0] = 1.0 + 0.2 * sin(win->pulse_time + 1.0);
+	p[1] = 1.0 + 0.2 * sin(win->pulse_time + 3.0);
+	p[2] = 1.0 + 0.2 * sin(win->pulse_time + 5.0);
+	p[3] = 1.0 + 0.2 * sin(win->pulse_time + 4.0);
+	p[4] = 1.0 + 0.2 * sin(win->pulse_time + 0.0);
+	p[5] = 1.0 + 0.2 * sin(win->pulse_time + 2.0);
+}
+
+void	setup_ray_limits(const t_win *win, t_ray *ray)
+{
+	ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
+	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2 + win->player->pitch;
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = ray->line_height / 2 + HEIGHT / 2 + win->player->pitch;
+	if (ray->draw_end >= HEIGHT)
+		ray->draw_end = HEIGHT - 1;
 }

@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:45:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
 	p->sin_l = sin(-p->turn_speed);
+	p->pitch = 0;
 }
 
 static void	load_tex(t_win *win, t_img *tex, char *path)
@@ -73,6 +74,7 @@ void	setup_mlx(t_win *win, t_img *img)
 		(free(win->mlxptr), exit(1));
 	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
 	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
+	mlx_hook(win->winptr, MotionNotify, PointerMotionMask, mouse_move, win);
 	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
 	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!img->img)
@@ -83,5 +85,8 @@ void	setup_mlx(t_win *win, t_img *img)
 		close_win(win, EXIT_FAILURE);
 	win->shake = 0;
 	win->pulse_time = 0.0;
+	win->mouse_x = WIDTH / 2;
+	win->mouse_y = HEIGHT / 2;
 	load_all_tex(win);
+	mlx_mouse_hide(win->mlxptr, win->winptr);
 }

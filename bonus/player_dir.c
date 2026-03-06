@@ -6,43 +6,36 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:16:14 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:50:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	rotate_left(t_player *player)
+int	rotate_player(t_player *p, double angle)
 {
 	double	old_dir_x;
 	double	old_camp_x;
+	double	c;
+	double	s;
 
-	old_dir_x = player->dir_x;
-	player->dir_x = player->dir_x * player->cos_l - player->dir_y
-		* player->sin_l;
-	player->dir_y = old_dir_x * player->sin_l + player->dir_y * player->cos_l;
-	old_camp_x = player->camp_x;
-	player->camp_x = player->camp_x * player->cos_l - player->camp_y
-		* player->sin_l;
-	player->camp_y = old_camp_x * player->sin_l + player->camp_y
-		* player->cos_l;
+	c = cos(angle);
+	s = sin(angle);
+	old_dir_x = p->dir_x;
+	p->dir_x = p->dir_x * c - p->dir_y * s;
+	p->dir_y = old_dir_x * s + p->dir_y * c;
+	old_camp_x = p->camp_x;
+	p->camp_x = p->camp_x * c - p->camp_y * s;
+	p->camp_y = old_camp_x * s + p->camp_y * c;
 	return (1);
+}
+
+int	rotate_left(t_player *player)
+{
+	return (rotate_player(player, -player->turn_speed));
 }
 
 int	rotate_right(t_player *player)
 {
-	double	old_dir_x;
-	double	old_camp_x;
-
-	old_dir_x = player->dir_x;
-	player->dir_x = player->dir_x * player->cos_r - player->dir_y
-		* player->sin_r;
-	player->dir_y = old_dir_x * player->sin_r + player->dir_y
-		* player->cos_r;
-	old_camp_x = player->camp_x;
-	player->camp_x = player->camp_x * player->cos_r - player->camp_y
-		* player->sin_r;
-	player->camp_y = old_camp_x * player->sin_r + player->camp_y
-		* player->cos_r;
-	return (1);
+	return (rotate_player(player, player->turn_speed));
 }

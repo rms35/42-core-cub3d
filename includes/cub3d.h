@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 19:15:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:40:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_player
 	double	sin_l;
 	double	cos_r;
 	double	sin_r;
+	int		pitch;
 }	t_player;
 
 typedef struct s_ray
@@ -95,6 +96,8 @@ typedef struct s_win
 	int			keys[65536];
 	int			shake;
 	double		pulse_time;
+	int			mouse_x;
+	int			mouse_y;
 }	t_win;
 
 // Mapping
@@ -112,6 +115,7 @@ int				move_down(char *grid, int width, t_player *player);
 int				move_left(char *grid, int width, t_player *player);
 int				move_right(char *grid, int width, t_player *player);
 int				move_player(t_win *win, double dx, double dy);
+int				rotate_player(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
@@ -119,11 +123,15 @@ int				rotate_right(t_player *player);
 void			render_frame(const t_win *win);
 void			render_env(const t_win *win, const t_ray *ray, int x,
 					double p[2]);
+void			render_hud(const t_win *win);
 unsigned int	apply_fog(unsigned int color, double dist, double p);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
+void			get_pulses(const t_win *win, double p[6]);
+void			setup_ray_limits(const t_win *win, t_ray *ray);
 int				key_press(int keysym, t_win *win);
 int				key_release(int keysym, t_win *win);
+int				mouse_move(int x, int y, t_win *win);
 int				handle_input(t_win *win);
 int				game_loop(t_win *win);
 
