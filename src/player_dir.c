@@ -40,7 +40,7 @@ int	rotate_right(t_player *player)
 		player->cos_r;
 	old_camp_x = player->camp_x;
 	player->camp_x = player->camp_x * player->cos_r - player->camp_y *
-		player->sin_l;
+		player->sin_r;
 	player->camp_y = old_camp_x * player->sin_r + player->camp_y *
 		player->cos_r;
 	return (1);
