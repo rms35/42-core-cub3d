@@ -24,9 +24,9 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->pos_y = (double)(i / width) + 0.5;
 	grid[i] = '0';
 	p->dir_x = 0.0;
-	p->dir_y = 1.0;
+	p->dir_y = -1.0;
 	p->camp_mod = 0.66;
-	p->camp_x = -0.66;
+	p->camp_x = 0.66;
 	p->camp_y = 0.0;
 	p->speed = 0.01;
 	p->turn_speed = 0.01;
