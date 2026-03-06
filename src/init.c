@@ -55,6 +55,8 @@ void	init_player(t_player *p, char *grid, int width, int total)
 
 int	key_press(const int keysym, t_win *win)
 {
+	if (keysym == XK_Escape)
+		close_win(win, EXIT_SUCCESS);
 	if (keysym < 65536)
 		win->keys[keysym] = 1;
 	return (0);

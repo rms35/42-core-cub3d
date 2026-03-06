@@ -99,6 +99,7 @@ typedef struct s_win
 t_map	*get_mock_map(void);
 void	check_map(const t_map *map);
 void	init_player(t_player *p, char *grid, int width, int total);
+int		close_win(const t_win *win, const int keysym);
 
 // Player movement
 
