@@ -1,22 +1,24 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: rafael <rafael@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/13 12:00:00 by rafael            #+#    #+#              #
-#    Updated: 2026/02/13 12:00:00 by rafael           ###   ########.fr        #
+#    Updated: 2026/03/06 17:55:00 by rafael           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME        = build/cub3D
+NAME_BONUS  = build/cub3D_bonus
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3
 RM          = rm -rf
 
 # Directories
 SRC_DIR     = src
+SRC_B_DIR   = bonus
 INC_DIR     = includes
 OBJ_DIR     = obj
 BUILD_DIR   = build
@@ -36,7 +38,10 @@ SRCS_FILES  = main.c map_mock.c render.c move_player.c player_dir.c \
               init.c input.c hooks.c utils.c ray.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
-OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
+
+SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_FILES))
+OBJS_B      = $(SRCS_B:$(SRC_B_DIR)/%.c=$(OBJ_DIR)/bonus/%.o)
 
 # Colors
 DEF_COLOR   = \033[0;39m
@@ -57,14 +62,23 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@echo -e "$(GREEN)cub3D compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
+$(NAME_BONUS): $(OBJS_B)
+	@mkdir -p $(BUILD_DIR)
+	@$(CC) $(CFLAGS) $(OBJS_B) $(LIBFT) $(MLX_FLAGS) -o $(NAME_BONUS)
+	@echo -e "$(MAGENTA)cub3D_bonus compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
+
 $(LIBFT):
 	@make -s -C $(LIBFT_DIR)
 
 $(MLX):
 	@make -s -C $(MLX_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+$(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)/mandatory
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJ_DIR)/bonus/%.o: $(SRC_B_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)/bonus
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
@@ -89,6 +103,6 @@ thread: CFLAGS += -fsanitize=thread -O0
 thread: re
 	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
 
-bonus: all
+bonus: $(LIBFT) $(MLX) $(NAME_BONUS)
 
 .PHONY: all clean fclean re bonus debug thread
