@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_dummy.c                                     :+:      :+:    :+:   */
+/*   render_dummy.c                                     :+:      |:    |:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,22 +12,25 @@
 
 #include "../includes/cub3d.h"
 
-void	render_floor(const t_win *win, const t_ray *ray, const int x)
+void	render_floor(const t_win *win, const t_ray *ray, int x, double p)
 {
 	(void)win;
 	(void)ray;
 	(void)x;
+	(void)p;
 }
 
-void	render_ceil(const t_win *win, const t_ray *ray, int x)
+void	render_ceil(const t_win *win, const t_ray *ray, int x, double p)
 {
 	(void)win;
 	(void)ray;
 	(void)x;
+	(void)p;
 }
 
-unsigned int	apply_fog(unsigned int color, double dist)
+unsigned int	apply_fog(unsigned int color, double dist, double p)
 {
 	(void)dist;
+	(void)p;
 	return (color);
 }

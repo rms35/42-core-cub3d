@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:35:45 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->camp_mod = 0.66;
 	p->camp_x = 0.66;
 	p->camp_y = 0.0;
-	p->speed = 0.02;
-	p->turn_speed = 0.01;
+	p->speed = 0.03;
+	p->turn_speed = 0.02;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
@@ -49,6 +49,16 @@ static void	load_tex(t_win *win, t_img *tex, char *path)
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
 			&tex->endian);
+}
+
+static void	load_all_tex(t_win *win)
+{
+	load_tex(win, &win->tex[0], win->map->no_path);
+	load_tex(win, &win->tex[1], win->map->so_path);
+	load_tex(win, &win->tex[2], win->map->we_path);
+	load_tex(win, &win->tex[3], win->map->ea_path);
+	load_tex(win, &win->tex[4], "./textures/floor.xpm");
+	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
 }
 
 void	setup_mlx(t_win *win, t_img *img)
@@ -72,10 +82,6 @@ void	setup_mlx(t_win *win, t_img *img)
 	if (!img->addr)
 		close_win(win, EXIT_FAILURE);
 	win->shake = 0;
-	load_tex(win, &win->tex[0], win->map->no_path);
-	load_tex(win, &win->tex[1], win->map->so_path);
-	load_tex(win, &win->tex[2], win->map->we_path);
-	load_tex(win, &win->tex[3], win->map->ea_path);
-	load_tex(win, &win->tex[4], "./textures/floor.xpm");
-	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
+	win->pulse_time = 0.0;
+	load_all_tex(win);
 }

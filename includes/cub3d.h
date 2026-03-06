@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 18:25:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ typedef struct s_win
 	t_player	*player;
 	t_img		tex[6];
 	int			keys[65536];
+	int			shake;
+	double		pulse_time;
 }	t_win;
 
 // Mapping
@@ -115,9 +117,11 @@ int				rotate_right(t_player *player);
 
 // Rendering
 void			render_frame(const t_win *win);
-void			render_floor(const t_win *win, const t_ray *ray, int x);
-void			render_ceil(const t_win *win, const t_ray *ray, int x);
-unsigned int	apply_fog(unsigned int color, double dist);
+void			render_floor(const t_win *win, const t_ray *ray, int x,
+					double p);
+void			render_ceil(const t_win *win, const t_ray *ray, int x,
+					double p);
+unsigned int	apply_fog(unsigned int color, double dist, double p);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
 int				key_press(int keysym, t_win *win);
