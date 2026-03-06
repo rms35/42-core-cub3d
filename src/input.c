@@ -30,25 +30,20 @@ int	key_release(const int keysym, t_win *win)
 
 int	handle_input(t_win *win)
 {
-	int		r;
-	double	old_speed;
+	int	r;
 
 	r = 0;
-	old_speed = win->player->speed;
-	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
-		win->player->speed *= 2.5;
-	if (win->keys[XK_w] || win->keys[XK_W])
+	if (win->keys[XK_w])
 		r |= move_up(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_s] || win->keys[XK_S])
+	if (win->keys[XK_s])
 		r |= move_down(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_a] || win->keys[XK_A])
+	if (win->keys[XK_a])
 		r |= move_left(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_d] || win->keys[XK_D])
+	if (win->keys[XK_d])
 		r |= move_right(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_Left])
 		r |= rotate_left(win->player);
 	if (win->keys[XK_Right])
 		r |= rotate_right(win->player);
-	win->player->speed = old_speed;
 	return (r);
 }
