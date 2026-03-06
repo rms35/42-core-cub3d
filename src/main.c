@@ -113,7 +113,7 @@ void	init_player(t_player *player, char *grid, const int width, const int total)
 	player->camp_x = -0.66;
 	player->camp_y = 0.0;
 	player->speed = 0.01;
-	player->turn_speed = 0.005;
+	player->turn_speed = 0.0075;
 	player->cos_r = cos(player->turn_speed);
 	player->sin_r = sin(player->turn_speed);
 	player->cos_l = cos(-player->turn_speed);
