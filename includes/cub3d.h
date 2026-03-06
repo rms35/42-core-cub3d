@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/02 17:24:39 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/06 17:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_map
 
 typedef struct s_img
 {
-	void    *img;
-	char    *addr;
+	void	*img;
+	char	*addr;
 	int		line_len;
 	int		bpp;
 	int		endian;
@@ -58,10 +58,10 @@ typedef struct s_player
 	double	speed;
 	double	turn_speed;
 	int		grid_pos;
-	double    cos_l;
-	double    sin_l;
-	double    cos_r;
-	double    sin_r;
+	double	cos_l;
+	double	sin_l;
+	double	cos_r;
+	double	sin_r;
 }	t_player;
 
 typedef struct s_ray
@@ -87,7 +87,7 @@ typedef struct s_ray
 typedef struct s_win
 {
 	void		*winptr;
-	void	    *mlxptr;
+	void		*mlxptr;
 	t_img		*img;
 	t_map		*map;
 	t_player	*player;
@@ -97,6 +97,8 @@ typedef struct s_win
 // Mapping
 
 t_map	*get_mock_map(void);
+void	check_map(const t_map *map);
+void	init_player(t_player *p, char *grid, int width, int total);
 
 // Player movement
 
@@ -112,9 +114,5 @@ void	render_frame(const t_win *win);
 int		key_press(int keysym, t_win *win);
 int		key_release(int keysym, t_win *win);
 int		game_loop(const t_win *win);
-
-
-// To remove later
-void	check_map(const t_map *map);
 
 #endif
