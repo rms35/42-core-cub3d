@@ -28,7 +28,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->camp_mod = 0.66;
 	p->camp_x = 0.66;
 	p->camp_y = 0.0;
-	p->speed = 0.01;
+	p->speed = 0.02;
 	p->turn_speed = 0.01;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
@@ -71,6 +71,7 @@ void	setup_mlx(t_win *win, t_img *img)
 			&img->endian);
 	if (!img->addr)
 		close_win(win, EXIT_FAILURE);
+	win->shake = 0;
 	load_tex(win, &win->tex[0], win->map->no_path);
 	load_tex(win, &win->tex[1], win->map->so_path);
 	load_tex(win, &win->tex[2], win->map->we_path);
