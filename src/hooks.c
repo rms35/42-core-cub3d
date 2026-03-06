@@ -17,7 +17,7 @@ static void	free_tex(const t_win *win)
 	int	i;
 
 	i = 0;
-	while (i < 5)
+	while (i < 6)
 	{
 		if (win->tex[i].img)
 			mlx_destroy_image(win->mlxptr, win->tex[i].img);

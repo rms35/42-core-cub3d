@@ -91,7 +91,7 @@ typedef struct s_win
 	t_img		*img;
 	t_map		*map;
 	t_player	*player;
-	t_img		tex[5];
+	t_img		tex[6];
 	int			keys[65536];
 }	t_win;
 

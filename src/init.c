@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 17:35:45 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->camp_x = -0.66;
 	p->camp_y = 0.0;
 	p->speed = 0.01;
-	p->turn_speed = 0.0075;
+	p->turn_speed = 0.01;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
@@ -76,4 +76,5 @@ void	setup_mlx(t_win *win, t_img *img)
 	load_tex(win, &win->tex[2], win->map->we_path);
 	load_tex(win, &win->tex[3], win->map->ea_path);
 	load_tex(win, &win->tex[4], "./textures/floor.xpm");
+	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
 }
