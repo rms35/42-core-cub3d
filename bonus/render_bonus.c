@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 18:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 19:15:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 22:20:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ void	apply_motion_blur(const t_win *win)
 	i = 0;
 	while (i < WIDTH * HEIGHT)
 	{
-		acc[i] = ((src[i] & 0xFEFEFE) >> 1) + ((acc[i] & 0xFEFEFE) >> 1);
+		acc[i] = ((src[i] & 0xFEFEFE) >> 1) + ((src[i] & 0xFCFCFC) >> 2)
+			+ ((acc[i] & 0xFCFCFC) >> 2);
 		src[i] = acc[i];
 		i++;
 	}
