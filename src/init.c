@@ -52,3 +52,17 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->cos_l = cos(-p->turn_speed);
 	p->sin_l = sin(-p->turn_speed);
 }
+
+int	key_press(const int keysym, t_win *win)
+{
+	if (keysym < 65536)
+		win->keys[keysym] = 1;
+	return (0);
+}
+
+int	key_release(const int keysym, t_win *win)
+{
+	if (keysym < 65536)
+		win->keys[keysym] = 0;
+	return (0);
+}
