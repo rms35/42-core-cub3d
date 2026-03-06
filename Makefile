@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: rafael <rafael@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/13 12:00:00 by rafael            #+#    #+#              #
-#    Updated: 2026/03/06 17:55:00 by rafael           ###   ########.fr        #
+#    Updated: 2026/03/06 18:30:00 by rafael           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,12 +35,15 @@ INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
 SRCS_FILES  = main.c map_mock.c render.c move_player.c player_dir.c \
-              init.c input.c hooks.c utils.c ray.c
+              init.c input.c hooks.c utils.c ray.c render_dummy.c
+
+SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
+               init.c input.c hooks.c utils.c ray.c render_bonus.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
 
-SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_FILES))
+SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_B_FILES))
 OBJS_B      = $(SRCS_B:$(SRC_B_DIR)/%.c=$(OBJ_DIR)/bonus/%.o)
 
 # Colors

@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   render_dummy.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
+/*   Created: 2026/03/06 18:30:00 by rafael            #+#    #+#             */
 /*   Updated: 2026/03/06 18:30:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	check_map(const t_map *map)
+void	render_floor(const t_win *win, const t_ray *ray, const int x)
 {
-	int	i;
-	int	total;
+	(void)win;
+	(void)ray;
+	(void)x;
+}
 
-	total = map->height * map->width;
-	i = 0;
-	while (i < total)
-	{
-		printf("%c ", map->grid[i]);
-		if (i != 0 && (i + 1) % map->width == 0)
-			printf("\n");
-		i++;
-	}
-	write(1, "\n", 1);
+void	render_ceil(const t_win *win, const t_ray *ray, int x)
+{
+	(void)win;
+	(void)ray;
+	(void)x;
+}
+
+unsigned int	apply_fog(unsigned int color, double dist)
+{
+	(void)dist;
+	return (color);
 }

@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 18:25:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,28 +97,31 @@ typedef struct s_win
 
 // Mapping
 
-t_map	*get_mock_map(void);
-void	check_map(const t_map *map);
-void	init_player(t_player *p, char *grid, int width, int total);
-void	setup_mlx(t_win *win, t_img *img);
-int		close_win(const t_win *win, const int keysym);
+t_map			*get_mock_map(void);
+void			check_map(const t_map *map);
+void			init_player(t_player *p, char *grid, int width, int total);
+void			setup_mlx(t_win *win, t_img *img);
+int				close_win(const t_win *win, const int keysym);
 
 // Player movement
 
-int		move_up(char *grid, int width, t_player *player);
-int		move_down(char *grid, int width, t_player *player);
-int		move_left(char *grid, int width, t_player *player);
-int		move_right(char *grid, int width, t_player *player);
-int		rotate_left(t_player *player);
-int		rotate_right(t_player *player);
+int				move_up(char *grid, int width, t_player *player);
+int				move_down(char *grid, int width, t_player *player);
+int				move_left(char *grid, int width, t_player *player);
+int				move_right(char *grid, int width, t_player *player);
+int				rotate_left(t_player *player);
+int				rotate_right(t_player *player);
 
 // Rendering
-void	render_frame(const t_win *win);
-void	init_ray(const t_win *win, t_ray *ray, const int x);
-void	perform_dda(const t_win *win, t_ray *ray);
-int		key_press(int keysym, t_win *win);
-int		key_release(int keysym, t_win *win);
-int		handle_input(t_win *win);
-int		game_loop(t_win *win);
+void			render_frame(const t_win *win);
+void			render_floor(const t_win *win, const t_ray *ray, int x);
+void			render_ceil(const t_win *win, const t_ray *ray, int x);
+unsigned int	apply_fog(unsigned int color, double dist);
+void			init_ray(const t_win *win, t_ray *ray, int x);
+void			perform_dda(const t_win *win, t_ray *ray);
+int				key_press(int keysym, t_win *win);
+int				key_release(int keysym, t_win *win);
+int				handle_input(t_win *win);
+int				game_loop(t_win *win);
 
 #endif
