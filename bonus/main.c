@@ -16,11 +16,13 @@ int	main(void)
 {
 	t_win		win;
 	t_img		img;
+	t_img		accum;
 	t_player	player;
 
 	ft_memset(&win, 0, sizeof(t_win));
 	win.map = get_mock_map();
 	win.img = &img;
+	win.accum = &accum;
 	win.player = &player;
 	init_player(&player, win.map->grid, win.map->width,
 		win.map->width * win.map->height);

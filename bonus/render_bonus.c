@@ -37,13 +37,15 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 	int		y;
 	double	d;
 	int		t[2];
+	double	h;
 
 	y = -1;
+	h = (double)HEIGHT / 2.0 + win->player->pitch + ray->tilt_offset;
 	while (++y < HEIGHT)
 	{
 		if (y >= ray->draw_start && y <= ray->draw_end)
 			continue ;
-		d = (double)HEIGHT / fabs(HEIGHT - 2.0 * (y - win->player->pitch));
+		d = (double)HEIGHT / fabs(HEIGHT - 2.0 * (y - (h - HEIGHT / 2.0)));
 		t[0] = (int)(64 * (win->player->pos_x + d * ray->dir_x)) & 63;
 		t[1] = (int)(64 * (win->player->pos_y + d * ray->dir_y)) & 63;
 		if (y < ray->draw_start)
@@ -67,13 +69,33 @@ void	get_pulses(const t_win *win, double p[6])
 	p[5] = 1.0 + 0.2 * sin(win->pulse_time + 2.0);
 }
 
-void	setup_ray_limits(const t_win *win, t_ray *ray)
+void	setup_ray_limits(const t_win *win, t_ray *ray, int x)
 {
+	ray->tilt_offset = (int)(win->player->tilt * (x - WIDTH / 2) / 250.0);
 	ray->line_height = (int)(HEIGHT / ray->perp_wall_dist);
-	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2 + win->player->pitch;
+	ray->draw_start = -ray->line_height / 2 + HEIGHT / 2 + win->player->pitch
+		+ ray->tilt_offset;
 	if (ray->draw_start < 0)
 		ray->draw_start = 0;
-	ray->draw_end = ray->line_height / 2 + HEIGHT / 2 + win->player->pitch;
+	ray->draw_end = ray->line_height / 2 + HEIGHT / 2 + win->player->pitch
+		+ ray->tilt_offset;
 	if (ray->draw_end >= HEIGHT)
 		ray->draw_end = HEIGHT - 1;
+}
+
+void	apply_motion_blur(const t_win *win)
+{
+	int				i;
+	unsigned int	*src;
+	unsigned int	*acc;
+
+	src = (unsigned int *)win->img->addr;
+	acc = (unsigned int *)win->accum->addr;
+	i = 0;
+	while (i < WIDTH * HEIGHT)
+	{
+		acc[i] = ((src[i] & 0xFEFEFE) >> 1) + ((acc[i] & 0xFEFEFE) >> 1);
+		src[i] = acc[i];
+		i++;
+	}
 }

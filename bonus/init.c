@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 19:45:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 20:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ static void	load_tex(t_win *win, t_img *tex, char *path)
 			&tex->endian);
 }
 
+static void	setup_buffers(t_win *win, t_img *img)
+{
+	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
+	if (!img->img)
+		close_win(win, EXIT_FAILURE);
+	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
+			&img->endian);
+	if (!img->addr)
+		close_win(win, EXIT_FAILURE);
+	win->accum->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
+	if (!win->accum->img)
+		close_win(win, EXIT_FAILURE);
+	win->accum->addr = mlx_get_data_addr(win->accum->img, &win->accum->bpp,
+			&win->accum->line_len, &win->accum->endian);
+	if (!win->accum->addr)
+		close_win(win, EXIT_FAILURE);
+}
+
 static void	load_all_tex(t_win *win)
 {
 	load_tex(win, &win->tex[0], win->map->no_path);
@@ -69,6 +87,8 @@ void	setup_mlx(t_win *win, t_img *img)
 		exit(1);
 	img->line_len = 0;
 	img->bpp = 4;
+	win->accum->line_len = 0;
+	win->accum->bpp = 4;
 	win->winptr = mlx_new_window(win->mlxptr, WIDTH, HEIGHT, "cub3d");
 	if (!win->winptr)
 		(free(win->mlxptr), exit(1));
@@ -76,13 +96,7 @@ void	setup_mlx(t_win *win, t_img *img)
 	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
 	mlx_hook(win->winptr, MotionNotify, PointerMotionMask, mouse_move, win);
 	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
-	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
-	if (!img->img)
-		close_win(win, EXIT_FAILURE);
-	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
-			&img->endian);
-	if (!img->addr)
-		close_win(win, EXIT_FAILURE);
+	setup_buffers(win, img);
 	win->shake = 0;
 	win->pulse_time = 0.0;
 	win->mouse_x = WIDTH / 2;

@@ -93,6 +93,7 @@ typedef struct s_win
 	t_map		*map;
 	t_player	*player;
 	t_img		tex[6];
+	t_img		*accum;
 	int			keys[65536];
 	int			shake;
 	double		pulse_time;
@@ -129,6 +130,7 @@ void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
 void			get_pulses(const t_win *win, double p[6]);
 void			setup_ray_limits(const t_win *win, t_ray *ray);
+void			apply_motion_blur(const t_win *win);
 int				key_press(int keysym, t_win *win);
 int				key_release(int keysym, t_win *win);
 int				mouse_move(int x, int y, t_win *win);

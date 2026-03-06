@@ -30,6 +30,8 @@ int	close_win(const t_win *win, const int keysym)
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	free_tex(win);
+	if (win->accum->img)
+		mlx_destroy_image(win->mlxptr, win->accum->img);
 	if (win->mlxptr)
 	{
 		mlx_destroy_display(win->mlxptr);
