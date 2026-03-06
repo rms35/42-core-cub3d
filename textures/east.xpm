@@ -1,11 +1,11 @@
 /* XPM */
 static char *tile[] = {
 "64 64 5 1",
-". c #0f0f1a",
-"L c #1a1b26",
-"1 c #00ffff",
-"2 c #07878c",
-"3 c #0c3f47",
+". c #1a1b26",
+"L c #24283b",
+"1 c #7aa2f7",
+"2 c #4a5e8e",
+"3 c #2d364f",
 "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
 "L12233.........................LL.........................33221L",
 "L12233.........................LL.........................33221L",
