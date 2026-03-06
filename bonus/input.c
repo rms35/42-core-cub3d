@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 19:55:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 22:30:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,18 @@ static void	get_move_vec(t_win *win, double d[2], double s)
 	}
 	if (win->keys[XK_s] || win->keys[XK_S])
 	{
-		d[0] -= win->player->dir_x * s;
-		d[1] -= win->player->dir_y * s;
+		d[0] -= win->player->dir_x * win->player->speed;
+		d[1] -= win->player->dir_y * win->player->speed;
 	}
 	if (win->keys[XK_a] || win->keys[XK_A])
 	{
-		d[0] += win->player->dir_y * s;
-		d[1] -= win->player->dir_x * s;
+		d[0] += win->player->dir_y * win->player->speed;
+		d[1] -= win->player->dir_x * win->player->speed;
 	}
 	if (win->keys[XK_d] || win->keys[XK_D])
 	{
-		d[0] -= win->player->dir_y * s;
-		d[1] += win->player->dir_x * s;
+		d[0] -= win->player->dir_y * win->player->speed;
+		d[1] += win->player->dir_x * win->player->speed;
 	}
 }
 

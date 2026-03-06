@@ -29,7 +29,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->camp_x = 0.66;
 	p->camp_y = 0.0;
 	p->speed = 0.03;
-	p->turn_speed = 0.02;
+	p->turn_speed = 0.001;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
