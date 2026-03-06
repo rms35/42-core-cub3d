@@ -51,21 +51,26 @@ int	key_release(const int keysym, t_win *win)
 
 int	game_loop(const t_win *win)
 {
-	int	render;
+	int		render;
+	double	old_speed;
 
 	render = 0;
+	old_speed = win->player->speed;
+	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
+		win->player->speed *= 2.0;
 	if (win->keys[XK_w])
-		render = move_up(win->map->grid, win->map->width, win->player);
+		render |= move_up(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_s])
-		render = move_down(win->map->grid, win->map->width, win->player);
+		render |= move_down(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_a])
-		render = move_left(win->map->grid, win->map->width, win->player);
+		render |= move_left(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_d])
-		render = move_right(win->map->grid, win->map->width, win->player);
+		render |= move_right(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_Left])
-		render = rotate_left(win->player);
+		render |= rotate_left(win->player);
 	if (win->keys[XK_Right])
-		render = rotate_right(win->player);
+		render |= rotate_right(win->player);
+	win->player->speed = old_speed;
 	if (render)
 	{
 		render_frame(win);
@@ -107,7 +112,7 @@ void	init_player(t_player *player, char *grid, const int width, const int total)
 	player->camp_mod = 0.66;
 	player->camp_x = -0.66;
 	player->camp_y = 0.0;
-	player->speed = 0.005;
+	player->speed = 0.01;
 	player->turn_speed = 0.005;
 	player->cos_r = cos(player->turn_speed);
 	player->sin_r = sin(player->turn_speed);
