@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 18:55:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,9 @@ int	close_win(const t_win *win, const int keysym)
 
 int	game_loop(t_win *win)
 {
-	int		render;
-
-	render = handle_input(win);
-	if (render)
-	{
-		render_frame(win);
-		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
-	}
+	win->pulse_time += 0.05;
+	handle_input(win);
+	render_frame(win);
+	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
 	return (0);
 }
