@@ -22,6 +22,7 @@
 # include <X11/X.h>
 # define WIDTH 1920
 # define HEIGHT 1080
+# define BUFFER 0.2
 
 typedef struct s_map
 {
