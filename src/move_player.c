@@ -21,8 +21,14 @@ int	move_up(char *grid, const int width, t_player *player)
 
 	nx = player->pos_x + player->dir_x * player->speed;
 	ny = player->pos_y + player->dir_y * player->speed;
-	bx = nx + (player->dir_x > 0 ? BUFFER : -BUFFER);
-	by = ny + (player->dir_y > 0 ? BUFFER : -BUFFER);
+	if (player->dir_x > 0)
+		bx = nx + BUFFER;
+	else
+		bx = nx - BUFFER;
+	if (player->dir_y > 0)
+		by = ny + BUFFER;
+	else
+		by = ny - BUFFER;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -40,8 +46,14 @@ int	move_down(char *grid, const int width, t_player *player)
 
 	nx = player->pos_x - player->dir_x * player->speed;
 	ny = player->pos_y - player->dir_y * player->speed;
-	bx = nx - (player->dir_x > 0 ? BUFFER : -BUFFER);
-	by = ny - (player->dir_y > 0 ? BUFFER : -BUFFER);
+	if (player->dir_x > 0)
+		bx = nx - BUFFER;
+	else
+		bx = nx + BUFFER;
+	if (player->dir_y > 0)
+		by = ny - BUFFER;
+	else
+		by = ny + BUFFER;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -59,8 +71,14 @@ int	move_left(char *grid, const int width, t_player *player)
 
 	nx = player->pos_x + player->dir_y * player->speed;
 	ny = player->pos_y - player->dir_x * player->speed;
-	bx = nx + (player->dir_y > 0 ? BUFFER : -BUFFER);
-	by = ny - (player->dir_x > 0 ? BUFFER : -BUFFER);
+	if (player->dir_y > 0)
+		bx = nx + BUFFER;
+	else
+		bx = nx - BUFFER;
+	if (player->dir_x > 0)
+		by = ny - BUFFER;
+	else
+		by = ny + BUFFER;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -78,8 +96,14 @@ int	move_right(char *grid, const int width, t_player *player)
 
 	nx = player->pos_x - player->dir_y * player->speed;
 	ny = player->pos_y + player->dir_x * player->speed;
-	bx = nx - (player->dir_y > 0 ? BUFFER : -BUFFER);
-	by = ny + (player->dir_x > 0 ? BUFFER : -BUFFER);
+	if (player->dir_y > 0)
+		bx = nx - BUFFER;
+	else
+		bx = nx + BUFFER;
+	if (player->dir_x > 0)
+		by = ny + BUFFER;
+	else
+		by = ny - BUFFER;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
