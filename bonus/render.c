@@ -6,66 +6,85 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 21:56:33 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 18:15:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/06 19:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-static void	draw_tex_line(const t_win *win, const t_ray *ray, int x, t_img *tex)
+static void	draw_tex_line(const t_win *win, const t_ray *ray, int x, double p[2])
 {
 	int		y;
 	double	step;
 	double	pos;
-	int		tx;
-	int		ty;
+	int		t[2];
+	t_img	*tex;
 
+	tex = (t_img *)&win->tex[(int)p[0]];
 	if (ray->side == 0)
-		tx = (int)((win->player->pos_y + ray->perp_wall_dist * ray->dir_y)
+		t[0] = (int)((win->player->pos_y + ray->perp_wall_dist * ray->dir_y)
 				* 64.0) % 64;
 	else
-		tx = (int)((win->player->pos_x + ray->perp_wall_dist * ray->dir_x)
+		t[0] = (int)((win->player->pos_x + ray->perp_wall_dist * ray->dir_x)
 				* 64.0) % 64;
 	step = 1.0 * 64 / ray->line_height;
 	pos = (ray->draw_start - HEIGHT / 2 + ray->line_height / 2) * step;
 	y = ray->draw_start;
 	while (y <= ray->draw_end)
 	{
-		ty = (int)pos & 63;
+		t[1] = (int)pos & 63;
 		pos += step;
 		*(unsigned int *)(win->img->addr + (y * win->img->line_len + x * 4))
-			= apply_fog(*(unsigned int *)(tex->addr + (ty * tex->line_len
-						+ tx * 4)), ray->perp_wall_dist);
+			= apply_fog(*(unsigned int *)(tex->addr + (t[1] * tex->line_len
+						+ t[0] * 4)), ray->perp_wall_dist, p[1]);
 		y++;
 	}
 }
 
-static void	render_wall(const t_win *win, const t_ray *ray, const int x)
+static void	render_wall(const t_win *win, const t_ray *ray, int x, double p[6])
 {
-	t_img	*tex;
+	double	param[2];
 
 	if (ray->side == 0)
 	{
+		param[1] = p[2];
 		if (ray->dir_x > 0)
-			tex = (t_img *)&win->tex[3];
+			param[0] = 3.0;
 		else
-			tex = (t_img *)&win->tex[2];
+			param[0] = 2.0;
+		if (ray->dir_x <= 0)
+			param[1] = p[3];
 	}
 	else
 	{
+		param[1] = p[0];
 		if (ray->dir_y > 0)
-			tex = (t_img *)&win->tex[1];
+			param[0] = 1.0;
 		else
-			tex = (t_img *)&win->tex[0];
+			param[0] = 0.0;
+		if (ray->dir_y <= 0)
+			param[1] = p[1];
 	}
-	draw_tex_line(win, ray, x, tex);
+	draw_tex_line(win, ray, x, param);
+}
+
+static void	get_pulses(const t_win *win, double p[6])
+{
+	p[0] = 1.0 + 0.2 * sin(win->pulse_time + 1.0);
+	p[1] = 1.0 + 0.2 * sin(win->pulse_time + 3.0);
+	p[2] = 1.0 + 0.2 * sin(win->pulse_time + 5.0);
+	p[3] = 1.0 + 0.2 * sin(win->pulse_time + 4.0);
+	p[4] = 1.0 + 0.2 * sin(win->pulse_time + 0.0);
+	p[5] = 1.0 + 0.2 * sin(win->pulse_time + 2.0);
 }
 
 void	render_frame(const t_win *win)
 {
 	t_ray	ray;
 	int		x;
+	double	p[6];
 
+	get_pulses(win, p);
 	x = 0;
 	while (x < WIDTH)
 	{
@@ -78,9 +97,9 @@ void	render_frame(const t_win *win)
 		ray.draw_end = ray.line_height / 2 + HEIGHT / 2;
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		render_floor(win, &ray, x);
-		render_ceil(win, &ray, x);
-		render_wall(win, &ray, x);
+		render_floor(win, &ray, x, p[4]);
+		render_ceil(win, &ray, x, p[5]);
+		render_wall(win, &ray, x, p);
 		x++;
 	}
 }
