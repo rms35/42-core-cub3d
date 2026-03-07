@@ -10,25 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
-static void	apply_move(char *grid, int width, t_player *p, double move[2])
+static int	can_move(t_map *map, double x, double y)
 {
+	int	mx;
+	int	my;
+
+	mx = (int)x;
+	my = (int)y;
+	if (map->grid[my * map->width + mx] == '1')
+		return (0);
+	if (map->grid[my * map->width + mx] == 'D'
+		&& map->door_state[my * map->width + mx] < 0.5)
+		return (0);
+	return (1);
+}
+
+static void	apply_move(t_win *win, t_player *p, double move[2])
+{
+	double	nx;
+	double	ny;
 	double	bx;
 	double	by;
 
+	nx = p->pos_x + move[0];
+	ny = p->pos_y + move[1];
 	if (move[0] > 0)
-		bx = p->pos_x + move[0] + BUFFER;
+		bx = nx + BUFFER;
 	else
-		bx = p->pos_x + move[0] - BUFFER;
+		bx = nx - BUFFER;
 	if (move[1] > 0)
-		by = p->pos_y + move[1] + BUFFER;
+		by = ny + BUFFER;
 	else
-		by = p->pos_y + move[1] - BUFFER;
-	if (grid[(int)p->pos_y * width + (int)bx] != '1')
-		p->pos_x += move[0];
-	if (grid[(int)by * width + (int)p->pos_x] != '1')
-		p->pos_y += move[1];
+		by = ny - BUFFER;
+	if (can_move(win->map, bx, p->pos_y))
+		p->pos_x = nx;
+	if (can_move(win->map, p->pos_x, by))
+		p->pos_y = ny;
 }
 
 int	move_player(t_win *win, double dx, double dy)
@@ -39,6 +58,6 @@ int	move_player(t_win *win, double dx, double dy)
 		return (0);
 	move[0] = dx;
 	move[1] = dy;
-	apply_move(win->map->grid, win->map->width, win->player, move);
+	apply_move(win, win->player, move);
 	return (1);
 }

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 int	main(void)
 {
@@ -19,13 +19,21 @@ int	main(void)
 	t_img		accum;
 	t_player	player;
 
+	int			i;
+
 	ft_memset(&win, 0, sizeof(t_win));
 	ft_memset(&img, 0, sizeof(t_img));
 	ft_memset(&accum, 0, sizeof(t_img));
+	ft_memset(&win.sky_tex, 0, sizeof(t_img));
+	i = -1;
+	while (++i < 10)
+		ft_memset(&win.tex[i], 0, sizeof(t_img));
 	win.map = get_mock_map();
 	win.img = &img;
 	win.accum = &accum;
 	win.player = &player;
+	if (!win.map)
+		return (1);
 	init_player(&player, win.map->grid, win.map->width,
 		win.map->width * win.map->height);
 	setup_mlx(&win, &img);
