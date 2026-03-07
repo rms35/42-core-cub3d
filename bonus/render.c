@@ -29,6 +29,7 @@ static void	draw_tex_col(const t_win *win, const t_ray *ray, int x, double p[2])
 	int				t[2];
 	char			*dst;
 	unsigned int	color;
+	double			f;
 
 	get_tex_x(win, ray, t);
 	pos = (ray->draw_start - (HEIGHT / 2 + win->player->pitch)
@@ -37,13 +38,16 @@ static void	draw_tex_col(const t_win *win, const t_ray *ray, int x, double p[2])
 		pos = 0;
 	y = ray->draw_start;
 	dst = win->img->addr + (y * win->img->line_len + x * 4);
+	f = 1.0 / (1.0 + ray->perp_wall_dist * ray->perp_wall_dist * 0.05);
+	if (f > 1.0)
+		f = 1.0;
 	while (y <= ray->draw_end)
 	{
 		t[1] = (int)pos & 63;
 		pos += 1.0 * 64 / ray->line_height;
 		color = *(unsigned int *)(win->tex[(int)p[0]].addr + (t[1]
 					* win->tex[(int)p[0]].line_len + t[0] * 4));
-		*(unsigned int *)dst = apply_fog(color, ray->perp_wall_dist, p[1]);
+		*(unsigned int *)dst = apply_fog_factor(color, f, p[1]);
 		dst += win->img->line_len;
 		y++;
 	}

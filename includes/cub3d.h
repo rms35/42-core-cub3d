@@ -126,6 +126,7 @@ void			render_env(const t_win *win, const t_ray *ray, int x,
 					double p[2]);
 void			render_hud(const t_win *win);
 unsigned int	apply_fog(unsigned int color, double dist, double p);
+unsigned int	apply_fog_factor(unsigned int color, double f, double p);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
 void			get_pulses(const t_win *win, double p[6]);

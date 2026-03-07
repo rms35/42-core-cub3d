@@ -41,7 +41,13 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 	double	angle;
 	double	wx;
 	double	wy;
+	double	dir_glow;
 
+	angle = atan2(ray->dir_y, ray->dir_x);
+	dir_glow = cos(angle);
+	if (dir_glow < 0)
+		dir_glow = 0;
+	dir_glow = dir_glow * dir_glow;
 	y = -1;
 	while (++y < HEIGHT)
 	{
@@ -69,7 +75,6 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 			}
 			else
 			{
-				angle = atan2(ray->dir_y, ray->dir_x);
 				t[0] = (int)(win->sky_tex.width * (angle + M_PI)
 						/ (2.0 * M_PI));
 				t[0] = (t[0] % win->sky_tex.width + win->sky_tex.width)
@@ -80,11 +85,9 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 				if (t[1] >= win->sky_tex.height) t[1] = win->sky_tex.height - 1;
 				unsigned int sky_col = *(unsigned int *)(win->sky_tex.addr
 						+ (t[1] * win->sky_tex.line_len + t[0] * 4));
-				double dir_glow = cos(angle);
-				if (dir_glow < 0) dir_glow = 0;
-				double height_glow = (double)t[1] / win->sky_tex.height;
-				if (height_glow < 0) height_glow = 0;
-				double glow = pow(dir_glow, 2.0) * pow(height_glow, 2.0) * 0.9;
+				double h_glow = (double)t[1] / win->sky_tex.height;
+				if (h_glow < 0) h_glow = 0;
+				double glow = dir_glow * (h_glow * h_glow) * 0.9;
 				int r = (int)((sky_col >> 16 & 0xFF) * (1.0 - glow) + 0x00 * glow);
 				int g = (int)((sky_col >> 8 & 0xFF) * (1.0 - glow) + 0xFF * glow);
 				int b = (int)((sky_col & 0xFF) * (1.0 - glow) + 0xBB * glow);
@@ -126,26 +129,44 @@ void	setup_ray_limits(const t_win *win, t_ray *ray)
 
 void	apply_motion_blur(const t_win *win)
 {
-	int				x;
 	int				y;
 	unsigned int	*src;
 	unsigned int	*acc;
+	int				row_add;
+	int				x;
 
 	y = 0;
+	row_add = win->img->line_len / 4;
+	src = (unsigned int *)win->img->addr;
+	acc = (unsigned int *)win->accum->addr;
 	while (y < HEIGHT)
 	{
 		x = 0;
 		while (x < WIDTH)
 		{
-			src = (unsigned int *)(win->img->addr + (y * win->img->line_len
-						+ x * 4));
-			acc = (unsigned int *)(win->accum->addr + (y * win->accum->line_len
-						+ x * 4));
-			*acc = ((*src & 0xFEFEFE) >> 1) + ((*src & 0xFCFCFC) >> 2)
-				+ ((*acc & 0xFCFCFC) >> 2);
-			*src = *acc;
+			acc[x] = ((src[x] & 0xFEFEFE) >> 1) + ((src[x] & 0xFCFCFC) >> 2)
+				+ ((acc[x] & 0xFCFCFC) >> 2);
+			src[x] = acc[x];
 			x++;
 		}
+		src += row_add;
+		acc += row_add;
 		y++;
 	}
+}
+
+unsigned int	apply_fog_factor(unsigned int color, double f, double p)
+{
+	int		rgb[3];
+
+	rgb[0] = (int)((color >> 16 & 0xFF) * p * f + 0x1a * (1.0 - f));
+	rgb[1] = (int)((color >> 8 & 0xFF) * p * f + 0x1b * (1.0 - f));
+	rgb[2] = (int)((color & 0xFF) * p * f + 0x26 * (1.0 - f));
+	if (rgb[0] > 255)
+		rgb[0] = 255;
+	if (rgb[1] > 255)
+		rgb[1] = 255;
+	if (rgb[2] > 255)
+		rgb[2] = 255;
+	return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
 }
