@@ -54,10 +54,8 @@ typedef struct s_player
 	double	dir_y;
 	double	camp_x;
 	double	camp_y;
-	double	camp_mod;
 	double	speed;
 	double	turn_speed;
-	int		grid_pos;
 	double	cos_l;
 	double	sin_l;
 	double	cos_r;
@@ -95,7 +93,6 @@ typedef struct s_win
 	t_img		tex[6];
 	t_img		*accum;
 	int			keys[65536];
-	int			shake;
 	double		pulse_time;
 	int			mouse_x;
 	int			mouse_y;
@@ -104,10 +101,9 @@ typedef struct s_win
 // Mapping
 
 t_map			*get_mock_map(void);
-void			check_map(const t_map *map);
 void			init_player(t_player *p, char *grid, int width, int total);
 void			setup_mlx(t_win *win, t_img *img);
-int				close_win(const t_win *win, const int keysym);
+int				close_win(const t_win *win, int keysym);
 
 // Player movement
 

@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-int	rotate_player(t_player *p, double angle)
+int	rotate_player(t_player *p, const double angle)
 {
 	double	old_dir_x;
 	double	old_camp_x;

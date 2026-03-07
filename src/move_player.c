@@ -33,7 +33,6 @@ int	move_up(char *grid, const int width, t_player *player)
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
 		player->pos_y = ny;
-	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
 	return (1);
 }
 
@@ -58,7 +57,6 @@ int	move_down(char *grid, const int width, t_player *player)
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
 		player->pos_y = ny;
-	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
 	return (1);
 }
 
@@ -83,7 +81,6 @@ int	move_left(char *grid, const int width, t_player *player)
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
 		player->pos_y = ny;
-	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
 	return (1);
 }
 
@@ -108,14 +105,7 @@ int	move_right(char *grid, const int width, t_player *player)
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
 		player->pos_y = ny;
-	player->grid_pos = (int)player->pos_y * width + (int)player->pos_x;
 	return (1);
 }
 
-int	move_player(t_win *win, double dx, double dy)
-{
-	(void)win;
-	(void)dx;
-	(void)dy;
-	return (0);
-}
+

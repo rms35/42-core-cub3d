@@ -27,7 +27,7 @@ static void	process_mouse(t_win *win)
 	dx = win->mouse_x - WIDTH / 2;
 	dy = win->mouse_y - HEIGHT / 2;
 	if (dx != 0)
-		rotate_player(win->player, dx * 0.001);
+		rotate_player(win->player, dx * 0.0005);
 	win->player->pitch -= dy * 2;
 	if (win->player->pitch > 400)
 		win->player->pitch = 400;

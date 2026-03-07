@@ -19,17 +19,15 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	i = 0;
 	while (i < total && (grid[i] == '1' || grid[i] == '0'))
 		i++;
-	p->grid_pos = i;
 	p->pos_x = (double)(i % width) + 0.5;
 	p->pos_y = (double)(i / width) + 0.5;
 	grid[i] = '0';
 	p->dir_x = 0.0;
 	p->dir_y = -1.0;
-	p->camp_mod = 0.66;
 	p->camp_x = 0.66;
 	p->camp_y = 0.0;
 	p->speed = 0.03;
-	p->turn_speed = 0.001;
+	p->turn_speed = 0.0005;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
@@ -97,7 +95,6 @@ void	setup_mlx(t_win *win, t_img *img)
 	mlx_hook(win->winptr, MotionNotify, PointerMotionMask, mouse_move, win);
 	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
 	setup_buffers(win, img);
-	win->shake = 0;
 	win->pulse_time = 0.0;
 	win->mouse_x = WIDTH / 2;
 	win->mouse_y = HEIGHT / 2;

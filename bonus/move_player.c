@@ -29,7 +29,6 @@ static void	apply_move(char *grid, int width, t_player *p, double move[2])
 		p->pos_x += move[0];
 	if (grid[(int)by * width + (int)p->pos_x] != '1')
 		p->pos_y += move[1];
-	p->grid_pos = (int)p->pos_y * width + (int)p->pos_x;
 }
 
 int	move_player(t_win *win, double dx, double dy)
