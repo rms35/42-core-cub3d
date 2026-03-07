@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 int	mouse_move(int x, int y, t_win *win)
 {
@@ -62,6 +62,35 @@ static void	get_move_vec(t_win *win, double d[2], double s)
 	}
 }
 
+static void	toggle_door(t_win *win, int x, int y)
+{
+	if (x < 0 || x >= win->map->width || y < 0 || y >= win->map->height)
+		return ;
+	if (win->map->grid[y * win->map->width + x] != 'D')
+		return ;
+	if (win->map->door_target[y * win->map->width + x] > 0.5)
+		win->map->door_target[y * win->map->width + x] = 0.0;
+	else
+		win->map->door_target[y * win->map->width + x] = 0.95;
+}
+
+static void	interact_door(t_win *win)
+{
+	int		mx;
+	int		my;
+
+	mx = (int)(win->player->pos_x + win->player->dir_x * 0.8);
+	my = (int)(win->player->pos_y + win->player->dir_y * 0.8);
+	if (win->map->grid[my * win->map->width + mx] == 'D')
+	{
+		toggle_door(win, mx, my);
+		toggle_door(win, mx + 1, my);
+		toggle_door(win, mx - 1, my);
+		toggle_door(win, mx, my + 1);
+		toggle_door(win, mx, my - 1);
+	}
+}
+
 int	handle_input(t_win *win)
 {
 	double	d[2];
@@ -69,6 +98,12 @@ int	handle_input(t_win *win)
 	int		moved;
 
 	process_mouse(win);
+	if (win->keys[XK_e] || win->keys[XK_E])
+	{
+		interact_door(win);
+		win->keys[XK_e] = 0;
+		win->keys[XK_E] = 0;
+	}
 	d[0] = 0;
 	d[1] = 0;
 	s = win->player->speed;
@@ -83,11 +118,6 @@ int	handle_input(t_win *win)
 			win->player->walk_t -= M_PI * 2.0;
 	}
 	else
-	{
-		if (win->player->walk_t > 0)
-			win->player->walk_t -= 0.1;
-		if (win->player->walk_t < 0)
-			win->player->walk_t = 0;
-	}
+		win->player->walk_t = 0;
 	return (moved);
 }

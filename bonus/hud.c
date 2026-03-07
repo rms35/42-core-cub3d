@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 static void	draw_pixel(const t_win *win, int x, int y, int color)
 {
@@ -86,17 +86,19 @@ static void	draw_minimap(const t_win *win)
 			c = 0x1a1b26;
 			if (win->map->grid[y * win->map->width + x] == '1')
 				c = 0x7aa2f7;
+			else if (win->map->grid[y * win->map->width + x] == 'D')
+				c = 0xff9e64;
 			draw_rect(win, (int [2]){x * s + 20, x * s + s + 20},
-				(int [2]){y * s + 20, y * s + s + 20}, c);
+				(int [2]){(win->map->height - 1 - y) * s + 20, (win->map->height - y) * s + 20}, c);
 		}
 	}
 	p[0] = win->player->pos_x * s + 20;
-	p[1] = win->player->pos_y * s + 20;
-	double tip[2] = {p[0] + win->player->dir_x * 10, p[1] + win->player->dir_y * 10};
-	double left[2] = {p[0] - win->player->dir_x * 4 + win->player->dir_y * 4,
-					  p[1] - win->player->dir_y * 4 - win->player->dir_x * 4};
-	double right[2] = {p[0] - win->player->dir_x * 4 - win->player->dir_y * 4,
-					   p[1] - win->player->dir_y * 4 + win->player->dir_x * 4};
+	p[1] = (win->map->height - win->player->pos_y) * s + 20;
+	double tip[2] = {p[0] + win->player->dir_x * 10, p[1] - win->player->dir_y * 10};
+	double left[2] = {p[0] - win->player->dir_x * 4 - win->player->dir_y * 4,
+					  p[1] + win->player->dir_y * 4 - win->player->dir_x * 4};
+	double right[2] = {p[0] - win->player->dir_x * 4 + win->player->dir_y * 4,
+					   p[1] + win->player->dir_y * 4 + win->player->dir_x * 4};
 	draw_line(win, (double [2]){tip[0], left[0]}, (double [2]){tip[1], left[1]}, 0xff00ff);
 	draw_line(win, (double [2]){tip[0], right[0]}, (double [2]){tip[1], right[1]}, 0xff00ff);
 	draw_line(win, (double [2]){left[0], right[0]}, (double [2]){left[1], right[1]}, 0xff00ff);
