@@ -33,6 +33,7 @@ typedef struct s_map
 	char	*so_path;
 	char	*we_path;
 	char	*ea_path;
+	char	*sky_path;
 	int		floor_color;
 	int		ceil_color;
 }	t_map;
@@ -44,6 +45,8 @@ typedef struct s_img
 	int		line_len;
 	int		bpp;
 	int		endian;
+	int		width;
+	int		height;
 }	t_img;
 
 typedef struct s_player
@@ -91,6 +94,7 @@ typedef struct s_win
 	t_map		*map;
 	t_player	*player;
 	t_img		tex[6];
+	t_img		sky_tex;
 	t_img		*accum;
 	int			keys[65536];
 	double		pulse_time;
@@ -103,7 +107,7 @@ typedef struct s_win
 t_map			*get_mock_map(void);
 void			init_player(t_player *p, char *grid, int width, int total);
 void			setup_mlx(t_win *win, t_img *img);
-int				close_win(const t_win *win, int keysym);
+int				close_win(const t_win *win, int status);
 
 // Player movement
 

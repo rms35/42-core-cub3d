@@ -25,7 +25,7 @@ static void	free_tex(const t_win *win)
 	}
 }
 
-int	close_win(const t_win *win, const int keysym)
+int	close_win(const t_win *win, const int status)
 {
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
@@ -44,7 +44,7 @@ int	close_win(const t_win *win, const int keysym)
 		free(win->map->ea_path);
 		free(win->map);
 	}
-	exit(keysym);
+	exit(status);
 }
 
 int	game_loop(t_win *win)

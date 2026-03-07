@@ -15,7 +15,7 @@
 int	key_press(const int keysym, t_win *win)
 {
 	if (keysym == XK_Escape)
-		close_win(win, EXIT_SUCCESS);
+		close_win(win);
 	if (keysym < 65536)
 		win->keys[keysym] = 1;
 	return (0);
