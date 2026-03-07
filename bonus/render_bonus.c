@@ -37,6 +37,10 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 	int		y;
 	double	d;
 	int		t[2];
+	char	tile;
+	double	angle;
+	double	wx;
+	double	wy;
 
 	y = -1;
 	while (++y < HEIGHT)
@@ -44,16 +48,58 @@ void	render_env(const t_win *win, const t_ray *ray, int x, double p[2])
 		if (y >= ray->draw_start && y <= ray->draw_end)
 			continue ;
 		d = (double)HEIGHT / fabs(HEIGHT - 2.0 * (y - win->player->pitch));
-		t[0] = (int)(64 * (win->player->pos_x + d * ray->dir_x)) & 63;
-		t[1] = (int)(64 * (win->player->pos_y + d * ray->dir_y)) & 63;
+		wx = win->player->pos_x + d * ray->dir_x;
+		wy = win->player->pos_y + d * ray->dir_y;
+		tile = '0';
+		if (wx >= 0 && wx < win->map->width && wy >= 0 && wy < win->map->height)
+			tile = win->map->grid[(int)wy * win->map->width + (int)wx];
 		if (y < ray->draw_start)
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + x * 4))
-				= apply_fog(*(unsigned int *)(win->tex[5].addr
-						+ (t[1] * win->tex[5].line_len + t[0] * 4)), d, p[1]);
+		{
+			if (tile == '2' || !win->sky_tex.img)
+			{
+				t[0] = (int)(64 * wx) & 63;
+				t[1] = (int)(64 * wy) & 63;
+				if (tile == '2')
+					*(unsigned int *)(win->img->addr + (y * win->img->line_len
+								+ x * 4)) = apply_fog(*(unsigned int *)(win->tex[5].addr
+								+ (t[1] * win->tex[5].line_len + t[0] * 4)), d, p[1]);
+				else
+					*(unsigned int *)(win->img->addr + (y * win->img->line_len
+								+ x * 4)) = win->map->ceil_color;
+			}
+			else
+			{
+				angle = atan2(ray->dir_y, ray->dir_x);
+				t[0] = (int)(win->sky_tex.width * (angle + M_PI)
+						/ (2.0 * M_PI));
+				t[0] = (t[0] % win->sky_tex.width + win->sky_tex.width)
+					% win->sky_tex.width;
+				t[1] = (y - win->player->pitch + HEIGHT)
+					* win->sky_tex.height / (HEIGHT * 2);
+				if (t[1] < 0) t[1] = 0;
+				if (t[1] >= win->sky_tex.height) t[1] = win->sky_tex.height - 1;
+				unsigned int sky_col = *(unsigned int *)(win->sky_tex.addr
+						+ (t[1] * win->sky_tex.line_len + t[0] * 4));
+				double dir_glow = cos(angle);
+				if (dir_glow < 0) dir_glow = 0;
+				double height_glow = (double)t[1] / win->sky_tex.height;
+				if (height_glow < 0) height_glow = 0;
+				double glow = pow(dir_glow, 2.0) * pow(height_glow, 2.0) * 0.9;
+				int r = (int)((sky_col >> 16 & 0xFF) * (1.0 - glow) + 0x00 * glow);
+				int g = (int)((sky_col >> 8 & 0xFF) * (1.0 - glow) + 0xFF * glow);
+				int b = (int)((sky_col & 0xFF) * (1.0 - glow) + 0xBB * glow);
+				*(unsigned int *)(win->img->addr + (y * win->img->line_len
+							+ x * 4)) = (r << 16 | g << 8 | b);
+			}
+		}
 		else
+		{
+			t[0] = (int)(64 * wx) & 63;
+			t[1] = (int)(64 * wy) & 63;
 			*(unsigned int *)(win->img->addr + (y * win->img->line_len + x * 4))
 				= apply_fog(*(unsigned int *)(win->tex[4].addr
 						+ (t[1] * win->tex[4].line_len + t[0] * 4)), d, p[0]);
+		}
 	}
 }
 
@@ -80,18 +126,26 @@ void	setup_ray_limits(const t_win *win, t_ray *ray)
 
 void	apply_motion_blur(const t_win *win)
 {
-	int				i;
+	int				x;
+	int				y;
 	unsigned int	*src;
 	unsigned int	*acc;
 
-	src = (unsigned int *)win->img->addr;
-	acc = (unsigned int *)win->accum->addr;
-	i = 0;
-	while (i < WIDTH * HEIGHT)
+	y = 0;
+	while (y < HEIGHT)
 	{
-		acc[i] = ((src[i] & 0xFEFEFE) >> 1) + ((src[i] & 0xFCFCFC) >> 2)
-			+ ((acc[i] & 0xFCFCFC) >> 2);
-		src[i] = acc[i];
-		i++;
+		x = 0;
+		while (x < WIDTH)
+		{
+			src = (unsigned int *)(win->img->addr + (y * win->img->line_len
+						+ x * 4));
+			acc = (unsigned int *)(win->accum->addr + (y * win->accum->line_len
+						+ x * 4));
+			*acc = ((*src & 0xFEFEFE) >> 1) + ((*src & 0xFCFCFC) >> 2)
+				+ ((*acc & 0xFCFCFC) >> 2);
+			*src = *acc;
+			x++;
+		}
+		y++;
 	}
 }

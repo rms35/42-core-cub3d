@@ -48,6 +48,8 @@ static void	load_tex(t_win *win, t_img *tex, char *path)
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
 			&tex->endian);
+	tex->width = w;
+	tex->height = h;
 }
 
 static void	setup_buffers(t_win *win, t_img *img)
@@ -59,6 +61,8 @@ static void	setup_buffers(t_win *win, t_img *img)
 			&img->endian);
 	if (!img->addr)
 		close_win(win, EXIT_FAILURE);
+	img->width = WIDTH;
+	img->height = HEIGHT;
 	win->accum->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!win->accum->img)
 		close_win(win, EXIT_FAILURE);
@@ -66,6 +70,24 @@ static void	setup_buffers(t_win *win, t_img *img)
 			&win->accum->line_len, &win->accum->endian);
 	if (!win->accum->addr)
 		close_win(win, EXIT_FAILURE);
+	win->accum->width = WIDTH;
+	win->accum->height = HEIGHT;
+	ft_bzero(win->accum->addr, HEIGHT * win->accum->line_len);
+}
+
+static int	load_tex_silent(t_win *win, t_img *tex, char *path)
+{
+	int	w;
+	int	h;
+
+	tex->img = mlx_xpm_file_to_image(win->mlxptr, path, &w, &h);
+	if (!tex->img)
+		return (0);
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
+			&tex->endian);
+	tex->width = w;
+	tex->height = h;
+	return (1);
 }
 
 static void	load_all_tex(t_win *win)
@@ -76,6 +98,13 @@ static void	load_all_tex(t_win *win)
 	load_tex(win, &win->tex[3], win->map->ea_path);
 	load_tex(win, &win->tex[4], "./textures/floor.xpm");
 	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
+	if (win->map->sky_path)
+	{
+		if (!load_tex_silent(win, &win->sky_tex, win->map->sky_path))
+			win->sky_tex.img = NULL;
+	}
+	else
+		win->sky_tex.img = NULL;
 }
 
 void	setup_mlx(t_win *win, t_img *img)

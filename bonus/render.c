@@ -33,6 +33,8 @@ static void	draw_tex_col(const t_win *win, const t_ray *ray, int x, double p[2])
 	get_tex_x(win, ray, t);
 	pos = (ray->draw_start - (HEIGHT / 2 + win->player->pitch)
 			+ ray->line_height / 2) * (1.0 * 64 / ray->line_height);
+	if (pos < 0)
+		pos = 0;
 	y = ray->draw_start;
 	dst = win->img->addr + (y * win->img->line_len + x * 4);
 	while (y <= ray->draw_end)

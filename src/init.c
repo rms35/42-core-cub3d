@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-void	init_player(t_player *p, char *grid, int width, int total)
+void	init_player(t_player *p, char *grid, const int width, const int total)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->sin_l = sin(-p->turn_speed);
 }
 
-static void	load_tex(t_win *win, t_img *tex, char *path)
+static void	load_tex(const t_win *win, t_img *tex, char *path)
 {
 	int	w;
 	int	h;
@@ -47,6 +47,8 @@ static void	load_tex(t_win *win, t_img *tex, char *path)
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
 			&tex->endian);
+	tex->width = w;
+	tex->height = h;
 }
 
 void	setup_mlx(t_win *win, t_img *img)
@@ -69,6 +71,8 @@ void	setup_mlx(t_win *win, t_img *img)
 			&img->endian);
 	if (!img->addr)
 		close_win(win, EXIT_FAILURE);
+	img->width = WIDTH;
+	img->height = HEIGHT;
 	load_tex(win, &win->tex[0], win->map->no_path);
 	load_tex(win, &win->tex[1], win->map->so_path);
 	load_tex(win, &win->tex[2], win->map->we_path);

@@ -1,0 +1,15 @@
+NO ./textures/north.xpm
+SO ./textures/south.xpm
+WE ./textures/west.xpm
+EA ./textures/east.xpm
+SK ./textures/skybox.xpm
+
+F 20,20,20
+C 200,200,200
+
+1111111
+1222001
+12N2001
+1222001
+1000001
+1111111
