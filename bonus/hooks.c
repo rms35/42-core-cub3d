@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 static void	free_tex(const t_win *win)
 {
 	int	i;
 
 	i = 0;
-	while (i < 6)
+	while (i < 10)
 	{
 		if (win->tex[i].img)
 			mlx_destroy_image(win->mlxptr, win->tex[i].img);
@@ -44,6 +44,8 @@ int	close_win(t_win *win)
 	if (win->map)
 	{
 		free(win->map->grid);
+		free(win->map->door_state);
+		free(win->map->door_target);
 		free(win->map->no_path);
 		free(win->map->so_path);
 		free(win->map->we_path);
@@ -54,12 +56,38 @@ int	close_win(t_win *win)
 	exit(win->exit_status);
 }
 
+static void	update_doors(t_win *win)
+{
+	int	i;
+	int	total;
+
+	total = win->map->width * win->map->height;
+	i = 0;
+	while (i < total)
+	{
+		if (win->map->door_state[i] < win->map->door_target[i])
+		{
+			win->map->door_state[i] += 0.02;
+			if (win->map->door_state[i] > win->map->door_target[i])
+				win->map->door_state[i] = win->map->door_target[i];
+		}
+		else if (win->map->door_state[i] > win->map->door_target[i])
+		{
+			win->map->door_state[i] -= 0.02;
+			if (win->map->door_state[i] < win->map->door_target[i])
+				win->map->door_state[i] = win->map->door_target[i];
+		}
+		i++;
+	}
+}
+
 int	game_loop(t_win *win)
 {
 	double	jump_z;
 	double	bob_z;
 
 	win->pulse_time += 0.05;
+	update_doors(win);
 	jump_z = 0;
 	bob_z = 0;
 	if (win->player->jump_t >= 0)
@@ -70,7 +98,7 @@ int	game_loop(t_win *win)
 			win->player->jump_t = -1.0;
 	}
 	else
-		bob_z = sin(win->player->walk_t * 2.0) * 0.05;
+		bob_z = sin(win->player->walk_t * 1.5) * 0.02;
 	win->player->pos_z = jump_z + bob_z;
 	handle_input(win);
 	render_frame(win);

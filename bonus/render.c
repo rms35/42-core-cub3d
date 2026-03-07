@@ -10,16 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 static void	get_tex_x(const t_win *win, const t_ray *ray, int t[2])
 {
+	double	hit_val;
+	double	state;
+
 	if (ray->side == 0)
-		t[0] = (int)((win->player->pos_y + ray->perp_wall_dist * ray->dir_y)
-				* 64.0) & 63;
+		hit_val = (win->player->pos_y + ray->perp_wall_dist * ray->dir_y);
 	else
-		t[0] = (int)((win->player->pos_x + ray->perp_wall_dist * ray->dir_x)
-				* 64.0) & 63;
+		hit_val = (win->player->pos_x + ray->perp_wall_dist * ray->dir_x);
+	hit_val -= floor(hit_val);
+	t[0] = (int)(hit_val * 64.0) & 63;
+	if (ray->is_door)
+	{
+		state = win->map->door_state[ray->map_y * win->map->width + ray->map_x] / 2.0;
+		if (hit_val < 0.5)
+			t[0] += (int)(state * 64.0);
+		else
+			t[0] -= (int)(state * 64.0);
+	}
+	t[0] &= 63;
 }
 
 static void	draw_tex_col(const t_win *win, const t_ray *ray, int x, double p[2], double pos_z)
@@ -62,7 +74,17 @@ static void	render_wall(const t_win *win, const t_ray *ray, int x, double p[6], 
 {
 	double	param[2];
 
-	if (ray->side == 0)
+	if (ray->is_door)
+	{
+		param[0] = 6.0;
+		param[1] = 1.0;
+	}
+	else if (ray->is_frame)
+	{
+		param[0] = 7.0;
+		param[1] = 1.0;
+	}
+	else if (ray->side == 0)
 	{
 		param[1] = p[2];
 		param[0] = 2.0;
