@@ -56,17 +56,22 @@ int	close_win(t_win *win)
 
 int	game_loop(t_win *win)
 {
+	double	jump_z;
+	double	bob_z;
+
 	win->pulse_time += 0.05;
+	jump_z = 0;
+	bob_z = 0;
 	if (win->player->jump_t >= 0)
 	{
 		win->player->jump_t += 0.1;
-		win->player->pos_z = sin(win->player->jump_t) * 0.5;
+		jump_z = sin(win->player->jump_t) * 0.5;
 		if (win->player->jump_t >= M_PI)
-		{
 			win->player->jump_t = -1.0;
-			win->player->pos_z = 0.0;
-		}
 	}
+	else
+		bob_z = sin(win->player->walk_t * 2.0) * 0.05;
+	win->player->pos_z = jump_z + bob_z;
 	handle_input(win);
 	render_frame(win);
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);

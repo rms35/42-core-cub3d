@@ -66,6 +66,7 @@ int	handle_input(t_win *win)
 {
 	double	d[2];
 	double	s;
+	int		moved;
 
 	process_mouse(win);
 	d[0] = 0;
@@ -74,5 +75,19 @@ int	handle_input(t_win *win)
 	if (win->keys[XK_Shift_L] || win->keys[XK_Shift_R])
 		s *= 2.5;
 	get_move_vec(win, d, s);
-	return (move_player(win, d[0], d[1]));
+	moved = move_player(win, d[0], d[1]);
+	if (moved)
+	{
+		win->player->walk_t += 0.15 * (s / win->player->speed);
+		if (win->player->walk_t > M_PI * 2.0)
+			win->player->walk_t -= M_PI * 2.0;
+	}
+	else
+	{
+		if (win->player->walk_t > 0)
+			win->player->walk_t -= 0.1;
+		if (win->player->walk_t < 0)
+			win->player->walk_t = 0;
+	}
+	return (moved);
 }

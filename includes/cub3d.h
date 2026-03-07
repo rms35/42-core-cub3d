@@ -66,6 +66,7 @@ typedef struct s_player
 	int		pitch;
 	double	jump_t;
 	double	pos_z;
+	double	walk_t;
 }	t_player;
 
 typedef struct s_ray

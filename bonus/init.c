@@ -35,6 +35,7 @@ void	init_player(t_player *p, char *grid, int width, int total)
 	p->pitch = 0;
 	p->jump_t = -1.0;
 	p->pos_z = 0.0;
+	p->walk_t = 0.0;
 }
 
 static void	load_tex(t_win *win, t_img *tex, char *path)
