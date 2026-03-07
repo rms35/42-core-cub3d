@@ -40,12 +40,41 @@ static void	draw_rect(const t_win *win, int x[2], int y[2], int color)
 	}
 }
 
+static void	draw_line(const t_win *win, double x[2], double y[2], int color)
+{
+	double	dx;
+	double	dy;
+	double	step;
+	double	i;
+	double	curr[2];
+
+	dx = x[1] - x[0];
+	dy = y[1] - y[0];
+	if (fabs(dx) >= fabs(dy))
+		step = fabs(dx);
+	else
+		step = fabs(dy);
+	dx /= step;
+	dy /= step;
+	curr[0] = x[0];
+	curr[1] = y[0];
+	i = 0;
+	while (i <= step)
+	{
+		draw_pixel(win, (int)curr[0], (int)curr[1], color);
+		curr[0] += dx;
+		curr[1] += dy;
+		i++;
+	}
+}
+
 static void	draw_minimap(const t_win *win)
 {
-	int	x;
-	int	y;
-	int	s;
-	int	c;
+	int		x;
+	int		y;
+	int		s;
+	int		c;
+	double	p[2];
 
 	s = 10;
 	y = -1;
@@ -61,10 +90,16 @@ static void	draw_minimap(const t_win *win)
 				(int [2]){y * s + 20, y * s + s + 20}, c);
 		}
 	}
-	draw_rect(win, (int [2]){win->player->pos_x * s + 18,
-		win->player->pos_x * s + 22},
-		(int [2]){win->player->pos_y * s + 18,
-		win->player->pos_y * s + 22}, 0xff00ff);
+	p[0] = win->player->pos_x * s + 20;
+	p[1] = win->player->pos_y * s + 20;
+	double tip[2] = {p[0] + win->player->dir_x * 10, p[1] + win->player->dir_y * 10};
+	double left[2] = {p[0] - win->player->dir_x * 4 + win->player->dir_y * 4,
+					  p[1] - win->player->dir_y * 4 - win->player->dir_x * 4};
+	double right[2] = {p[0] - win->player->dir_x * 4 - win->player->dir_y * 4,
+					   p[1] - win->player->dir_y * 4 + win->player->dir_x * 4};
+	draw_line(win, (double [2]){tip[0], left[0]}, (double [2]){tip[1], left[1]}, 0xff00ff);
+	draw_line(win, (double [2]){tip[0], right[0]}, (double [2]){tip[1], right[1]}, 0xff00ff);
+	draw_line(win, (double [2]){left[0], right[0]}, (double [2]){left[1], right[1]}, 0xff00ff);
 }
 
 static void	draw_scanlines(const t_win *win)
