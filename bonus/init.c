@@ -10,15 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../includes/cub3d_bonus.h"
 
 void	init_player(t_player *p, char *grid, int width, int total)
 {
 	int	i;
 
 	i = 0;
-	while (i < total && (grid[i] == '1' || grid[i] == '0'))
+	while (i < total && grid[i] != 'N' && grid[i] != 'S' && grid[i] != 'E' && grid[i] != 'W')
 		i++;
+	if (i >= total)
+		return ;
 	p->pos_x = (double)(i % width) + 0.5;
 	p->pos_y = (double)(i / width) + 0.5;
 	grid[i] = '0';
@@ -114,6 +116,9 @@ static void	load_all_tex(t_win *win)
 	load_tex(win, &win->tex[3], win->map->ea_path);
 	load_tex(win, &win->tex[4], "./textures/floor.xpm");
 	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
+	load_tex(win, &win->tex[6], "./textures/door.xpm");
+	load_tex(win, &win->tex[7], "./textures/door_frame.xpm");
+	load_tex(win, &win->tex[8], "./textures/door_top.xpm");
 	if (win->map->sky_path)
 	{
 		if (!load_tex_silent(win, &win->sky_tex, win->map->sky_path))
