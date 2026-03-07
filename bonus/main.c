@@ -20,6 +20,8 @@ int	main(void)
 	t_player	player;
 
 	ft_memset(&win, 0, sizeof(t_win));
+	ft_memset(&img, 0, sizeof(t_img));
+	ft_memset(&accum, 0, sizeof(t_img));
 	win.map = get_mock_map();
 	win.img = &img;
 	win.accum = &accum;
