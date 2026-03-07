@@ -51,7 +51,7 @@ int	close_win(t_win *win)
 		free(win->map->sky_path);
 		free(win->map);
 	}
-	exit(0);
+	exit(win->exit_status);
 }
 
 int	game_loop(t_win *win)

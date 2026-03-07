@@ -25,11 +25,13 @@ static void	free_tex(const t_win *win)
 	}
 }
 
-int	close_win(const t_win *win, const int status)
+int	close_win(t_win *win)
 {
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	free_tex(win);
+	if (win->img->img)
+		mlx_destroy_image(win->mlxptr, win->img->img);
 	if (win->mlxptr)
 	{
 		mlx_destroy_display(win->mlxptr);
@@ -44,7 +46,7 @@ int	close_win(const t_win *win, const int status)
 		free(win->map->ea_path);
 		free(win->map);
 	}
-	exit(status);
+	exit(win->exit_status);
 }
 
 int	game_loop(t_win *win)

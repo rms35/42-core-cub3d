@@ -100,6 +100,7 @@ typedef struct s_win
 	double		pulse_time;
 	int			mouse_x;
 	int			mouse_y;
+	int			exit_status;
 }	t_win;
 
 // Mapping
@@ -107,7 +108,7 @@ typedef struct s_win
 t_map			*get_mock_map(void);
 void			init_player(t_player *p, char *grid, int width, int total);
 void			setup_mlx(t_win *win, t_img *img);
-int				close_win(const t_win *win, int status);
+int				close_win(t_win *win);
 
 // Player movement
 

@@ -44,7 +44,8 @@ static void	load_tex(t_win *win, t_img *tex, char *path)
 	if (!tex->img)
 	{
 		write(2, "Error loading texture\n", 22);
-		close_win(win, EXIT_FAILURE);
+		win->exit_status = EXIT_FAILURE;
+		close_win(win);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
 			&tex->endian);
@@ -56,20 +57,32 @@ static void	setup_buffers(t_win *win, t_img *img)
 {
 	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!img->img)
-		close_win(win, EXIT_FAILURE);
+	{
+		win->exit_status = EXIT_FAILURE;
+		close_win(win);
+	}
 	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
 			&img->endian);
 	if (!img->addr)
-		close_win(win, EXIT_FAILURE);
+	{
+		win->exit_status = EXIT_FAILURE;
+		close_win(win);
+	}
 	img->width = WIDTH;
 	img->height = HEIGHT;
 	win->accum->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!win->accum->img)
-		close_win(win, EXIT_FAILURE);
+	{
+		win->exit_status = EXIT_FAILURE;
+		close_win(win);
+	}
 	win->accum->addr = mlx_get_data_addr(win->accum->img, &win->accum->bpp,
 			&win->accum->line_len, &win->accum->endian);
 	if (!win->accum->addr)
-		close_win(win, EXIT_FAILURE);
+	{
+		win->exit_status = EXIT_FAILURE;
+		close_win(win);
+	}
 	win->accum->width = WIDTH;
 	win->accum->height = HEIGHT;
 	ft_bzero(win->accum->addr, HEIGHT * win->accum->line_len);
@@ -109,6 +122,7 @@ static void	load_all_tex(t_win *win)
 
 void	setup_mlx(t_win *win, t_img *img)
 {
+	win->exit_status = EXIT_SUCCESS;
 	win->mlxptr = mlx_init();
 	if (!win->mlxptr)
 		exit(1);
