@@ -12,44 +12,63 @@
 
 #include "../includes/cub3d.h"
 
-void	init_player(t_player *p, char *grid, const int width, const int total)
+# define P1_TURNSP 0.013
+# define P1_SPEED 0.02
+# define P1_R 0.2
+
+static void	get_dir(t_player *p, const char c)
+{
+	if (c == 'N')
+	{
+		p->dir_x = 0;
+		p->dir_y = -1;
+	}
+	if (c == 'S')
+	{
+		p->dir_x = 0;
+		p->dir_y = 1;
+	}
+	if (c == 'W')
+	{
+		p->dir_x = 1;
+		p->dir_y = 0;
+	}
+	if (c == 'E')
+	{
+		p->dir_x = -1;
+		p->dir_y = 0;
+	}
+}
+
+void	init_player(t_player *p, const t_map *map, const double fov)
 {
 	int	i;
+	int	total;
 
 	i = 0;
-	while (i < total && (grid[i] == '1' || grid[i] == '0'))
+	total = map->width * map->height;
+	while (i < total && !ft_strchr(PLAYER_DIR, map->grid[i]))
 		i++;
-	p->pos_x = (double)(i % width) + 0.5;
-	p->pos_y = (double)(i / width) + 0.5;
-	grid[i] = '0';
-	p->dir_x = 0.0;
-	p->dir_y = -1.0;
-	p->camp_x = 0.66;
-	p->camp_y = 0.0;
-	p->speed = 0.03;
-	p->turn_speed = 0.01;
+	if (i == total)
+	{
+		write(2, "Error: No player found in map\n", 30);
+		exit(1);
+	}
+	p->pos_x = (double)(i % map->width) + 0.5;
+	p->pos_y = (double)(i / map->width) + 0.5;
+	get_dir(p, map->grid[i]);
+	map->grid[i] = '0';
+	p->camp_x = -p->dir_y * (tan(fov / 2));
+	p->camp_y = p->dir_x * (tan(fov / 2));
+	p->speed = P1_SPEED;
+	p->turn_speed = P1_TURNSP;
 	p->cos_r = cos(p->turn_speed);
 	p->sin_r = sin(p->turn_speed);
 	p->cos_l = cos(-p->turn_speed);
 	p->sin_l = sin(-p->turn_speed);
-}
-
-static void	load_tex(t_win *win, t_img *tex, char *path)
-{
-	int	w;
-	int	h;
-
-	tex->img = mlx_xpm_file_to_image(win->mlxptr, path, &w, &h);
-	if (!tex->img)
-	{
-		write(2, "Error loading texture\n", 22);
-		win->exit_status = EXIT_FAILURE;
-		close_win(win);
-	}
-	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
-			&tex->endian);
-	tex->width = w;
-	tex->height = h;
+	p->fov = fov;
+	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
+	p->radius = P1_R;
 }
 
 void	setup_mlx(t_win *win, t_img *img)
@@ -81,10 +100,4 @@ void	setup_mlx(t_win *win, t_img *img)
 	}
 	img->width = WIDTH;
 	img->height = HEIGHT;
-	load_tex(win, &win->tex[0], win->map->no_path);
-	load_tex(win, &win->tex[1], win->map->so_path);
-	load_tex(win, &win->tex[2], win->map->we_path);
-	load_tex(win, &win->tex[3], win->map->ea_path);
-	load_tex(win, &win->tex[4], "./textures/floor.xpm");
-	load_tex(win, &win->tex[5], "./textures/ceiling.xpm");
 }

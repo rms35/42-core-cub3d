@@ -16,34 +16,34 @@ int	key_press(const int keysym, t_win *win)
 {
 	if (keysym == XK_Escape)
 		close_win(win);
-	if (keysym < 65536)
+	if (keysym < N_KEYS)
 		win->keys[keysym] = 1;
 	return (0);
 }
 
 int	key_release(const int keysym, t_win *win)
 {
-	if (keysym < 65536)
+	if (keysym < N_KEYS)
 		win->keys[keysym] = 0;
 	return (0);
 }
 
-int	handle_input(t_win *win)
+int	handle_input(const t_win *win)
 {
 	int	r;
 
 	r = 0;
 	if (win->keys[XK_w])
-		r |= move_up(win->map->grid, win->map->width, win->player);
+		r += move_up(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_s])
-		r |= move_down(win->map->grid, win->map->width, win->player);
+		r += move_down(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_a])
-		r |= move_left(win->map->grid, win->map->width, win->player);
+		r += move_left(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_d])
-		r |= move_right(win->map->grid, win->map->width, win->player);
+		r += move_right(win->map->grid, win->map->width, win->player);
 	if (win->keys[XK_Left])
-		r |= rotate_left(win->player);
+		r += rotate_left(win->player);
 	if (win->keys[XK_Right])
-		r |= rotate_right(win->player);
+		r += rotate_right(win->player);
 	return (r);
 }

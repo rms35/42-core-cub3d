@@ -42,7 +42,7 @@ Common types:
 
 ## Resources
 - [Ray-casting Tutorial by Lode Vandevenne](https://lodev.org/cgtutor/raycasting.html)
-- [Online Playable version](http://users.atw.hu/wolf3d/)
+- [Wolfenstein3D Online Playable version](http://users.atw.hu/wolf3d/)
 - [Wikipedia Raycasting](https://es.wikipedia.org/wiki/Ray_casting)
 - [Wikipedia Digital Diferential Analyzer](https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm))
 - [Rotation Matrix](https://es.wikipedia.org/wiki/Matriz_de_rotaci%C3%B3n)
@@ -50,6 +50,13 @@ Common types:
 - [javidx9 YouTube Essential Mathematics For Aspiring Game Developers](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
 - [ferxchot YouTube Cómo hacer un raycaster](https://www.youtube.com/watch?v=IzimG4VuW0Q)
 - [Itchio texures and sprites](https://itch.io/game-assets/free/tag-sprites)
+- [Wikipedia Ecuaciones paramétricas](https://es.wikipedia.org/wiki/Ecuaci%C3%B3n_param%C3%A9trica)
+- **DOOM 64**
+- [Ultima Underworld: The Stygian Abyss](https://playclassic.games/games/role-playing-dos-games-online/play-ultima-underworld-stygian-abyss-online/)
+- [Rise of the Triad](https://www.playdosgames.com/online/rise-of-the-triad/)
+- [Duke Nukem 3D](https://playclassic.games/games/first-person-shooter-dos-games-online/play-duke-nukem-3d-online/play/)
 
 ### AI Usage
-Used to investigate about algorithms, create good commit messages folloeing the convention.
+Used to investigate about algorithms, create good commit messages following 
+the convention, ask questions about code and implementation of mathematical 
+algorithms in code, implementing textures and finding bugs.

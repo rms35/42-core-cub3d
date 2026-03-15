@@ -12,24 +12,10 @@
 
 #include "../includes/cub3d.h"
 
-static void	free_tex(const t_win *win)
-{
-	int	i;
-
-	i = 0;
-	while (i < 6)
-	{
-		if (win->tex[i].img)
-			mlx_destroy_image(win->mlxptr, win->tex[i].img);
-		i++;
-	}
-}
-
-int	close_win(t_win *win)
+int	close_win(const t_win *win)
 {
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
-	free_tex(win);
 	if (win->img->img)
 		mlx_destroy_image(win->mlxptr, win->img->img);
 	if (win->mlxptr)
@@ -40,16 +26,12 @@ int	close_win(t_win *win)
 	if (win->map)
 	{
 		free(win->map->grid);
-		free(win->map->no_path);
-		free(win->map->so_path);
-		free(win->map->we_path);
-		free(win->map->ea_path);
 		free(win->map);
 	}
 	exit(win->exit_status);
 }
 
-int	game_loop(t_win *win)
+int	game_loop(const t_win *win)
 {
 	int		render;
 

@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d.h"
 
-int	move_up(char *grid, const int width, t_player *player)
+int	move_up(const char *grid, const int width, t_player *player)
 {
 	double	nx;
 	double	ny;
@@ -22,13 +22,13 @@ int	move_up(char *grid, const int width, t_player *player)
 	nx = player->pos_x + player->dir_x * player->speed;
 	ny = player->pos_y + player->dir_y * player->speed;
 	if (player->dir_x > 0)
-		bx = nx + BUFFER;
+		bx = nx + player->radius;
 	else
-		bx = nx - BUFFER;
+		bx = nx - player->radius;
 	if (player->dir_y > 0)
-		by = ny + BUFFER;
+		by = ny + player->radius;
 	else
-		by = ny - BUFFER;
+		by = ny - player->radius;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -36,7 +36,7 @@ int	move_up(char *grid, const int width, t_player *player)
 	return (1);
 }
 
-int	move_down(char *grid, const int width, t_player *player)
+int	move_down(const char *grid, const int width, t_player *player)
 {
 	double	nx;
 	double	ny;
@@ -46,13 +46,13 @@ int	move_down(char *grid, const int width, t_player *player)
 	nx = player->pos_x - player->dir_x * player->speed;
 	ny = player->pos_y - player->dir_y * player->speed;
 	if (player->dir_x > 0)
-		bx = nx - BUFFER;
+		bx = nx - player->radius;
 	else
-		bx = nx + BUFFER;
+		bx = nx + player->radius;
 	if (player->dir_y > 0)
-		by = ny - BUFFER;
+		by = ny - player->radius;
 	else
-		by = ny + BUFFER;
+		by = ny + player->radius;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -60,7 +60,7 @@ int	move_down(char *grid, const int width, t_player *player)
 	return (1);
 }
 
-int	move_left(char *grid, const int width, t_player *player)
+int	move_left(const char *grid, const int width, t_player *player)
 {
 	double	nx;
 	double	ny;
@@ -70,13 +70,13 @@ int	move_left(char *grid, const int width, t_player *player)
 	nx = player->pos_x + player->dir_y * player->speed;
 	ny = player->pos_y - player->dir_x * player->speed;
 	if (player->dir_y > 0)
-		bx = nx + BUFFER;
+		bx = nx + player->radius;
 	else
-		bx = nx - BUFFER;
+		bx = nx - player->radius;
 	if (player->dir_x > 0)
-		by = ny - BUFFER;
+		by = ny - player->radius;
 	else
-		by = ny + BUFFER;
+		by = ny + player->radius;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')
@@ -84,7 +84,7 @@ int	move_left(char *grid, const int width, t_player *player)
 	return (1);
 }
 
-int	move_right(char *grid, const int width, t_player *player)
+int	move_right(const char *grid, const int width, t_player *player)
 {
 	double	nx;
 	double	ny;
@@ -94,13 +94,13 @@ int	move_right(char *grid, const int width, t_player *player)
 	nx = player->pos_x - player->dir_y * player->speed;
 	ny = player->pos_y + player->dir_x * player->speed;
 	if (player->dir_y > 0)
-		bx = nx - BUFFER;
+		bx = nx - player->radius;
 	else
-		bx = nx + BUFFER;
+		bx = nx + player->radius;
 	if (player->dir_x > 0)
-		by = ny + BUFFER;
+		by = ny + player->radius;
 	else
-		by = ny - BUFFER;
+		by = ny - player->radius;
 	if (grid[(int)player->pos_y * width + (int)bx] != '1')
 		player->pos_x = nx;
 	if (grid[(int)by * width + (int)player->pos_x] != '1')

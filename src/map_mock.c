@@ -49,10 +49,6 @@ t_map	*get_mock_map(void)
 	map->grid = get_grid();
 	if (!map->grid)
 		return (free(map), NULL);
-	map->no_path = ft_strdup("./textures/north.xpm");
-	map->so_path = ft_strdup("./textures/south.xpm");
-	map->we_path = ft_strdup("./textures/west.xpm");
-	map->ea_path = ft_strdup("./textures/east.xpm");
 	map->floor_color = 0x4B4B4B;
 	map->ceil_color = 0x87CEEB;
 	return (map);

@@ -23,6 +23,14 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define BUFFER 0.2
+# define N_KEYS 65536
+# define TEXTS 10
+
+// Player
+# define PLAYER_DIR "WNSE"
+# define P1_FOV 1.32
+# define P1_TURNSP 0.02
+# define P1_SPEED 0.05
 
 typedef struct s_map
 {
@@ -100,10 +108,10 @@ typedef struct s_win
 	t_img		*img;
 	t_map		*map;
 	t_player	*player;
-	t_img		tex[10];
+	t_img		tex[TEXTS];
 	t_img		sky_tex;
 	t_img		*accum;
-	int			keys[65536];
+	int			keys[N_KEYS];
 	double		pulse_time;
 	int			mouse_x;
 	int			mouse_y;

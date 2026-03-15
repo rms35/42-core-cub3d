@@ -34,8 +34,8 @@ MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
-SRCS_FILES  = main.c map_mock.c render.c move_player.c player_dir.c \
-              init.c input.c hooks.c ray.c
+SRCS_FILES  = main.c map_mock.c init.c hooks.c  input.c \
+render.c move_player.c player_dir.c ray.c
 
 SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
                init.c input.c hooks.c ray.c render_bonus.c hud.c keys.c

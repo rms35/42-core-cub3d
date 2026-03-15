@@ -20,19 +20,22 @@
 # include <math.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
+
+// Map
 # define WIDTH 1920
 # define HEIGHT 1080
-# define BUFFER 0.2
+# define N_KEYS 65536
+# define CEILING = 0x87CEEB;
+# define FLOOR = 0x4B4B4B;
+
+// Player
+# define PLAYER_DIR "WNSE"
 
 typedef struct s_map
 {
 	char	*grid;
 	int		width;
 	int		height;
-	char	*no_path;
-	char	*so_path;
-	char	*we_path;
-	char	*ea_path;
 	char	*sky_path;
 	int		floor_color;
 	int		ceil_color;
@@ -55,6 +58,7 @@ typedef struct s_player
 	double	pos_y;
 	double	dir_x;
 	double	dir_y;
+	double	dir_mag;
 	double	camp_x;
 	double	camp_y;
 	double	speed;
@@ -63,23 +67,26 @@ typedef struct s_player
 	double	sin_l;
 	double	cos_r;
 	double	sin_r;
-	int		pitch;
 	double	jump_t;
 	double	pos_z;
 	double	walk_t;
+	double	fov;
+	double	radius;
+	int		pitch;
 }	t_player;
 
 typedef struct s_ray
 {
 	double	dir_x;
 	double	dir_y;
-	int		map_x;
-	int		map_y;
 	double	side_dist_x;
 	double	side_dist_y;
 	double	delta_dist_x;
 	double	delta_dist_y;
 	double	perp_wall_dist;
+	double	ray_mag;
+	int		map_x;
+	int		map_y;
 	int		step_x;
 	int		step_y;
 	int		hit;
@@ -96,10 +103,8 @@ typedef struct s_win
 	t_img		*img;
 	t_map		*map;
 	t_player	*player;
-	t_img		tex[6];
-	t_img		sky_tex;
 	t_img		*accum;
-	int			keys[65536];
+	int			keys[N_KEYS];
 	double		pulse_time;
 	int			mouse_x;
 	int			mouse_y;
@@ -109,22 +114,23 @@ typedef struct s_win
 // Mapping
 
 t_map			*get_mock_map(void);
-void			init_player(t_player *p, char *grid, int width, int total);
+void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
-int				close_win(t_win *win);
+int				close_win(const t_win *win);
 
 // Player movement
 
-int				move_up(char *grid, int width, t_player *player);
-int				move_down(char *grid, int width, t_player *player);
-int				move_left(char *grid, int width, t_player *player);
-int				move_right(char *grid, int width, t_player *player);
+int				move_up(const char *grid, int width, t_player *player);
+int				move_down(const char *grid, int width, t_player *player);
+int				move_left(const char *grid, int width, t_player *player);
+int				move_right(const char *grid, int width, t_player *player);
 int				move_player(t_win *win, double dx, double dy);
 int				rotate_player(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
 // Rendering
+void			render_fisheye(const t_win *win);
 void			render_frame(const t_win *win);
 void			render_env(const t_win *win, const t_ray *ray, int x,
 					double p[2], double pos_z);
@@ -139,7 +145,7 @@ void			apply_motion_blur(const t_win *win);
 int				key_press(int keysym, t_win *win);
 int				key_release(int keysym, t_win *win);
 int				mouse_move(int x, int y, t_win *win);
-int				handle_input(t_win *win);
-int				game_loop(t_win *win);
+int				handle_input(const t_win *win);
+int				game_loop(const t_win *win);
 
 #endif
