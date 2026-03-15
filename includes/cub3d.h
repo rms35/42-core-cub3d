@@ -36,7 +36,6 @@ typedef struct s_map
 	char	*grid;
 	int		width;
 	int		height;
-	char	*sky_path;
 	int		floor_color;
 	int		ceil_color;
 }	t_map;
@@ -67,12 +66,8 @@ typedef struct s_player
 	double	sin_l;
 	double	cos_r;
 	double	sin_r;
-	double	jump_t;
-	double	pos_z;
-	double	walk_t;
 	double	fov;
 	double	radius;
-	int		pitch;
 }	t_player;
 
 typedef struct s_ray
@@ -103,11 +98,7 @@ typedef struct s_win
 	t_img		*img;
 	t_map		*map;
 	t_player	*player;
-	t_img		*accum;
 	int			keys[N_KEYS];
-	double		pulse_time;
-	int			mouse_x;
-	int			mouse_y;
 	int			exit_status;
 }	t_win;
 
