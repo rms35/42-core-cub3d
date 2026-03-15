@@ -120,31 +120,17 @@ int				close_win(const t_win *win);
 
 // Player movement
 
-int				move_up(const char *grid, int width, t_player *player);
-int				move_down(const char *grid, int width, t_player *player);
-int				move_left(const char *grid, int width, t_player *player);
-int				move_right(const char *grid, int width, t_player *player);
-int				move_player(t_win *win, double dx, double dy);
+int				move_player(const t_win *win, double dx, double dy);
 int				rotate_player(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
 // Rendering
-void			render_fisheye(const t_win *win);
 void			render_frame(const t_win *win);
-void			render_env(const t_win *win, const t_ray *ray, int x,
-					double p[2], double pos_z);
-void			render_hud(const t_win *win);
-unsigned int	apply_fog(unsigned int color, double dist, double p);
-unsigned int	apply_fog_factor(unsigned int color, double f, double p);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-void			get_pulses(const t_win *win, double p[6]);
-void			setup_ray_limits(const t_win *win, t_ray *ray, double pos_z);
-void			apply_motion_blur(const t_win *win);
 int				key_press(int keysym, t_win *win);
 int				key_release(int keysym, t_win *win);
-int				mouse_move(int x, int y, t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(const t_win *win);
 

@@ -81,7 +81,10 @@ void	setup_mlx(t_win *win, t_img *img)
 	img->bpp = 4;
 	win->winptr = mlx_new_window(win->mlxptr, WIDTH, HEIGHT, "cub3d");
 	if (!win->winptr)
-		(free(win->mlxptr), exit(1));
+	{
+		free(win->mlxptr);
+		exit(1);
+	}
 	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
 	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
 	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);

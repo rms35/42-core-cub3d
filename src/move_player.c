@@ -12,100 +12,31 @@
 
 #include "../includes/cub3d.h"
 
-int	move_up(const char *grid, const int width, t_player *player)
+int	move_player(const t_win *win, double dx, double dy)
 {
 	double	nx;
 	double	ny;
 	double	bx;
 	double	by;
 
-	nx = player->pos_x + player->dir_x * player->speed;
-	ny = player->pos_y + player->dir_y * player->speed;
-	if (player->dir_x > 0)
-		bx = nx + player->radius;
-	else
-		bx = nx - player->radius;
-	if (player->dir_y > 0)
-		by = ny + player->radius;
-	else
-		by = ny - player->radius;
-	if (grid[(int)player->pos_y * width + (int)bx] != '1')
-		player->pos_x = nx;
-	if (grid[(int)by * width + (int)player->pos_x] != '1')
-		player->pos_y = ny;
+	nx = win->player->pos_x + dx;
+	ny = win->player->pos_y + dy;
+	bx = nx - win->player->radius;
+	if (dx > 0)
+		bx = nx + win->player->radius;
+	if (win->map->grid[(int)(win->player->pos_y - win->player->radius)
+		* win->map->width + (int)bx] != '1' &&
+		win->map->grid[(int)(win->player->pos_y + win->player->radius)
+		* win->map->width + (int)bx] != '1')
+		win->player->pos_x = nx;
+	by = ny - win->player->radius;
+	if (dy > 0)
+		by = ny + win->player->radius;
+	if (win->map->grid[(int)by * win->map->width
+		+ (int)(win->player->pos_x - win->player->radius)] != '1' &&
+		win->map->grid[(int)by * win->map->width
+		+ (int)(win->player->pos_x + win->player->radius)] != '1')
+		win->player->pos_y = ny;
 	return (1);
 }
-
-int	move_down(const char *grid, const int width, t_player *player)
-{
-	double	nx;
-	double	ny;
-	double	bx;
-	double	by;
-
-	nx = player->pos_x - player->dir_x * player->speed;
-	ny = player->pos_y - player->dir_y * player->speed;
-	if (player->dir_x > 0)
-		bx = nx - player->radius;
-	else
-		bx = nx + player->radius;
-	if (player->dir_y > 0)
-		by = ny - player->radius;
-	else
-		by = ny + player->radius;
-	if (grid[(int)player->pos_y * width + (int)bx] != '1')
-		player->pos_x = nx;
-	if (grid[(int)by * width + (int)player->pos_x] != '1')
-		player->pos_y = ny;
-	return (1);
-}
-
-int	move_left(const char *grid, const int width, t_player *player)
-{
-	double	nx;
-	double	ny;
-	double	bx;
-	double	by;
-
-	nx = player->pos_x + player->dir_y * player->speed;
-	ny = player->pos_y - player->dir_x * player->speed;
-	if (player->dir_y > 0)
-		bx = nx + player->radius;
-	else
-		bx = nx - player->radius;
-	if (player->dir_x > 0)
-		by = ny - player->radius;
-	else
-		by = ny + player->radius;
-	if (grid[(int)player->pos_y * width + (int)bx] != '1')
-		player->pos_x = nx;
-	if (grid[(int)by * width + (int)player->pos_x] != '1')
-		player->pos_y = ny;
-	return (1);
-}
-
-int	move_right(const char *grid, const int width, t_player *player)
-{
-	double	nx;
-	double	ny;
-	double	bx;
-	double	by;
-
-	nx = player->pos_x - player->dir_y * player->speed;
-	ny = player->pos_y + player->dir_x * player->speed;
-	if (player->dir_y > 0)
-		bx = nx - player->radius;
-	else
-		bx = nx + player->radius;
-	if (player->dir_x > 0)
-		by = ny + player->radius;
-	else
-		by = ny - player->radius;
-	if (grid[(int)player->pos_y * width + (int)bx] != '1')
-		player->pos_x = nx;
-	if (grid[(int)by * width + (int)player->pos_x] != '1')
-		player->pos_y = ny;
-	return (1);
-}
-
 

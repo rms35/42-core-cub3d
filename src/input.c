@@ -28,19 +28,44 @@ int	key_release(const int keysym, t_win *win)
 	return (0);
 }
 
+void update_dir(const t_win *win, t_player *p, double *dx, double *dy)
+{
+	if (win->keys[XK_w])
+	{
+		*dx += p->dir_x * p->speed;
+		*dy += p->dir_y * p->speed;
+	}
+	if (win->keys[XK_s])
+	{
+		*dx -= p->dir_x * p->speed;
+		*dy -= p->dir_y * p->speed;
+	}
+	if (win->keys[XK_a])
+	{
+		*dx += p->dir_y * p->speed;
+		*dy -= p->dir_x * p->speed;
+	}
+	if (win->keys[XK_d])
+	{
+		*dx -= p->dir_y * p->speed;
+		*dy += p->dir_x * p->speed;
+	}
+}
+
 int	handle_input(const t_win *win)
 {
-	int	r;
+	t_player	*p;
+	double		dx;
+	double		dy;
+	int			r;
 
 	r = 0;
-	if (win->keys[XK_w])
-		r += move_up(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_s])
-		r += move_down(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_a])
-		r += move_left(win->map->grid, win->map->width, win->player);
-	if (win->keys[XK_d])
-		r += move_right(win->map->grid, win->map->width, win->player);
+	p = win->player;
+	dx = 0;
+	dy = 0;
+	update_dir(win, p, &dx, &dy);
+	if (dx != 0 || dy != 0)
+		r = move_player((t_win *)win, dx, dy);
 	if (win->keys[XK_Left])
 		r += rotate_left(win->player);
 	if (win->keys[XK_Right])
