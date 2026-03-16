@@ -55,6 +55,13 @@ typedef struct s_map
 	int		ceil_color;
 }	t_map;
 
+typedef struct s_sprite {
+	double	x;
+	double	y;
+	int		texture_id;
+	double	distance;
+}	t_sprite;
+
 typedef struct s_img
 {
 	void	*img;
@@ -124,17 +131,19 @@ typedef struct s_win
 	t_img       textures[N_TEX];
 	t_map		*map;
 	t_player	*player;
-	int			keys[N_KEYS];
+	int			*keys;
 	int			exit_status;
 }	t_win;
 
 // Mapping
+
 t_map			*get_mock_map(t_win *win);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				close_win(const t_win *win);
 
 // Player movement
+
 int				mouse_hook(int x, int y, const t_win *win);
 int				move_player(const t_win *win, double dx, double dy);
 void			rot_x_axis(t_player *p, double angle);
@@ -142,11 +151,12 @@ int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
 // Rendering
+
 void			render_frame(const t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-int				key_press(int keysym, t_win *win);
-int				key_release(int keysym, t_win *win);
+int				key_press(int keysym, const t_win *win);
+int				key_release(int keysym, const t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(const t_win *win);
 

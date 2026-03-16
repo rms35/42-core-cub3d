@@ -14,6 +14,21 @@
 
 #define P1_FOV 1.7
 
+/* TODO:	NOW
+*		 - sprites
+*		 - minimap
+*		 -
+*			LATER:
+*		 - Head bobbing
+*		 - Mouse physics
+*		 - Sky/ceiling and floor textures
+*		 - Planned map nad textures
+*		 - Jumping and crouching
+*		 - Nice HUD
+*		 - Different players/modes for the same player
+*		 - FOV variation when running?
+*/
+
 int	game_loop(const t_win *win)
 {
 	int	render;
@@ -49,9 +64,11 @@ int	main(void)
 	t_img		img;
 	t_win		win;
 	t_map		*map;
+	static int	keys[N_KEYS];
 
 	ft_bzero(&win, sizeof(t_win));
 	win.img = &img;
+	win.keys = keys;
 	setup_mlx(&win, win.img);
 	map = get_mock_map(&win);
 	init_player(&player, map, P1_FOV);

@@ -120,8 +120,8 @@ int				rotate_right(t_player *player);
 void			render_frame(const t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-int				key_press(int keysym, t_win *win);
-int				key_release(int keysym, t_win *win);
+int				key_press(int keysym, const t_win *win);
+int				key_release(int keysym, const t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(const t_win *win);
 

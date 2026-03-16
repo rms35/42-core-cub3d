@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d_bonus.h"
 
-int	key_press(const int keysym, t_win *win)
+int	key_press(const int keysym, const t_win *win)
 {
 	if (keysym == XK_Escape)
 		close_win(win);
@@ -21,7 +21,7 @@ int	key_press(const int keysym, t_win *win)
 	return (0);
 }
 
-int	key_release(const int keysym, t_win *win)
+int	key_release(const int keysym, const t_win *win)
 {
 	if (keysym < N_KEYS)
 		win->keys[keysym] = 0;

@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d_bonus.h"
 
-static void	draw_tex(const t_win *win, t_ray *ray, int int_x, int y)
+static void	draw_wall(const t_win *win, t_ray *ray, const int int_x, int y)
 {
 	int tex_y;
 	int tex_x;
@@ -26,6 +26,7 @@ static void	draw_tex(const t_win *win, t_ray *ray, int int_x, int y)
 	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
 		color;
 }
+
 static void	draw_line(const t_win *win, t_ray *ray, const int x)
 {
 	int	y;
@@ -43,7 +44,7 @@ static void	draw_line(const t_win *win, t_ray *ray, const int x)
 		}
 		while (y < ray->draw_end)
 		{
-			draw_tex(win, ray, int_x, y);
+			draw_wall(win, ray, int_x, y);
 			y++;
 		}
 		while (y < HEIGHT)
@@ -55,7 +56,7 @@ static void	draw_line(const t_win *win, t_ray *ray, const int x)
 	}
 }
 
-static void	get_tex(t_ray *ray)
+static void	get_wall(t_ray *ray)
 {
 	if (ray->side == 0)
 	{
@@ -97,7 +98,7 @@ void	render_frame(const t_win *win)
 		ray.tex_step = 1.0 * TEX_HEIGHT / ray.line_height;
 		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2) *
 			ray.tex_step;
-		get_tex(&ray);
+		get_wall(&ray);
 		draw_line(win, &ray, x);
 		x++;
 	}
