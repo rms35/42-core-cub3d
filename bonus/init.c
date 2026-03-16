@@ -45,8 +45,10 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 	int	i;
 	int	total;
 
+	ft_bzero(p, sizeof(t_player));
 	i = 0;
 	total = map->width * map->height;
+
 	while (i < total && !ft_strchr(PLAYER_DIR, map->grid[i]))
 		i++;
 	if (i == total)
@@ -61,14 +63,15 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 	p->camp_x = -p->dir_y * (tan(fov / 2));
 	p->camp_y = p->dir_x * (tan(fov / 2));
 	p->speed = P1_SPEED;
-	p->turn_speed = P1_TURNSP;
-	p->cos_r = cos(p->turn_speed);
-	p->sin_r = sin(p->turn_speed);
-	p->cos_l = cos(-p->turn_speed);
-	p->sin_l = sin(-p->turn_speed);
+	p->rot_speed = P1_TURNSP;
+	p->cos_r = cos(p->rot_speed);
+	p->sin_r = sin(p->rot_speed);
+	p->cos_l = cos(-p->rot_speed);
+	p->sin_l = sin(-p->rot_speed);
 	p->fov = fov;
 	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
 	p->radius = P1_R;
+	p->pitch = 0;
 }
 
 void	setup_mlx(t_win *win, t_img *img)
@@ -88,6 +91,7 @@ void	setup_mlx(t_win *win, t_img *img)
 	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
 	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
 	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
+	mlx_hook(win->winptr, MotionNotify, PointerMotionMask, mouse_hook, win);
 	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!img->img)
 	{
@@ -103,4 +107,6 @@ void	setup_mlx(t_win *win, t_img *img)
 	}
 	img->width = WIDTH;
 	img->height = HEIGHT;
+	mlx_mouse_hide(win->mlxptr, win->winptr);
+	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
 }

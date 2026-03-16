@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d_bonis.h                                      :+:      :+:     :+:  */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H
 
 # include "../libft/libft.h"
 # include "../minilibx-linux/mlx.h"
@@ -25,11 +25,10 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-# define CEILING = 0x87CEEB;
-# define FLOOR = 0x4B4B4B;
 
 // Player
 # define PLAYER_DIR "WNSE"
+# define M_SENS 0.0015
 
 typedef struct s_map
 {
@@ -61,13 +60,15 @@ typedef struct s_player
 	double	camp_x;
 	double	camp_y;
 	double	speed;
-	double	turn_speed;
+	double	rot_speed;
 	double	cos_l;
 	double	sin_l;
 	double	cos_r;
 	double	sin_r;
 	double	fov;
 	double	radius;
+	int		pitch;
+	int		m_delta_x;
 }	t_player;
 
 typedef struct s_ray
@@ -103,16 +104,15 @@ typedef struct s_win
 }	t_win;
 
 // Mapping
-
 t_map			*get_mock_map(void);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				close_win(const t_win *win);
 
 // Player movement
-
+int				mouse_hook(int x, int y, const t_win *win);
 int				move_player(const t_win *win, double dx, double dy);
-int				rotate_player(t_player *p, double angle);
+void			rot_x_axis(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 

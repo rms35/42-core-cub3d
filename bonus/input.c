@@ -66,9 +66,5 @@ int	handle_input(const t_win *win)
 	update_dir(win, p, &dx, &dy);
 	if (dx != 0 || dy != 0)
 		r = move_player((t_win *)win, dx, dy);
-	if (win->keys[XK_Left])
-		r += rotate_left(win->player);
-	if (win->keys[XK_Right])
-		r += rotate_right(win->player);
 	return (r);
 }

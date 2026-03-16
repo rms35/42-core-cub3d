@@ -67,21 +67,21 @@ void	render_frame(const t_win *win)
 {
 	t_ray	ray;
 	int		x;
-	int		height;
+	int		center_ofs;
 
 	x = 0;
-	height = HEIGHT / 2;
 	while (x < WIDTH)
 	{
 		init_ray(win, &ray, x);
 		perform_dda(win, &ray);
 		if (ray.perp_wall_dist < 0.1)
 			ray.perp_wall_dist = 0.1;
-		ray.line_height = (int)((double)height / ray.perp_wall_dist);
-		ray.draw_start = -ray.line_height / 2 + HEIGHT / 2;
+		center_ofs = (HEIGHT / 2) + win->player->pitch;
+		ray.line_height = (int)((double)HEIGHT / 2 / ray.perp_wall_dist);
+		ray.draw_start = center_ofs - (ray.line_height / 2);
 		if (ray.draw_start < 0)
 			ray.draw_start = 0;
-		ray.draw_end = ray.line_height / 2 + HEIGHT / 2;
+		ray.draw_end = center_ofs + (ray.line_height / 2);
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
 		draw_line(win, &ray, x, get_wall(&ray));

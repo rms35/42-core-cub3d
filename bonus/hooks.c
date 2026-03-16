@@ -12,8 +12,19 @@
 
 #include "../includes/cub3d_bonus.h"
 
+int	mouse_hook(const int x, const int y, const t_win *win)
+{
+	(void)y;
+	if (x == WIDTH / 2)
+		return (0);
+	win->player->m_delta_x += (x - WIDTH / 2);
+	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
+	return (0);
+}
+
 int	close_win(const t_win *win)
 {
+	mlx_mouse_show(win->mlxptr, win->winptr);
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	if (win->img->img)
@@ -29,17 +40,4 @@ int	close_win(const t_win *win)
 		free(win->map);
 	}
 	exit(win->exit_status);
-}
-
-int	game_loop(const t_win *win)
-{
-	int		render;
-
-	render = handle_input(win);
-	if (render)
-	{
-		render_frame(win);
-		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
-	}
-	return (0);
 }
