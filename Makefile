@@ -13,7 +13,8 @@
 NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3
+CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3 \
+-fsanitize=address,leak -O0
 RM          = rm -rf
 
 # Directories
@@ -38,7 +39,7 @@ SRCS_FILES  = main.c map_mock.c init.c hooks.c  input.c \
 render.c move_player.c player_dir.c ray.c
 
 SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
-               init.c input.c hooks.c ray.c render_bonus.c hud.c keys.c
+               init.c input.c hooks.c ray.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
