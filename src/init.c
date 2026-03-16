@@ -61,11 +61,11 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 	p->camp_x = -p->dir_y * (tan(fov / 2));
 	p->camp_y = p->dir_x * (tan(fov / 2));
 	p->speed = P1_SPEED;
-	p->turn_speed = P1_TURNSP;
-	p->cos_r = cos(p->turn_speed);
-	p->sin_r = sin(p->turn_speed);
-	p->cos_l = cos(-p->turn_speed);
-	p->sin_l = sin(-p->turn_speed);
+	p->rot_speed = P1_TURNSP;
+	p->cos_r = cos(p->rot_speed);
+	p->sin_r = sin(p->rot_speed);
+	p->cos_l = cos(-p->rot_speed);
+	p->sin_l = sin(-p->rot_speed);
 	p->fov = fov;
 	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
 	p->radius = P1_R;

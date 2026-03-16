@@ -61,7 +61,7 @@ typedef struct s_player
 	double	camp_x;
 	double	camp_y;
 	double	speed;
-	double	turn_speed;
+	double	rot_speed;
 	double	cos_l;
 	double	sin_l;
 	double	cos_r;
