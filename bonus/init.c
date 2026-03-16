@@ -43,15 +43,12 @@ static void	get_dir(t_player *p, const char c)
 void	init_player(t_player *p, const t_map *map, const double fov)
 {
 	int	i;
-	int	total;
 
 	ft_bzero(p, sizeof(t_player));
 	i = 0;
-	total = map->width * map->height;
-
-	while (i < total && !ft_strchr(PLAYER_DIR, map->grid[i]))
+	while (i < map->width * map->height && !ft_strchr(PLYR_DIR, map->grid[i]))
 		i++;
-	if (i == total)
+	if (i == map->width * map->height)
 	{
 		write(2, "Error: No player found in map\n", 30);
 		exit(1);
@@ -71,7 +68,6 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 	p->fov = fov;
 	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
 	p->radius = P1_R;
-	p->pitch = 0;
 }
 
 void	setup_mlx(t_win *win, t_img *img)

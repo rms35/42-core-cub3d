@@ -47,7 +47,7 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 
 	i = 0;
 	total = map->width * map->height;
-	while (i < total && !ft_strchr(PLAYER_DIR, map->grid[i]))
+	while (i < total && !ft_strchr(PLYR_DIR, map->grid[i]))
 		i++;
 	if (i == total)
 	{

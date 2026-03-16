@@ -27,7 +27,7 @@
 # define N_KEYS 65536
 
 // Player
-# define PLAYER_DIR "WNSE"
+# define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
 
 typedef struct s_map
@@ -67,8 +67,9 @@ typedef struct s_player
 	double	sin_r;
 	double	fov;
 	double	radius;
-	int		pitch;
 	int		m_delta_x;
+	int		m_delta_y;
+	int		pitch;
 }	t_player;
 
 typedef struct s_ray

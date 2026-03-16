@@ -29,7 +29,7 @@
 # define FLOOR = 0x4B4B4B;
 
 // Player
-# define PLAYER_DIR "WNSE"
+# define PLYR_DIR "WNSE"
 
 typedef struct s_map
 {
