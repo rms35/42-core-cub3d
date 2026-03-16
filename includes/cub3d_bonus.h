@@ -29,6 +29,7 @@
 // Player
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
+# define P1_SPEED 0.02
 
 typedef struct s_map
 {
@@ -60,6 +61,7 @@ typedef struct s_player
 	double	camp_x;
 	double	camp_y;
 	double	speed;
+	double	fwd_speed;
 	double	rot_speed;
 	double	cos_l;
 	double	sin_l;

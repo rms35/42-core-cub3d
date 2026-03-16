@@ -12,7 +12,7 @@
 
 #include "../includes/cub3d_bonus.h"
 
-int	move_player(const t_win *win, double dx, double dy)
+int	move_player(const t_win *win, const double dx, const double dy)
 {
 	double	nx;
 	double	ny;

@@ -13,7 +13,6 @@
 #include "../includes/cub3d_bonus.h"
 
 # define P1_TURNSP 0.013
-# define P1_SPEED 0.02
 # define P1_R 0.2
 
 static void	get_dir(t_player *p, const char c)

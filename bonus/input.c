@@ -32,8 +32,8 @@ void update_dir(const t_win *win, t_player *p, double *dx, double *dy)
 {
 	if (win->keys[XK_w])
 	{
-		*dx += p->dir_x * p->speed;
-		*dy += p->dir_y * p->speed;
+		*dx += p->dir_x * p->fwd_speed;
+		*dy += p->dir_y * p->fwd_speed;
 	}
 	if (win->keys[XK_s])
 	{
@@ -64,6 +64,10 @@ int	handle_input(const t_win *win)
 	dx = 0;
 	dy = 0;
 	update_dir(win, p, &dx, &dy);
+	if (win->keys[XK_Shift_L])
+		win->player->fwd_speed = P1_SPEED * 2;
+	if (win->keys[XK_Shift_L] == 0)
+		win->player->fwd_speed = P1_SPEED;
 	if (dx != 0 || dy != 0)
 		r = move_player((t_win *)win, dx, dy);
 	return (r);
