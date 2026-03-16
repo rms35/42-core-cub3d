@@ -14,12 +14,12 @@
 
 int	mouse_hook(const int x, const int y, const t_win *win)
 {
-	(void)y;
-	if (x == WIDTH / 2)
+	if (x == WIDTH / 2 && y == HEIGHT / 2)
 		return (0);
 	win->player->m_delta_x += (x - WIDTH / 2);
+	win->player->m_delta_y += (y - HEIGHT / 2);
 	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
-	return (0);
+	return (1);
 }
 
 int	close_win(const t_win *win)

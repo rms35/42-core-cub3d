@@ -25,6 +25,16 @@ int	game_loop(const t_win *win)
 		win->player->m_delta_x = 0;
 		render = 1;
 	}
+	if (win->player->m_delta_y != 0)
+	{
+		win->player->pitch -= win->player->m_delta_y;
+		win->player->m_delta_y = 0;
+		if (win->player->pitch > HEIGHT / 2)
+			win->player->pitch = HEIGHT / 2;
+		if (win->player->pitch < -HEIGHT / 2)
+			win->player->pitch = -HEIGHT / 2;
+		render = 1;
+	}
 	if (render)
 	{
 		render_frame(win);
