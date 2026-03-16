@@ -21,17 +21,19 @@ int	move_player(const t_win *win, const double dx, const double dy)
 
 	nx = win->player->pos_x + dx;
 	ny = win->player->pos_y + dy;
-	bx = nx - win->player->radius;
 	if (dx > 0)
 		bx = nx + win->player->radius;
+	else
+		bx = nx - win->player->radius;
 	if (win->map->grid[(int)(win->player->pos_y - win->player->radius)
 		* win->map->width + (int)bx] != '1' &&
 		win->map->grid[(int)(win->player->pos_y + win->player->radius)
 		* win->map->width + (int)bx] != '1')
 		win->player->pos_x = nx;
-	by = ny - win->player->radius;
 	if (dy > 0)
 		by = ny + win->player->radius;
+	else
+		by = ny - win->player->radius;
 	if (win->map->grid[(int)by * win->map->width
 		+ (int)(win->player->pos_x - win->player->radius)] != '1' &&
 		win->map->grid[(int)by * win->map->width

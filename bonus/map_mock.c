@@ -37,7 +37,24 @@ static char	*get_grid(void)
 			"11111111111111111111"));
 }
 
-t_map	*get_mock_map(void)
+static int load_texture(const t_win *win, t_img *tex, char *path)
+{
+	tex->img = mlx_xpm_file_to_image(win->mlxptr, path, &tex->width,
+		&tex->height);
+	if (!tex->img)
+	{
+		write(2, "Error: Failed to load texture: ", 32);
+		write(2, path, ft_strlen(path));
+		write(2, "\n", 1);
+		return (1);
+	}
+	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
+		&tex->line_len, &tex->endian);
+	return (0);
+}
+
+// TODO: Free everything if errors happen
+t_map	*get_mock_map(t_win *win)
 {
 	t_map	*map;
 
@@ -51,5 +68,11 @@ t_map	*get_mock_map(void)
 		return (free(map), NULL);
 	map->floor_color = 0x4B4B4B;
 	map->ceil_color = 0x87CEEB;
+	load_texture(win, &win->textures[0], "textures/north.xpm");
+	load_texture(win, &win->textures[1], "textures/south.xpm");
+	load_texture(win, &win->textures[2], "textures/west.xpm");
+	load_texture(win, &win->textures[3], "textures/east.xpm");
+	load_texture(win, &win->textures[4], "textures/skybox.xpm");
+	load_texture(win, &win->textures[5], "textures/floor.xpm");
 	return (map);
 }

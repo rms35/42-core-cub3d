@@ -22,14 +22,29 @@
 # include <X11/X.h>
 
 // Map
+
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
 
 // Player
+
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
 # define P1_SPEED 0.02
+
+// Textures
+
+# define TEX_WIDTH 64
+# define TEX_HEIGHT 64
+# define N_TEX 6
+# define W1N 0
+# define W1S 1
+# define W1W 2
+# define W1E 3
+# define S1 4
+# define F1 5
+
 
 typedef struct s_map
 {
@@ -84,6 +99,12 @@ typedef struct s_ray
 	double	delta_dist_y;
 	double	perp_wall_dist;
 	double	ray_mag;
+	double	wall_x;
+	double	tex_step;
+	double	tex_pos;
+	int		wall_tex;
+	int		ceiling_tex;
+	int		floor_tex;
 	int		map_x;
 	int		map_y;
 	int		step_x;
@@ -100,6 +121,7 @@ typedef struct s_win
 	void		*winptr;
 	void		*mlxptr;
 	t_img		*img;
+	t_img       textures[N_TEX];
 	t_map		*map;
 	t_player	*player;
 	int			keys[N_KEYS];
@@ -107,7 +129,7 @@ typedef struct s_win
 }	t_win;
 
 // Mapping
-t_map			*get_mock_map(void);
+t_map			*get_mock_map(t_win *win);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				close_win(const t_win *win);

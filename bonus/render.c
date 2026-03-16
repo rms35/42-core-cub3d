@@ -12,7 +12,21 @@
 
 #include "../includes/cub3d_bonus.h"
 
-static void	draw_line(const t_win *win, const t_ray *ray, int x, int color)
+static void	draw_tex(const t_win *win, t_ray *ray, int int_x, int y)
+{
+	int tex_y;
+	int tex_x;
+	int	color;
+
+	tex_y = (int)ray->tex_pos & (TEX_HEIGHT - 1);
+	tex_x = (int)(ray->wall_x * (double)TEX_WIDTH);
+	ray->tex_pos += ray->tex_step;
+	color = ((unsigned int *)win->textures[ray->wall_tex].addr)[TEX_WIDTH *
+		tex_y + tex_x];
+	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
+		color;
+}
+static void	draw_line(const t_win *win, t_ray *ray, const int x)
 {
 	int	y;
 	int	int_x;
@@ -29,8 +43,7 @@ static void	draw_line(const t_win *win, const t_ray *ray, int x, int color)
 		}
 		while (y < ray->draw_end)
 		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
-				color;
+			draw_tex(win, ray, int_x, y);
 			y++;
 		}
 		while (y < HEIGHT)
@@ -42,25 +55,22 @@ static void	draw_line(const t_win *win, const t_ray *ray, int x, int color)
 	}
 }
 
-static int	get_wall(const t_ray *ray)
+static void	get_tex(t_ray *ray)
 {
-	int	color;
-
 	if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
-			color = 0x00FF0000;
+			ray->wall_tex = W1W;
 		else
-			color = 0x0000FF00;
+			ray->wall_tex = W1E;
 	}
 	else
 	{
 		if (ray->dir_y > 0)
-			color = 0x5F0000FF;
+			ray->wall_tex = W1S;
 		else
-			color = 0x00FFFF00;
+			ray->wall_tex = W1N;
 	}
-	return (color);
 }
 
 void	render_frame(const t_win *win)
@@ -84,7 +94,11 @@ void	render_frame(const t_win *win)
 		ray.draw_end = center_ofs + (ray.line_height / 2);
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		draw_line(win, &ray, x, get_wall(&ray));
+		ray.tex_step = 1.0 * TEX_HEIGHT / ray.line_height;
+		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2) *
+			ray.tex_step;
+		get_tex(&ray);
+		draw_line(win, &ray, x);
 		x++;
 	}
 }

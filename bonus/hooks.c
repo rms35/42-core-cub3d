@@ -24,6 +24,14 @@ int	mouse_hook(const int x, const int y, const t_win *win)
 
 int	close_win(const t_win *win)
 {
+	int	i;
+
+	i = 0;
+	while (i < N_TEX)
+	{
+		mlx_destroy_image(win->mlxptr, win->textures[i].img);
+		i++;
+	}
 	mlx_mouse_show(win->mlxptr, win->winptr);
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
