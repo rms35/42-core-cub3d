@@ -29,16 +29,13 @@
 *		 - FOV variation when running?
 */
 
-int	game_loop(const t_win *win)
+int	game_loop(t_win *win)
 {
-	int	render;
-
-	render = handle_input(win);
+	handle_input(win);
 	if (win->player->m_delta_x != 0)
 	{
 		rot_x_axis(win->player, (double)win->player->m_delta_x * M_SENS);
 		win->player->m_delta_x = 0;
-		render = 1;
 	}
 	if (win->player->m_delta_y != 0)
 	{
@@ -48,13 +45,9 @@ int	game_loop(const t_win *win)
 			win->player->pitch = HEIGHT / 2;
 		if (win->player->pitch < -HEIGHT / 2)
 			win->player->pitch = -HEIGHT / 2;
-		render = 1;
 	}
-	if (render)
-	{
-		render_frame(win);
-		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
-	}
+	render_frame(win);
+	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
 	return (0);
 }
 
@@ -67,12 +60,19 @@ int	main(void)
 	static int	keys[N_KEYS];
 
 	ft_bzero(&win, sizeof(t_win));
+	win.z_buffer = ft_calloc(WIDTH, sizeof(double));
+	if (!win.z_buffer)
+	{
+		write(2, "Error: malloc\n", 8);
+		exit(EXIT_FAILURE);
+	}
+	init_sprites(&win);
 	win.img = &img;
 	win.keys = keys;
+	win.player = &player;
 	setup_mlx(&win, win.img);
 	map = get_mock_map(&win);
-	init_player(&player, map, P1_FOV);
-	win.player = &player;
+	init_player(&win, &player, map, P1_FOV);
 	win.map = map;
 	render_frame(&win);
 	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);

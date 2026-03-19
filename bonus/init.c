@@ -15,6 +15,12 @@
 # define P1_TURNSP 0.013
 # define P1_R 0.2
 
+// static void	load_sprites(t_sprite *sprites)
+// {
+// 	int	i;
+//
+// }
+
 static void	get_dir(t_player *p, const char c)
 {
 	if (c == 'N')
@@ -39,15 +45,19 @@ static void	get_dir(t_player *p, const char c)
 	}
 }
 
-void	init_player(t_player *p, const t_map *map, const double fov)
+void	init_player(const t_win *win, t_player *p, const t_map *map, const
+	double fov)
 {
-	int	i;
+	int		i;
+	int		j;
+	int		sprites;
+	double	inv_det;
 
 	ft_bzero(p, sizeof(t_player));
 	i = 0;
 	while (i < map->width * map->height && !ft_strchr(PLYR_DIR, map->grid[i]))
 		i++;
-	if (i == map->width * map->height)
+	if (i >= map->width * map->height)
 	{
 		write(2, "Error: No player found in map\n", 30);
 		exit(1);
@@ -67,6 +77,52 @@ void	init_player(t_player *p, const t_map *map, const double fov)
 	p->fov = fov;
 	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
 	p->radius = P1_R;
+	j = 0;
+	sprites = 0;
+	inv_det = 1.0 / (p->camp_x * p->dir_y - p->dir_x * p->camp_y);
+	while (j < map->width * map->height)
+	{
+		if (map->grid[j] == 'F' && sprites < N_SPRITES)
+		{
+			win->sprites[sprites].x = (double)(j % map->width) + 0.5;
+			win->sprites[sprites].y = (double)(j / map->width) + 0.5;
+			win->sprites[sprites].dist = inv_det * (-p->camp_y *
+				(win->sprites[sprites].x - p->pos_x) + p->camp_x * (win->sprites[sprites].y - p->pos_y));
+			if (load_texture(win, &win->sprites[sprites].tex, "textures/fire_0"
+															 ".xpm") == 1)
+				return ;
+			sprites++;
+		}
+		j++;
+	}
+}
+
+void	init_sprites(t_win *win)
+{
+	win->sprites = ft_calloc(N_SPRITES, sizeof(t_sprite));
+	if (!win->sprites)
+	{
+		free(win->z_buffer);
+		write(2, "Error: malloc\n", 8);
+		exit(EXIT_FAILURE);
+	}
+	win->sprite_dist = ft_calloc(N_SPRITES, sizeof(double));
+	if (!win->sprite_dist)
+	{
+		free(win->z_buffer);
+		free(win->sprites);
+		write(2, "Error: malloc\n", 8);
+		exit(EXIT_FAILURE);
+	}
+	win->sprite_order = ft_calloc(N_SPRITES, sizeof(double));
+	if (!win->sprite_order)
+	{
+		free(win->z_buffer);
+		free(win->sprites);
+		free(win->sprite_dist);
+		write(2, "Error: malloc\n", 8);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	setup_mlx(t_win *win, t_img *img)
@@ -81,6 +137,7 @@ void	setup_mlx(t_win *win, t_img *img)
 	if (!win->winptr)
 	{
 		free(win->mlxptr);
+		write(2, "Error: mlx_new_window\n", 23);
 		exit(1);
 	}
 	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
@@ -91,6 +148,7 @@ void	setup_mlx(t_win *win, t_img *img)
 	if (!img->img)
 	{
 		win->exit_status = EXIT_FAILURE;
+		write(2, "Error: mlx_new_image\n", 22);
 		close_win(win);
 	}
 	img->addr = mlx_get_data_addr(img->img, &img->bpp, &img->line_len,
@@ -98,6 +156,7 @@ void	setup_mlx(t_win *win, t_img *img)
 	if (!img->addr)
 	{
 		win->exit_status = EXIT_FAILURE;
+		write(2, "Error: mlx_get_data_addr\n", 26);
 		close_win(win);
 	}
 	img->width = WIDTH;

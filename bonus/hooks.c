@@ -22,17 +22,24 @@ int	mouse_hook(const int x, const int y, const t_win *win)
 	return (1);
 }
 
+// TODO: Free sprite's related data
 int	close_win(const t_win *win)
 {
 	int	i;
 
+	mlx_mouse_show(win->mlxptr, win->winptr);
 	i = 0;
 	while (i < N_TEX)
 	{
 		mlx_destroy_image(win->mlxptr, win->textures[i].img);
 		i++;
 	}
-	mlx_mouse_show(win->mlxptr, win->winptr);
+	i = 0;
+	while (i < N_SPRITES)
+	{
+		mlx_destroy_image(win->mlxptr, win->sprites->tex.img);
+		i++;
+	}
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	if (win->img->img)
@@ -47,5 +54,9 @@ int	close_win(const t_win *win)
 		free(win->map->grid);
 		free(win->map);
 	}
+	free(win->z_buffer);
+	free(win->sprite_dist);
+	free(win->sprite_order);
+	free(win->sprites);
 	exit(win->exit_status);
 }
