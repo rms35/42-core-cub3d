@@ -52,7 +52,7 @@
 # define FIRE_T 100
 # define WALK_T 150
 # define IDLE_T 300
-# define SPRT1 0
+# define SPRT1 1
 # define SPRT1_N 4
 # define SPRT1_S 64
 
