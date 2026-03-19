@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 22:30:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/17 20:53:01 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
+# define N_SPRITES 1
 
 // Player
 
@@ -35,8 +36,8 @@
 
 // Textures
 
-# define TEX_WIDTH 64
-# define TEX_HEIGHT 64
+# define TEX_WIDTH 512
+# define TEX_HEIGHT 512
 # define N_TEX 6
 # define W1N 0
 # define W1S 1
@@ -44,7 +45,7 @@
 # define W1E 3
 # define S1 4
 # define F1 5
-
+# define SPRT1 0
 
 typedef struct s_map
 {
@@ -54,13 +55,6 @@ typedef struct s_map
 	int		floor_color;
 	int		ceil_color;
 }	t_map;
-
-typedef struct s_sprite {
-	double	x;
-	double	y;
-	int		texture_id;
-	double	distance;
-}	t_sprite;
 
 typedef struct s_img
 {
@@ -72,6 +66,17 @@ typedef struct s_img
 	int		width;
 	int		height;
 }	t_img;
+
+typedef struct s_sprite
+{
+	double	x;
+	double	y;
+	double	dist;
+	double	trans_x;
+	double	trans_y;
+	t_img	tex;
+	int		texture_id;
+}	t_sprite;
 
 typedef struct s_player
 {
@@ -123,6 +128,19 @@ typedef struct s_ray
 	int		draw_end;
 }	t_ray;
 
+typedef struct s_sprite_draw
+{
+	int		sprite_screen_x;
+	int		sprite_height;
+	int		sprite_width;
+	int		draw_start_y;
+	int		draw_end_y;
+	int		draw_start_x;
+	int		draw_end_x;
+	int		tex_x;
+	int		tex_y;
+}	t_sprite_draw;
+
 typedef struct s_win
 {
 	void		*winptr;
@@ -133,14 +151,24 @@ typedef struct s_win
 	t_player	*player;
 	int			*keys;
 	int			exit_status;
+	t_sprite    *sprites;
+	double      *sprite_dist;
+	double		*z_buffer;
+	int         *sprite_order;
+
 }	t_win;
+
+//  Initializing resources
+
+void			init_player(const t_win *win, t_player *p, const t_map *map, double fov);
+void			setup_mlx(t_win *win, t_img *img);
+void			init_sprites(t_win *win);
+int				close_win(const t_win *win);
 
 // Mapping
 
 t_map			*get_mock_map(t_win *win);
-void			init_player(t_player *p, const t_map *map, double fov);
-void			setup_mlx(t_win *win, t_img *img);
-int				close_win(const t_win *win);
+int				load_texture(const t_win *win, t_img *tex, char *path);
 
 // Player movement
 
@@ -152,12 +180,13 @@ int				rotate_right(t_player *player);
 
 // Rendering
 
-void			render_frame(const t_win *win);
+void			render_frame(t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
 int				key_press(int keysym, const t_win *win);
 int				key_release(int keysym, const t_win *win);
 int				handle_input(const t_win *win);
-int				game_loop(const t_win *win);
+int				game_loop(t_win *win);
+void			render_sprites(const t_win * win);
 
 #endif
