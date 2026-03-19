@@ -17,12 +17,12 @@
 /* TODO:	NOW
 *		 - sprites
 *		 - minimap
-*		 -
+*		 - doors
 *			LATER:
 *		 - Head bobbing
 *		 - Mouse physics
 *		 - Sky/ceiling and floor textures
-*		 - Planned map nad textures
+*		 - Planned map and textures
 *		 - Jumping and crouching
 *		 - Nice HUD
 *		 - Different players/modes for the same player
@@ -31,6 +31,8 @@
 
 int	game_loop(t_win *win)
 {
+	struct timespec	t;
+
 	handle_input(win);
 	if (win->player->m_delta_x != 0)
 	{
@@ -48,6 +50,9 @@ int	game_loop(t_win *win)
 	}
 	render_frame(win);
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	win->current_time = (t.tv_sec * 1000) + (t.tv_nsec / 1000000);
+	animate_fire(&win->sprites[0], win->current_time);
 	return (0);
 }
 
