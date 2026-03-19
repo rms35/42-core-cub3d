@@ -188,6 +188,6 @@ void	setup_mlx(t_win *win, t_img *img)
 	}
 	img->width = WIDTH;
 	img->height = HEIGHT;
-	mlx_mouse_hide(win->mlxptr, win->winptr);
 	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
+	mlx_mouse_hide(win->mlxptr, win->winptr);
 }

@@ -14,6 +14,15 @@
 
 int	mouse_hook(const int x, const int y, const t_win *win)
 {
+	static int	first_call = 1;
+
+	if (first_call)
+	{
+		mlx_mouse_hide(win->mlxptr, win->winptr);
+		mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
+		first_call = 0;
+		return (0);
+	}
 	if (x == WIDTH / 2 && y == HEIGHT / 2)
 		return (0);
 	win->player->m_delta_x += (x - WIDTH / 2);
