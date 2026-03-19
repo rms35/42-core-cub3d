@@ -49,12 +49,14 @@ Common types:
 - [javidx9 Youtube Super Fast Ray Casting in Tiled Worlds using DDA](https://youtu.be/NbSee-XM7WA?si=Yj74O55iTt4D1CEB)
 - [javidx9 YouTube Essential Mathematics For Aspiring Game Developers](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
 - [ferxchot YouTube Cómo hacer un raycaster](https://www.youtube.com/watch?v=IzimG4VuW0Q)
-- [Itchio texures and sprites](https://itch.io/game-assets/free/tag-sprites)
+- [wolfenstein3d.co.uk/walls](http://www.wolfenstein3d.co.uk/walls.htm)
 - [Wikipedia Ecuaciones paramétricas](https://es.wikipedia.org/wiki/Ecuaci%C3%B3n_param%C3%A9trica)
 - **DOOM 64**
 - [Ultima Underworld: The Stygian Abyss](https://playclassic.games/games/role-playing-dos-games-online/play-ultima-underworld-stygian-abyss-online/)
 - [Rise of the Triad](https://www.playdosgames.com/online/rise-of-the-triad/)
 - [Duke Nukem 3D](https://playclassic.games/games/first-person-shooter-dos-games-online/play-duke-nukem-3d-online/play/)
+- [Cambio de base Wiki](https://es.wikipedia.org/wiki/Cambio_de_base)
+- [YouTube unicoos Cambio de base](https://www.youtube.com/watch?v=wGl-E5LRvac)
 
 ### AI Usage
 Used to investigate about algorithms, create good commit messages following 
