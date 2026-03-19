@@ -28,7 +28,7 @@ int	key_release(const int keysym, const t_win *win)
 	return (0);
 }
 
-void	update_dir(const t_win *win, t_player *p, double *dx, double *dy)
+void	update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
 {
 	if (win->keys[XK_w])
 	{

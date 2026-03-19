@@ -6,13 +6,13 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/03/17 20:52:10 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	key_press(const int keysym, const t_win *win)
+int	key_press(const int keysym, t_win *win)
 {
 	if (keysym == XK_Escape)
 		close_win(win);
@@ -21,14 +21,14 @@ int	key_press(const int keysym, const t_win *win)
 	return (0);
 }
 
-int	key_release(const int keysym, const t_win *win)
+int	key_release(const int keysym, t_win *win)
 {
 	if (keysym < N_KEYS)
 		win->keys[keysym] = 0;
 	return (0);
 }
 
-void update_dir(const t_win *win, t_player *p, double *dx, double *dy)
+void update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
 {
 	if (win->keys[XK_w])
 	{
