@@ -77,7 +77,7 @@ static void	calculate_sprite_draw_params(const t_win *win, const t_sprite
 		d->draw_end_x = WIDTH - 1;
 }
 static void	draw_sprite_stripe(const t_win *win, const t_sprite *s,
-	t_sprite_draw *d, int x)
+	t_sprite_draw *d, const int x)
 {
 	int				y;
 	int				d_val;
@@ -131,7 +131,7 @@ void	render_sprites(const t_win *win)
 		stripe = d.draw_start_x - 1;
 		while (++stripe < d.draw_end_x)
 		{
-			d.tex_x = (int)(256 * (stripe - (-d.sprite_width / 2
+			d.tex_x = (256 * (stripe - (-d.sprite_width / 2
 							+ d.sprite_screen_x)) * s->tex.width
 					/ d.sprite_width) / 256;
 			if (s->trans_y < win->z_buffer[stripe])

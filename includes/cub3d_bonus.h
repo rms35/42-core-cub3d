@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/17 20:53:01 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/19 15:45:00 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <math.h>
 # include <X11/keysym.h>
 # include <X11/X.h>
+# include <time.h>
 
 // Map
 
@@ -32,7 +33,7 @@
 
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
-# define P1_SPEED 0.02
+# define P1_SPEED 0.03
 
 // Textures
 
@@ -45,7 +46,15 @@
 # define W1E 3
 # define S1 4
 # define F1 5
+
+// Sprites
+
+# define FIRE_T 100
+# define WALK_T 150
+# define IDLE_T 300
 # define SPRT1 0
+# define SPRT1_N 4
+# define SPRT1_S 64
 
 typedef struct s_map
 {
@@ -74,8 +83,15 @@ typedef struct s_sprite
 	double	dist;
 	double	trans_x;
 	double	trans_y;
-	t_img	tex;
-	int		texture_id;
+	t_img	*tex;
+	long	last_update;
+	long	anim_speed;
+	int		*texture_ids;
+	int		frame_count;
+	int		current_frame;
+	int		next_frame;
+	int		sprite_id;
+	int		res;
 }	t_sprite;
 
 typedef struct s_player
@@ -141,26 +157,33 @@ typedef struct s_sprite_draw
 	int		tex_y;
 }	t_sprite_draw;
 
+typedef struct s_pair
+{
+	double	dist;
+	int		index;
+}	t_pair;
+
 typedef struct s_win
 {
-	void		*winptr;
-	void		*mlxptr;
-	t_img		*img;
-	t_img       textures[N_TEX];
-	t_map		*map;
-	t_player	*player;
-	int			*keys;
-	int			exit_status;
-	t_sprite    *sprites;
-	double      *sprite_dist;
-	double		*z_buffer;
-	int         *sprite_order;
-
+	void			*winptr;
+	void			*mlxptr;
+	t_img			*img;
+	t_img			textures[N_TEX];
+	t_map			*map;
+	t_player		*player;
+	int				*keys;
+	int				exit_status;
+	t_sprite		*sprites;
+	double			*sprite_dist;
+	double			*z_buffer;
+	int				*sprite_order;
+	long			current_time;
 }	t_win;
 
 //  Initializing resources
 
-void			init_player(const t_win *win, t_player *p, const t_map *map, double fov);
+void			init_player(const t_win *win, t_player *p, const t_map *map,
+					double fov);
 void			setup_mlx(t_win *win, t_img *img);
 void			init_sprites(t_win *win);
 int				close_win(const t_win *win);
@@ -187,6 +210,9 @@ int				key_press(int keysym, const t_win *win);
 int				key_release(int keysym, const t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(t_win *win);
-void			render_sprites(const t_win * win);
+void			render_sprites(t_win *win);
+
+// Sprite animation
+void			animate_fire(t_sprite *s, const long time);
 
 #endif
