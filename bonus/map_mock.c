@@ -33,11 +33,11 @@ static char	*get_grid(void)
 			"10101010000000000001"
 			"10101010111111111101"
 			"10100000100000000001"
-			"10000N01000000000001"
+			"1F000N01000000000001"
 			"11111111111111111111"));
 }
 
-static int load_texture(const t_win *win, t_img *tex, char *path)
+int load_texture(const t_win *win, t_img *tex, char *path)
 {
 	tex->img = mlx_xpm_file_to_image(win->mlxptr, path, &tex->width,
 		&tex->height);
@@ -68,10 +68,10 @@ t_map	*get_mock_map(t_win *win)
 		return (free(map), NULL);
 	map->floor_color = 0x4B4B4B;
 	map->ceil_color = 0x87CEEB;
-	load_texture(win, &win->textures[0], "textures/north.xpm");
-	load_texture(win, &win->textures[1], "textures/south.xpm");
-	load_texture(win, &win->textures[2], "textures/west.xpm");
-	load_texture(win, &win->textures[3], "textures/east.xpm");
+	load_texture(win, &win->textures[0], "textures/wall4_512.xpm");
+	load_texture(win, &win->textures[1], "textures/wall4_512.xpm");
+	load_texture(win, &win->textures[2], "textures/wall4_512.xpm");
+	load_texture(win, &win->textures[3], "textures/wall4_512.xpm");
 	load_texture(win, &win->textures[4], "textures/skybox.xpm");
 	load_texture(win, &win->textures[5], "textures/floor.xpm");
 	return (map);
