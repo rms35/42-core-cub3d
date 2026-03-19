@@ -45,13 +45,13 @@ static void	get_dir(t_player *p, const char c)
 	}
 }
 
+// TODO: Proper error handling
 void	init_player(const t_win *win, t_player *p, const t_map *map, const
 	double fov)
 {
-	int		i;
-	int		j;
-	int		sprites;
-	double	inv_det;
+	int				i;
+	int				j;
+	int				sprites;
 
 	ft_bzero(p, sizeof(t_player));
 	i = 0;
@@ -79,18 +79,32 @@ void	init_player(const t_win *win, t_player *p, const t_map *map, const
 	p->radius = P1_R;
 	j = 0;
 	sprites = 0;
-	inv_det = 1.0 / (p->camp_x * p->dir_y - p->dir_x * p->camp_y);
 	while (j < map->width * map->height)
 	{
 		if (map->grid[j] == 'F' && sprites < N_SPRITES)
 		{
 			win->sprites[sprites].x = (double)(j % map->width) + 0.5;
 			win->sprites[sprites].y = (double)(j / map->width) + 0.5;
-			win->sprites[sprites].dist = inv_det * (-p->camp_y *
-				(win->sprites[sprites].x - p->pos_x) + p->camp_x * (win->sprites[sprites].y - p->pos_y));
-			if (load_texture(win, &win->sprites[sprites].tex, "textures/fire_0"
-															 ".xpm") == 1)
+			win->sprites[sprites].sprite_id = SPRT1;
+			if (load_texture(win, &win->sprites[sprites].tex[0],
+				"textures/fire_0.xpm") == 1)
 				return ;
+			if (load_texture(win, &win->sprites[sprites].tex[1],
+				"textures/fire_1.xpm") == 1)
+				return ;
+			if (load_texture(win, &win->sprites[sprites].tex[2],
+				"textures/fire_2.xpm") == 1)
+				return ;
+			if (load_texture(win, &win->sprites[sprites].tex[3],
+				"textures/fire_3.xpm") == 1)
+				return ;
+			win->sprites[sprites].frame_count = 4;
+			win->sprites[sprites].anim_speed = 1;
+			win->sprites[sprites].next_frame = 1;
+			win->sprites[sprites].current_frame = 0;
+			win->sprites[sprites].res = SPRT1_S;
+			sprites++;
+			win->sprites[sprites].current_frame = 0;
 			sprites++;
 		}
 		j++;
@@ -99,12 +113,25 @@ void	init_player(const t_win *win, t_player *p, const t_map *map, const
 
 void	init_sprites(t_win *win)
 {
+	int	i;
+
 	win->sprites = ft_calloc(N_SPRITES, sizeof(t_sprite));
 	if (!win->sprites)
 	{
 		free(win->z_buffer);
 		write(2, "Error: malloc\n", 8);
 		exit(EXIT_FAILURE);
+	}
+	i = 0;
+	while (i < N_SPRITES)
+	{
+		win->sprites[i].tex = ft_calloc(SPRT1_N, sizeof(t_img));
+		if (!win->sprites[i].tex)
+		{
+			// TODO: Proper cleanup
+			exit(EXIT_FAILURE);
+		}
+		i++;
 	}
 	win->sprite_dist = ft_calloc(N_SPRITES, sizeof(double));
 	if (!win->sprite_dist)
@@ -114,7 +141,7 @@ void	init_sprites(t_win *win)
 		write(2, "Error: malloc\n", 8);
 		exit(EXIT_FAILURE);
 	}
-	win->sprite_order = ft_calloc(N_SPRITES, sizeof(double));
+	win->sprite_order = ft_calloc(N_SPRITES, sizeof(int));
 	if (!win->sprite_order)
 	{
 		free(win->z_buffer);

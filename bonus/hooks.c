@@ -26,18 +26,24 @@ int	mouse_hook(const int x, const int y, const t_win *win)
 int	close_win(const t_win *win)
 {
 	int	i;
+	int	j;
 
+	i = 0;
+	while (i < N_SPRITES)
+	{
+		j = 0;
+		while (j < SPRT1_N)
+		{
+			mlx_destroy_image(win->mlxptr, win->sprites->tex[j].img);
+			j++;
+		}
+		i++;
+	}
 	mlx_mouse_show(win->mlxptr, win->winptr);
 	i = 0;
 	while (i < N_TEX)
 	{
 		mlx_destroy_image(win->mlxptr, win->textures[i].img);
-		i++;
-	}
-	i = 0;
-	while (i < N_SPRITES)
-	{
-		mlx_destroy_image(win->mlxptr, win->sprites->tex.img);
 		i++;
 	}
 	if (win->winptr)
