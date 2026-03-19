@@ -68,9 +68,9 @@ t_map	*get_mock_map(t_win *win)
 		return (free(map), NULL);
 	map->floor_color = 0x4B4B4B;
 	map->ceil_color = 0x87CEEB;
-	load_texture(win, &win->textures[0], "textures/wall4_512.xpm");
-	load_texture(win, &win->textures[1], "textures/wall4_512.xpm");
-	load_texture(win, &win->textures[2], "textures/wall4_512.xpm");
+	load_texture(win, &win->textures[0], "textures/wall1_512.xpm");
+	load_texture(win, &win->textures[1], "textures/wall2_512.xpm");
+	load_texture(win, &win->textures[2], "textures/wall3_512.xpm");
 	load_texture(win, &win->textures[3], "textures/wall4_512.xpm");
 	load_texture(win, &win->textures[4], "textures/skybox.xpm");
 	load_texture(win, &win->textures[5], "textures/floor.xpm");
