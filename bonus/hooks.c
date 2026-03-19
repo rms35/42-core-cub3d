@@ -46,8 +46,10 @@ int	close_win(const t_win *win)
 			mlx_destroy_image(win->mlxptr, win->sprites->tex[j].img);
 			j++;
 		}
+		free(win->sprites->tex);
 		i++;
 	}
+	// free(win->sprites);
 	mlx_mouse_show(win->mlxptr, win->winptr);
 	i = 0;
 	while (i < N_TEX)
