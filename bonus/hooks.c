@@ -14,13 +14,13 @@
 
 int	mouse_hook(const int x, const int y, const t_win *win)
 {
-	static int	first_call = 1;
+	static int	first_call;
 
-	if (first_call)
+	if (!first_call)
 	{
 		mlx_mouse_hide(win->mlxptr, win->winptr);
 		mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
-		first_call = 0;
+		first_call = 1;
 		return (0);
 	}
 	if (x == WIDTH / 2 && y == HEIGHT / 2)
