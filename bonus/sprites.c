@@ -22,12 +22,24 @@ void	animate_fire(t_sprite *s, const long time)
 			s->current_frame = 1;
 			s->next_frame = 1;
 		}
-		else if (s->current_frame == SPRT1_N - 1)
+		else if (s->current_frame == N_FIRES - 1)
 		{
 			s->current_frame = 2;
 			s->next_frame = -1;
 		}
 		else
 			s->current_frame += s->next_frame;
+	}
+}
+
+void animate_sprites(t_sprite *s, const long time)
+{
+	int	i;
+
+	i = 0;
+	while (i < N_SPRITES && s[i].sprite_id != 0)
+	{
+		s[i].animation(s + i, time);
+		i++;
 	}
 }
