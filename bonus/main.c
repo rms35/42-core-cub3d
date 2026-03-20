@@ -19,6 +19,7 @@
 *		 - minimap
 *		 - doors
 *			LATER:
+*		 - Parallelizing rendering/rasterizing(specially)
 *		 - Head bobbing
 *		 - Mouse physics
 *		 - Sky/ceiling and floor textures
@@ -27,6 +28,7 @@
 *		 - Nice HUD
 *		 - Different players/modes for the same player
 *		 - FOV variation when running?
+*		 - More and better sprites
 */
 
 int	game_loop(t_win *win)
@@ -52,7 +54,7 @@ int	game_loop(t_win *win)
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
 	clock_gettime(CLOCK_MONOTONIC, &t);
 	win->current_time = (t.tv_sec * 1000) + (t.tv_nsec / 1000000);
-	animate_fire(&win->sprites[0], win->current_time);
+	animate_sprites(&win->sprites[0], win->current_time);
 	return (0);
 }
 
@@ -71,13 +73,13 @@ int	main(void)
 		write(2, "Error: malloc\n", 8);
 		exit(EXIT_FAILURE);
 	}
-	init_sprites(&win);
 	win.img = &img;
 	win.keys = keys;
 	win.player = &player;
 	setup_mlx(&win, win.img);
 	map = get_mock_map(&win);
-	init_player(&win, &player, map, P1_FOV);
+	init_player(&player, map, P1_FOV);
+	init_sprites(&win, map);
 	win.map = map;
 	render_frame(&win);
 	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);

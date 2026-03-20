@@ -39,7 +39,8 @@ SRCS_FILES  = main.c map_mock.c init.c hooks.c  input.c \
 render.c move_player.c player_dir.c ray.c
 
 SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
-               init.c input.c hooks.c ray.c render_sprites.c sprites.c
+               init.c input.c hooks.c ray.c render_sprites.c sprites.c \
+               init_sprites.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)

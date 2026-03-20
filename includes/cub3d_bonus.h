@@ -27,7 +27,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-# define N_SPRITES 1
+# define N_SPRITES 100
 
 // Player
 
@@ -49,12 +49,19 @@
 
 // Sprites
 
+# define FIRE 1
 # define FIRE_T 100
 # define WALK_T 150
 # define IDLE_T 300
-# define SPRT1 1
-# define SPRT1_N 4
-# define SPRT1_S 64
+# define N_FIRES 4
+# define F_RADIUS 0.1
+// # define FIRES_SIZE 64
+
+typedef struct s_sprt_types
+{
+	int	fires[2];
+	int	total;
+}	t_sprt_types;
 
 typedef struct s_map
 {
@@ -78,20 +85,21 @@ typedef struct s_img
 
 typedef struct s_sprite
 {
-	double	x;
-	double	y;
-	double	dist;
-	double	trans_x;
-	double	trans_y;
-	t_img	*tex;
-	long	last_update;
-	long	anim_speed;
-	int		*texture_ids;
-	int		frame_count;
-	int		current_frame;
-	int		next_frame;
-	int		sprite_id;
-	int		res;
+	double			x;
+	double			y;
+	double			dist;
+	double			trans_x;
+	double			trans_y;
+	t_img			*tex;
+	t_sprt_types	*types;
+	void			(*animation)(struct s_sprite *s, long time);
+	long			last_update;
+	long			anim_speed;
+	int				frame_count;
+	int				current_frame;
+	int				next_frame;
+	int				sprite_id;
+	// int				res;
 }	t_sprite;
 
 typedef struct s_player
@@ -182,10 +190,11 @@ typedef struct s_win
 
 //  Initializing resources
 
-void			init_player(const t_win *win, t_player *p, const t_map *map,
+void			init_player(t_player *p, const t_map *map,
 					double fov);
 void			setup_mlx(t_win *win, t_img *img);
-void			init_sprites(t_win *win);
+int				alloc_sprites(t_win *win);
+int				init_sprites(t_win *win, const t_map *map);
 int				close_win(const t_win *win);
 
 // Mapping
@@ -203,6 +212,9 @@ int				rotate_right(t_player *player);
 
 // Rendering
 
+// Sprite transparency
+unsigned int	alpha_blend(unsigned int background, unsigned int foreground, float alpha);
+
 void			render_frame(t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
@@ -210,9 +222,10 @@ int				key_press(int keysym, const t_win *win);
 int				key_release(int keysym, const t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(t_win *win);
-void			render_sprites(t_win *win);
+void			render_sprites(const t_win *win);
 
 // Sprite animation
-void			animate_fire(t_sprite *s, const long time);
+void			animate_fire(t_sprite *s, long time);
+void			animate_sprites(t_sprite *s, long time);
 
 #endif
