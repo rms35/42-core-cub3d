@@ -14,7 +14,7 @@ NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
 CC          = cc
 CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3 \
--fsanitize=address,leak -O0
+-fsanitize=address,leak -O0 -MMD
 RM          = rm -rf
 
 # Directories
@@ -40,13 +40,15 @@ render.c move_player.c player_dir.c ray.c
 
 SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
                init.c input.c hooks.c ray.c render_sprites.c sprites.c \
-               init_sprites.c
+               init_sprites.c init2.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
+DEPS        = $(OBJS:.o=.d)
 
 SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_B_FILES))
 OBJS_B      = $(SRCS_B:$(SRC_B_DIR)/%.c=$(OBJ_DIR)/bonus/%.o)
+DEPS_B      = $(OBJS_B:.o=.d)
 
 # Colors
 DEF_COLOR   = \033[0;39m
@@ -109,5 +111,8 @@ thread: re
 	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
 
 bonus: $(LIBFT) $(MLX) $(NAME_BONUS)
+
+-include $(DEPS)
+-include $(DEPS_B)
 
 .PHONY: all clean fclean re bonus debug thread
