@@ -41,12 +41,13 @@ int	close_win(const t_win *win)
 	while (i < N_SPRITES)
 	{
 		j = 0;
-		while (j < SPRT1_N)
+		while (win->sprites->tex && j < N_FIRES)
 		{
 			mlx_destroy_image(win->mlxptr, win->sprites->tex[j].img);
 			j++;
 		}
-		free(win->sprites->tex);
+		free(win->sprites[i].tex);
+		win->sprites[i].tex = NULL;
 		i++;
 	}
 	// free(win->sprites);
