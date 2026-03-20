@@ -6,21 +6,21 @@
 /*   By: rafael-m <rafael-m@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 23:26:48 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/03/20 11:43:27 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/20 13:30:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
 
-void	init_fires(t_sprite *s)
+void	init_fires(t_sprite *s, const int total)
 {
 	int i;
 
 	i = 0;
-	while ((s + i)->sprite_id == FIRE)
+	while (i < total && s[i].sprite_id == FIRE)
 	{
 		if (i % 2)
-			(s + i)->current_frame = 3;
+			s[i].current_frame = 3;
 		i++;
 	}
 }
@@ -66,12 +66,12 @@ int	init_sprites(t_win *win, const t_map *map)
 			win->sprites[sprites].sprite_id = FIRE;
 			win->sprites[sprites].next_frame = 1;
 			win->sprites[sprites].current_frame = 0;
-			// win->sprites[sprites].res = FIRES_SIZE;
 			win->sprites[sprites].animation = animate_fire;
+			win->sprites[sprites].last_update = get_time() * 1000;
 			sprites++;
 		}
-		init_fires(win->sprites);
 		i++;
 	}
+	init_fires(win->sprites, sprites);
 	return (0);
 }
