@@ -69,6 +69,8 @@ void	init_player(t_player *p, const t_map *map, const
 	p->fov = fov;
 	p->dir_mag = sqrt(p->dir_x * p->dir_x + p->dir_y * p->dir_y);
 	p->radius = P1_R;
+	p->fwd_speed = P1_SPEED;
+	p->rot_speed = P1_ROT_SPEED;
 }
 
 // TODO: Proper cleanup

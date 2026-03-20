@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/19 15:45:00 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/20 12:43:33 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,20 @@
 # include <X11/X.h>
 # include <time.h>
 
-// Map
+// Screen & Map
 
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
 # define N_SPRITES 100
+# define FRAME_DELAY 33.3333
 
 // Player
 
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
-# define P1_SPEED 0.03
+# define P1_SPEED 2.0
+# define P1_ROT_SPEED 1.0
 
 // Textures
 
@@ -55,7 +57,6 @@
 # define IDLE_T 300
 # define N_FIRES 4
 # define F_RADIUS 0.1
-// # define FIRES_SIZE 64
 
 typedef struct s_sprt_types
 {
@@ -92,14 +93,13 @@ typedef struct s_sprite
 	double			trans_y;
 	t_img			*tex;
 	t_sprt_types	*types;
-	void			(*animation)(struct s_sprite *s, long time);
-	long			last_update;
+	void			(*animation)(struct s_sprite *s, double time);
+	double			last_update;
 	long			anim_speed;
 	int				frame_count;
 	int				current_frame;
 	int				next_frame;
 	int				sprite_id;
-	// int				res;
 }	t_sprite;
 
 typedef struct s_player
@@ -173,19 +173,22 @@ typedef struct s_pair
 
 typedef struct s_win
 {
+	t_img			textures[N_TEX];
 	void			*winptr;
 	void			*mlxptr;
 	t_img			*img;
-	t_img			textures[N_TEX];
 	t_map			*map;
 	t_player		*player;
+	double			current_time;
+	double			last_frame;
+	double			delta_time;
 	int				*keys;
-	int				exit_status;
 	t_sprite		*sprites;
 	double			*sprite_dist;
 	double			*z_buffer;
 	int				*sprite_order;
-	long			current_time;
+	int				exit_status;
+
 }	t_win;
 
 //  Initializing resources
@@ -195,7 +198,9 @@ void			init_player(t_player *p, const t_map *map,
 void			setup_mlx(t_win *win, t_img *img);
 int				alloc_sprites(t_win *win);
 int				init_sprites(t_win *win, const t_map *map);
-int				close_win(const t_win *win);
+int				close_win(t_win *win);
+
+double get_time(void);
 
 // Mapping
 
@@ -204,28 +209,27 @@ int				load_texture(const t_win *win, t_img *tex, char *path);
 
 // Player movement
 
-int				mouse_hook(int x, int y, const t_win *win);
-int				move_player(const t_win *win, double dx, double dy);
+int				mouse_hook(int x, int y, t_win *win);
+int				move_player(t_win *win, double dx, double dy);
 void			rot_x_axis(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 
 // Rendering
 
-// Sprite transparency
-unsigned int	alpha_blend(unsigned int background, unsigned int foreground, float alpha);
 
 void			render_frame(t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-int				key_press(int keysym, const t_win *win);
-int				key_release(int keysym, const t_win *win);
-int				handle_input(const t_win *win);
-int				game_loop(t_win *win);
+int				key_press(int keysym, t_win *win);
+int				key_release(int keysym, t_win *win);
+int				handle_input(t_win *win);
 void			render_sprites(const t_win *win);
+unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
+	float alpha);
 
 // Sprite animation
-void			animate_fire(t_sprite *s, long time);
-void			animate_sprites(t_sprite *s, long time);
+void			animate_fire(t_sprite *s, double time);
+void			animate_sprites(t_sprite *s, double time);
 
 #endif

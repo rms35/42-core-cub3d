@@ -14,27 +14,13 @@
 
 #define P1_FOV 1.7
 
-/* TODO:	NOW
-*		 - sprites
-*		 - minimap
-*		 - doors
-*			LATER:
-*		 - Parallelizing rendering/rasterizing(specially)
-*		 - Head bobbing
-*		 - Mouse physics
-*		 - Sky/ceiling and floor textures
-*		 - Planned map and textures
-*		 - Jumping and crouching
-*		 - Nice HUD
-*		 - Different players/modes for the same player
-*		 - FOV variation when running?
-*		 - More and better sprites
-*/
-
-int	game_loop(t_win *win)
+static int	game_loop(t_win *win)
 {
-	struct timespec	t;
+	double now;
 
+	now = get_time();
+	win->delta_time = now - win->last_frame;
+	win->last_frame = now;
 	handle_input(win);
 	if (win->player->m_delta_x != 0)
 	{
@@ -51,12 +37,14 @@ int	game_loop(t_win *win)
 			win->player->pitch = -HEIGHT / 2;
 	}
 	render_frame(win);
+	animate_sprites(&win->sprites[0], now * 1000);
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
-	clock_gettime(CLOCK_MONOTONIC, &t);
-	win->current_time = (t.tv_sec * 1000) + (t.tv_nsec / 1000000);
-	animate_sprites(&win->sprites[0], win->current_time);
+	now = get_time();
+	if (now - win->last_frame < (double)FRAME_DELAY / 1000.0)
+		usleep(((double)FRAME_DELAY / 1000.0 - (now - win->last_frame)) * 1e6);
 	return (0);
 }
+
 
 int	main(void)
 {
@@ -81,8 +69,7 @@ int	main(void)
 	init_player(&player, map, P1_FOV);
 	init_sprites(&win, map);
 	win.map = map;
-	render_frame(&win);
-	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);
+	win.last_frame = get_time();
 	mlx_loop_hook(win.mlxptr, game_loop, &win);
 	mlx_loop(win.mlxptr);
 	return (0);
