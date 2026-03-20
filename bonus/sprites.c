@@ -6,13 +6,13 @@
 /*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 12:00:00 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/03/19 12:00:00 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/03/20 13:50:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d_bonus.h"
 
-void	animate_fire(t_sprite *s, const long time)
+void	animate_fire(t_sprite *s, double time)
 {
 	if (time - s->last_update >= s->anim_speed)
 	{
@@ -32,14 +32,14 @@ void	animate_fire(t_sprite *s, const long time)
 	}
 }
 
-void animate_sprites(t_sprite *s, const long time)
+void animate_sprites(t_sprite *s, double time)
 {
 	int	i;
 
 	i = 0;
 	while (i < N_SPRITES && s[i].sprite_id != 0)
 	{
-		s[i].animation(s + i, time);
+		s[i].animation(&s[i], time);
 		i++;
 	}
 }
