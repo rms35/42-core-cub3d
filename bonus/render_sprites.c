@@ -69,12 +69,28 @@ static void	calculate_draw_params(const t_win *win, const t_sprite *s, t_sprite_
 		d->draw_end_x = WIDTH - 1;
 }
 
+unsigned int	alpha_blend(unsigned int background, unsigned int foreground, float alpha)
+{
+	unsigned int	r;
+	unsigned int	g;
+	unsigned int	b;
+
+	r = (unsigned int)((((background >> 16) & 0xFF) * (1.0 - alpha))
+			+ (((foreground >> 16) & 0xFF) * alpha));
+	g = (unsigned int)((((background >> 8) & 0xFF) * (1.0 - alpha))
+			+ (((foreground >> 8) & 0xFF) * alpha));
+	b = (unsigned int)(((background & 0xFF) * (1.0 - alpha))
+			+ ((foreground & 0xFF) * alpha));
+	return ((r << 16) | (g << 8) | b);
+}
+
 static void	draw_sprite_stripe(const t_win *win, const t_sprite *s, t_sprite_draw *d, int x)
 {
 	t_img			*tex;
 	int				y;
 	int				d_y;
 	unsigned int	color;
+	unsigned int	*dest;
 
 	tex = &s->tex[s->current_frame];
 	d->tex_x = (int)(256 * (x - (-d->sprite_width / 2 + d->sprite_screen_x))
@@ -94,8 +110,14 @@ static void	draw_sprite_stripe(const t_win *win, const t_sprite *s, t_sprite_dra
 		color = ((unsigned int *)tex->addr)[d->tex_y * (tex->line_len / 4)
 			+ d->tex_x];
 		if ((color & 0x00FFFFFF) != 0)
-			((unsigned int *)win->img->addr)[y * (win->img->line_len / 4) + x]
-				= color;
+		{
+			dest = (unsigned int *)win->img->addr + (y * (win->img->line_len / 4) + x);
+			if (s->sprite_id == FIRE && ((color >> 16) & 0xFF) > 150
+				&& ((color >> 8) & 0xFF) > 100)
+				*dest = alpha_blend(*dest, color, 0.7);
+			else
+				*dest = color;
+		}
 		y++;
 	}
 }
@@ -113,7 +135,7 @@ static void	calc_sprite_pos(const t_win *win, t_sprite *s, const double inv_det)
 			+ win->player->camp_x * spr_y);
 }
 
-void	render_sprites(t_win *win)
+void	render_sprites(const t_win *win)
 {
 	t_sprite_draw	d;
 	t_sprite		*s;
