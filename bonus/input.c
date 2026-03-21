@@ -71,7 +71,7 @@ int	handle_input(t_win *win)
 	if (dx != 0 || dy != 0)
 		r = move_player(win, dx, dy);
 	if (win->keys[XK_Shift_L])
-		win->player->fwd_speed = 3 * P1_SPEED;
+		win->player->fwd_speed = 2.5 * P1_SPEED;
 	else
 		win->player->fwd_speed = P1_SPEED;
 	return (r);
