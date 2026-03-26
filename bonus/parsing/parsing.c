@@ -15,9 +15,11 @@
 t_map	*parsing(const int argc, const char **argv)
 {
 	t_map	*map;
+	size_t	len;
 
 	if (argc != 2)
 		return (write(2, "Error: invalid number of maps\n", 31), NULL);
+	len = ft_strlen(argv[1]);
 	
 	return (map);
 }
