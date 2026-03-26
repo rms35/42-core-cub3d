@@ -46,7 +46,7 @@ static int	game_loop(t_win *win)
 }
 
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_player	player;
 	t_img		img;
