@@ -12,3 +12,12 @@
 
 #include "../../includes/cub3d_bonus.h"
 
+t_map	*parsing(const int argc, const char **argv)
+{
+	t_map	*map;
+
+	if (argc != 2)
+		return (write(2, "Error: invalid number of maps\n", 31), NULL);
+	
+	return (map);
+}
