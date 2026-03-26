@@ -35,12 +35,29 @@ MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
-SRCS_FILES  = main.c map_mock.c init.c hooks.c  input.c \
-render.c move_player.c player_dir.c ray.c
+SRCS_FILES  = main.c \
+              hooks.c \
+              init.c \
+              input.c \
+              map_mock.c \
+              move_player.c \
+              player_dir.c \
+              ray.c \
+              render.c
 
-SRCS_B_FILES = main.c map_mock.c render.c move_player.c player_dir.c \
-               init.c input.c hooks.c ray.c render_sprites.c sprites.c \
-               init_sprites.c init2.c
+SRCS_B_FILES = main.c \
+                engine/hooks.c \
+                engine/input.c \
+                engine/move_player.c \
+                engine/player_dir.c \
+                engine/ray.c \
+                engine/render.c \
+                engine/render_sprites.c \
+                engine/sprites.c \
+                parsing/init.c \
+                parsing/init2.c \
+                parsing/init_sprites.c \
+                parsing/map_mock.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
@@ -81,11 +98,11 @@ $(MLX):
 	@make -s -C $(MLX_DIR)
 
 $(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)/mandatory
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJ_DIR)/bonus/%.o: $(SRC_B_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)/bonus
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
