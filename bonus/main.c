@@ -14,6 +14,18 @@
 
 #define P1_FOV 1.7
 
+void print_grid(const char *grid, size_t width, size_t height)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < width * height)
+	{
+		write(1, grid + i, width);
+		i += width;
+	}
+}
+
 static int	game_loop(t_win *win)
 {
 	double now;
@@ -54,6 +66,13 @@ int	main(int argc, char **argv)
 	t_map		*map;
 	static int	keys[N_KEYS];
 
+	map = parsing(argc, argv[1]);
+	if (!map)
+		return (1);
+	print_grid(map->grid, map->width, map->height);
+	free(map->grid);
+	free(map);
+	return (0);
 	ft_bzero(&win, sizeof(t_win));
 	win.z_buffer = ft_calloc(WIDTH, sizeof(double));
 	if (!win.z_buffer)
