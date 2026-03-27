@@ -28,7 +28,7 @@ void	init_fires(t_sprite *s, const int total)
 // TODO: Proper cleanup
 int	init_sprites(t_win *win, const t_map *map)
 {
-	int				i;
+	size_t				i;
 	int				sprites;
 
 	i = 0;

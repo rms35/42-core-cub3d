@@ -43,7 +43,7 @@ static void	get_dir(t_player *p, const char c)
 void	init_player(t_player *p, const t_map *map, const
 	double fov)
 {
-	int				i;
+	size_t				i;
 
 	ft_bzero(p, sizeof(t_player));
 	i = 0;

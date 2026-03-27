@@ -13,6 +13,7 @@
 #ifndef STRUCT_BONUS_H
 # define STRUCT_BONUS_H
 
+# include <stddef.h>
 # include "macros_bonus.h"
 
 typedef struct s_sprt_types
@@ -24,8 +25,8 @@ typedef struct s_sprt_types
 typedef struct s_map
 {
 	char	*grid;
-	int		width;
-	int		height;
+	size_t	width;
+	size_t	height;
 	int		floor_color;
 	int		ceil_color;
 }	t_map;
