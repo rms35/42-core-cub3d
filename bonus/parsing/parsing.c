@@ -73,7 +73,7 @@ t_map	*parsing(const int argc, const char *argv)
 		return (write(2, "Error: malloc\n", 15), NULL);
 	len = ft_strlen(argv);
 	if (ft_strncmp(&argv[len - 4], ".cub", 4))
-		return (write(2, "Error: invalid map file extension\n", 30), free(map),
+		return (write(2, "Error: invalid map file extension\n", 35), free(map),
 			NULL);
 	if (!get_width_height(argv, map))
 		return (free(map), NULL);
