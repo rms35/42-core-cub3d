@@ -57,7 +57,9 @@ SRCS_B_FILES = main.c \
                 parsing/init.c \
                 parsing/init2.c \
                 parsing/init_sprites.c \
-                parsing/map_mock.c
+                parsing/map_mock.c \
+                parsing/parsing.c \
+                parsing/get_grid.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
