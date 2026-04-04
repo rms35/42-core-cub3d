@@ -46,20 +46,22 @@ SRCS_FILES  = main.c \
               render.c
 
 SRCS_B_FILES = main.c \
-                engine/hooks.c \
-                engine/input.c \
-                engine/move_player.c \
-                engine/player_dir.c \
-                engine/ray.c \
-                engine/render.c \
-                engine/render_sprites.c \
-                engine/sprites.c \
-                parsing/init.c \
-                parsing/init2.c \
-                parsing/init_sprites.c \
-                parsing/map_mock.c \
-                parsing/parsing.c \
-                parsing/get_grid.c
+              engine/hooks.c \
+              engine/input.c \
+              engine/move_player.c \
+              engine/player_dir.c \
+              engine/ray.c \
+              engine/render.c \
+              engine/render_sprites.c \
+              engine/sprites.c \
+              parsing/init.c \
+              parsing/init2.c \
+              parsing/init_sprites.c \
+              parsing/map_mock.c \
+              parsing/parsing.c \
+              parsing/get_grid.c \
+              parsing/validate_map.c \
+              parsing/parse_config.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
@@ -83,12 +85,12 @@ WHITE       = \033[0;97m
 # Rules
 all: $(LIBFT) $(MLX) $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@echo -e "$(GREEN)cub3D compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
-$(NAME_BONUS): $(OBJS_B)
+$(NAME_BONUS): $(OBJS_B) $(LIBFT) $(MLX)
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) $(OBJS_B) $(LIBFT) $(MLX_FLAGS) -o $(NAME_BONUS)
 	@echo -e "$(MAGENTA)cub3D_bonus compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
@@ -129,7 +131,9 @@ thread: CFLAGS += -fsanitize=thread -O0
 thread: re
 	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
 
-bonus: $(LIBFT) $(MLX) $(NAME_BONUS)
+bonus: $(MLX)
+	@make -s -C $(LIBFT_DIR) bonus
+	@$(MAKE) $(NAME_BONUS)
 
 -include $(DEPS)
 -include $(DEPS_B)
