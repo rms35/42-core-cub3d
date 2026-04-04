@@ -26,14 +26,19 @@
 # include <fcntl.h>
 
 // Parsing
-t_map	*parsing(const int argc, const char *argv);
-int	get_grid(const char *file, t_map *map);
+t_map   *parsing(const int argc, const char *argv);
+int     get_grid(const char *file, t_map *map);
+int     validate_map(t_map *map);
+int		parse_line_config(char *line, t_map *map);
+int		is_config_full(t_map *map);
+
 
 //  Initializing resources
 
 void			init_player(t_player *p, const t_map *map,
 					double fov);
 void			setup_mlx(t_win *win, t_img *img);
+int				init_textures(t_win *win);
 int				alloc_sprites(t_win *win);
 int				init_sprites(t_win *win, const t_map *map);
 int				close_win(t_win *win);

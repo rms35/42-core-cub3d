@@ -29,6 +29,10 @@ typedef struct s_map
 	size_t	height;
 	int		floor_color;
 	int		ceil_color;
+	char	*no_path;
+	char	*so_path;
+	char	*we_path;
+	char	*ea_path;
 }	t_map;
 
 typedef struct s_img
