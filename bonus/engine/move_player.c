@@ -21,6 +21,9 @@ static void	move_x(t_win *win, const double next_x, const double prev_x)
 	y[0] = (int)(win->player->pos_y - win->player->radius);
 	y[1] = (int)(win->player->pos_y + win->player->radius);
 	x = (int)prev_x;
+	if (x < 0 || x >= (int)win->map->width || y[0] < 0 || y[0] >= (int)win->map->height
+		|| y[1] < 0 || y[1] >= (int)win->map->height)
+		return ;
 	if (win->map->grid[y[0] * win->map->width + x] == '1' ||
 		win->map->grid[y[1] * win->map->width + x] == '1')
 		return ;
@@ -45,6 +48,9 @@ static void	move_y(t_win *win, const double next_y, const double prev_y)
 	x[0] = (int)(win->player->pos_x - win->player->radius);
 	x[1] = (int)(win->player->pos_x + win->player->radius);
 	y = (int)prev_y;
+	if (y < 0 || y >= (int)win->map->height || x[0] < 0 || x[0] >= (int)win->map->width
+		|| x[1] < 0 || x[1] >= (int)win->map->width)
+		return ;
 	if (win->map->grid[y * win->map->width + x[0]] == '1' ||
 		win->map->grid[y * win->map->width + x[1]] == '1')
 		return ;

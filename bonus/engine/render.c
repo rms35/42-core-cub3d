@@ -20,8 +20,14 @@ static void	draw_wall(t_win *win, t_ray *ray, const int int_x, int y)
 	t_img	*tex;
 
 	tex = &win->textures[ray->wall_tex];
-	tex_y = (int)ray->tex_pos & (TEX_HEIGHT - 1);
-	tex_x = (int)(ray->wall_x * (double)TEX_WIDTH);
+	tex_y = (int)ray->tex_pos % tex->height;
+	if (tex_y < 0)
+		tex_y += tex->height;
+	tex_x = (int)(ray->wall_x * (double)tex->width);
+	if (tex_x >= tex->width)
+		tex_x = tex->width - 1;
+	if (tex_x < 0)
+		tex_x = 0;
 	ray->tex_pos += ray->tex_step;
 	color = *(unsigned int *)(tex->addr + (tex_y * tex->line_len
 				+ tex_x * (tex->bpp / 8)));
@@ -98,10 +104,10 @@ void	render_frame(t_win *win)
 		ray.draw_end = center_ofs + (ray.line_height / 2);
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		ray.tex_step = 1.0 * TEX_HEIGHT / ray.line_height;
+		get_wall(&ray);
+		ray.tex_step = 1.0 * win->textures[ray.wall_tex].height / ray.line_height;
 		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2) *
 			ray.tex_step;
-		get_wall(&ray);
 		draw_line(win, &ray, x);
 		x++;
 	}

@@ -73,6 +73,10 @@ int	close_win(t_win *win)
 	}
 	if (win->map)
 	{
+		free(win->map->no_path);
+		free(win->map->so_path);
+		free(win->map->we_path);
+		free(win->map->ea_path);
 		free(win->map->grid);
 		free(win->map);
 	}
