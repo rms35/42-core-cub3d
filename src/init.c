@@ -13,7 +13,7 @@
 #include "../includes/cub3d.h"
 
 # define P1_TURNSP 0.013
-# define P1_SPEED 0.02
+# define P1_SPEED 0.03
 # define P1_R 0.2
 
 static void	get_dir(t_player *p, const char c)
@@ -85,9 +85,9 @@ void	setup_mlx(t_win *win, t_img *img)
 		free(win->mlxptr);
 		exit(1);
 	}
-	mlx_hook(win->winptr, KeyPress, KeyPressMask, key_press, win);
-	mlx_hook(win->winptr, KeyRelease, KeyReleaseMask, key_release, win);
-	mlx_hook(win->winptr, DestroyNotify, 0, close_win, win);
+	mlx_hook(win->winptr, EVENT_KEY_PRESS, MASK_KEY_PRESS, key_press, win);
+	mlx_hook(win->winptr, EVENT_KEY_RELEASE, MASK_KEY_RELEASE, key_release, win);
+	mlx_hook(win->winptr, EVENT_DESTROY_NOTIFY, 0, close_win, win);
 	img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
 	if (!img->img)
 	{
