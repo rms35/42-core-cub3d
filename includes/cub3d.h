@@ -18,18 +18,56 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include <X11/keysym.h>
-# include <X11/X.h>
 
 // Map
+
 # define WIDTH 1920
 # define HEIGHT 1080
-# define N_KEYS 65536
+# define N_KEYS 7
 # define CEILING = 0x87CEEB;
 # define FLOOR = 0x4B4B4B;
 
 // Player
+
 # define PLYR_DIR "WNSE"
+
+// Keys
+
+#ifdef LINUX
+# define W_KEY       119
+# define A_KEY       97
+# define S_KEY       115
+# define D_KEY       100
+# define LARRW_KEY   65361
+# define RARRW_KEY   65363
+# define ESC_KEY     65307
+#elif defined(MACOS)
+# define W_KEY       13
+# define A_KEY       0
+# define S_KEY       1
+# define D_KEY       2
+# define LARRW_KEY   123
+# define RARRW_KEY   124
+# define ESC_KEY     53
+#endif
+
+#define W 0
+#define A 1
+#define S 2
+#define D 3
+#define LA 4
+#define RA 5
+
+/* MiniLibX/X11 Event Codes */
+
+#define EVENT_KEY_PRESS      2
+#define EVENT_KEY_RELEASE    3
+#define EVENT_DESTROY_NOTIFY 17
+
+/* MiniLibX/X11 Event Masks */
+
+#define MASK_KEY_PRESS       1L<<0
+#define MASK_KEY_RELEASE     1L<<1
 
 typedef struct s_map
 {
@@ -107,22 +145,23 @@ typedef struct s_win
 t_map			*get_mock_map(void);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
-int			close_win(const t_win *win);
+int				close_win(const t_win *win);
 
 // Player movement
 
-int			move_player(const t_win *win, double dx, double dy);
-int			rotate_player(t_player *p, double angle);
-int			rotate_left(t_player *player);
-int			rotate_right(t_player *player);
+int				move_player(const t_win *win, double dx, double dy);
+int				rotate_player(t_player *p, double angle);
+int				rotate_left(t_player *player);
+int				rotate_right(t_player *player);
 
 // Rendering
+
 void			render_frame(const t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-int			key_press(int keysym, t_win *win);
-int			key_release(int keysym, t_win *win);
-int			handle_input(const t_win *win);
-int			game_loop(const t_win *win);
+int				key_press(int keysym, t_win *win);
+int				key_release(int keysym, t_win *win);
+int				handle_input(const t_win *win);
+int				game_loop(const t_win *win);
 
 #endif

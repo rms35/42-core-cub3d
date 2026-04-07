@@ -1,5 +1,5 @@
 #include "../includes/cub3d.h"
-# define P1_FOV 1.7
+#define P1_FOV 1.7
 
 void	init_ray1(t_ray *ray, const t_player *player, const int x)
 {

@@ -17,6 +17,14 @@ CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3 \
 -fsanitize=address,leak -O0 -MMD
 RM          = rm -rf
 
+# OS Detection
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CFLAGS += -D LINUX
+else ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -D MACOS
+endif
+
 # Directories
 SRC_DIR     = src
 SRC_B_DIR   = bonus
