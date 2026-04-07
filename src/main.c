@@ -29,7 +29,7 @@ void	init_ray1(t_ray *ray, const t_player *player, const int x)
 			* ray->delta_dist_y;
 }
 
-int	main()
+int	main(int argc, const char **argv)
 {
 	t_player	player;
 	t_img		img;
@@ -37,7 +37,7 @@ int	main()
 	t_map		*map;
 
 	ft_bzero(&win, sizeof(t_win));
-	map = get_mock_map();
+	map = parsing(argc, argv);
 	init_player(&player, map, P1_FOV);
 	win.player = &player;
 	win.map = map;
