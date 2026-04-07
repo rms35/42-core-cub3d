@@ -62,8 +62,9 @@ int	main(int argc, char **argv)
 	win.player = &player;
 	win.map = map;
 	win.img = &img;
-	init_player(&player, map, P1_FOV);
+	return (0);
 	setup_mlx(&win, &img);
+	init_player(&player, map, P1_FOV);
 	if (init_textures(&win) || init_sprites(&win, map))
 		return (1);
 	mlx_loop_hook(win.mlxptr, game_loop, &win);
