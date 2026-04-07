@@ -44,7 +44,7 @@ int	game_loop(const t_win *win)
 	return (0);
 }*/
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 int	close_win(const t_win *win)
 {
