@@ -18,6 +18,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include <unistd.h>
+#include <fcntl.h>
 
 // Map
 
@@ -72,10 +74,14 @@
 typedef struct s_map
 {
 	char	*grid;
-	int		width;
-	int		height;
+	size_t	width;
+	size_t	height;
 	int		floor_color;
 	int		ceil_color;
+	char	*no_path;
+	char	*so_path;
+	char	*we_path;
+	char	*ea_path;
 }	t_map;
 
 typedef struct s_img
@@ -139,6 +145,14 @@ typedef struct s_win
 	int			keys[N_KEYS];
 	int			exit_status;
 }	t_win;
+
+// Parsing
+
+t_map			*parsing(int argc, const char *argv);
+int				get_grid(const char *file, t_map *map);
+int				validate_map(t_map *map);
+int				parse_line_config(char *line, t_map *map);
+int				is_config_full(t_map *map);
 
 // Mapping
 
