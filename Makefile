@@ -46,14 +46,16 @@ INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
 SRCS_FILES  = main.c \
-              hooks.c \
-              init.c \
-              input.c \
-              map_mock.c \
-              move_player.c \
-              player_dir.c \
-              ray.c \
-              render.c
+              engine/hooks.c \
+              engine/input.c \
+              engine/move_player.c \
+              engine/player_dir.c \
+              engine/ray.c \
+              engine/render.c \
+              parsing/init.c \
+              parsing/validate_map.c \
+              parsing/parsing.c \
+              parsing/parse_config.c
 
 SRCS_B_FILES = main.c \
                 engine/hooks.c \
@@ -104,7 +106,7 @@ $(NAME_BONUS): $(OBJS_B)
 	@echo -e "$(MAGENTA)cub3D_bonus compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
 $(LIBFT):
-	@make -s -C $(LIBFT_DIR)
+	@make bonus -s -C $(LIBFT_DIR)
 
 $(MLX):
 	@make -s -C $(MLX_DIR)
