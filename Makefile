@@ -21,8 +21,12 @@ RM          = rm -rf
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 	CFLAGS += -D LINUX
+	MLX_DIR = minilibx-linux
+	MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME_S),Darwin)
 	CFLAGS += -D MACOS
+	MLX_DIR = minilibx-macos
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -frameworl OpenGL -framework AppKit
 endif
 
 # Directories
@@ -32,12 +36,10 @@ INC_DIR     = includes
 OBJ_DIR     = obj
 BUILD_DIR   = build
 LIBFT_DIR   = libft
-MLX_DIR     = minilibx-linux
 
 # Libraries
 LIBFT       = $(LIBFT_DIR)/libft.a
 MLX         = $(MLX_DIR)/libmlx.a
-MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 
 # Includes
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
