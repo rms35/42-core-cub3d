@@ -26,14 +26,39 @@ The engine shoots rays from the player's position across the FOV. For each ray, 
 
 ## Technical Choices
 
+## Contributing
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for all commit messages. This ensures a clean and readable project history.
+
+Commit messages should be in the imperative mood (e.g., `feat: add player movement` instead of `feat: added player movement`).
+
+Common types:
+- `feat`: A new feature
+- `fix`: A bug fix
+- `docs`: Documentation only changes
+- `style`: Changes that do not affect the meaning of the code (white-space, formatting, etc.)
+- `refactor`: A code change that neither fixes a bug nor adds a feature
+- `test`: Adding missing tests or correcting existing tests
+- `chore`: Changes to the build process or auxiliary tools and libraries
+
 ## Resources
 - [Ray-casting Tutorial by Lode Vandevenne](https://lodev.org/cgtutor/raycasting.html)
-- [Online Playable version](http://users.atw.hu/wolf3d/)
+- [Wolfenstein3D Online Playable version](http://users.atw.hu/wolf3d/)
 - [Wikipedia Raycasting](https://es.wikipedia.org/wiki/Ray_casting)
 - [Wikipedia Digital Diferential Analyzer](https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm))
 - [Rotation Matrix](https://es.wikipedia.org/wiki/Matriz_de_rotaci%C3%B3n)
-- [javidx9 Youtube DDA & Raycasting](https://youtu.be/NbSee-XM7WA?si=Yj74O55iTt4D1CEB)
-- [javidx9 YouTube Math for Game Developing](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
+- [javidx9 Youtube Super Fast Ray Casting in Tiled Worlds using DDA](https://youtu.be/NbSee-XM7WA?si=Yj74O55iTt4D1CEB)
+- [javidx9 YouTube Essential Mathematics For Aspiring Game Developers](https://youtu.be/DPfxjQ6sqrc?si=Fo0VWGD2K607Fgrh)
+- [ferxchot YouTube Cómo hacer un raycaster](https://www.youtube.com/watch?v=IzimG4VuW0Q)
+- [wolfenstein3d.co.uk/walls](http://www.wolfenstein3d.co.uk/walls.htm)
+- [Wikipedia Ecuaciones paramétricas](https://es.wikipedia.org/wiki/Ecuaci%C3%B3n_param%C3%A9trica)
+- **DOOM 64**
+- [Ultima Underworld: The Stygian Abyss](https://playclassic.games/games/role-playing-dos-games-online/play-ultima-underworld-stygian-abyss-online/)
+- [Rise of the Triad](https://www.playdosgames.com/online/rise-of-the-triad/)
+- [Duke Nukem 3D](https://playclassic.games/games/first-person-shooter-dos-games-online/play-duke-nukem-3d-online/play/)
+- [Cambio de base Wiki](https://es.wikipedia.org/wiki/Cambio_de_base)
+- [YouTube unicoos Cambio de base](https://www.youtube.com/watch?v=wGl-E5LRvac)
 
 ### AI Usage
-*Describe here how AI was used, specifying for which tasks and which parts of the project.*
+Used to investigate about algorithms, create good commit messages following 
+the convention, ask questions about code and implementation of mathematical 
+algorithms in code, implementing textures and finding bugs.

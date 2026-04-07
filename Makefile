@@ -6,17 +6,28 @@
 #    By: rafael <rafael@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/13 12:00:00 by rafael            #+#    #+#              #
-#    Updated: 2026/02/13 12:00:00 by rafael           ###   ########.fr        #
+#    Updated: 2026/03/06 18:30:00 by rafael           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME        = build/cub3D
+NAME_BONUS  = build/cub3D_bonus
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3
+CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3 \
+-fsanitize=address,leak -O0 -MMD
 RM          = rm -rf
+
+# OS Detection
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	CFLAGS += -D LINUX
+else ifeq ($(UNAME_S),Darwin)
+	CFLAGS += -D MACOS
+endif
 
 # Directories
 SRC_DIR     = src
+SRC_B_DIR   = bonus
 INC_DIR     = includes
 OBJ_DIR     = obj
 BUILD_DIR   = build
@@ -32,10 +43,39 @@ MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Sources
-SRCS_FILES  = main.c map_mock.c dda.c
+SRCS_FILES  = main.c \
+              hooks.c \
+              init.c \
+              input.c \
+              map_mock.c \
+              move_player.c \
+              player_dir.c \
+              ray.c \
+              render.c
+
+SRCS_B_FILES = main.c \
+                engine/hooks.c \
+                engine/input.c \
+                engine/move_player.c \
+                engine/player_dir.c \
+                engine/ray.c \
+                engine/render.c \
+                engine/render_sprites.c \
+                engine/sprites.c \
+                parsing/init.c \
+                parsing/init2.c \
+                parsing/init_sprites.c \
+                parsing/map_mock.c \
+                parsing/parsing.c \
+                parsing/get_grid.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
-OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
+DEPS        = $(OBJS:.o=.d)
+
+SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_B_FILES))
+OBJS_B      = $(SRCS_B:$(SRC_B_DIR)/%.c=$(OBJ_DIR)/bonus/%.o)
+DEPS_B      = $(OBJS_B:.o=.d)
 
 # Colors
 DEF_COLOR   = \033[0;39m
@@ -56,14 +96,23 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@echo -e "$(GREEN)cub3D compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
+$(NAME_BONUS): $(OBJS_B)
+	@mkdir -p $(BUILD_DIR)
+	@$(CC) $(CFLAGS) $(OBJS_B) $(LIBFT) $(MLX_FLAGS) -o $(NAME_BONUS)
+	@echo -e "$(MAGENTA)cub3D_bonus compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
+
 $(LIBFT):
 	@make -s -C $(LIBFT_DIR)
 
 $(MLX):
 	@make -s -C $(MLX_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+$(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+$(OBJ_DIR)/bonus/%.o: $(SRC_B_DIR)/%.c
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
@@ -88,6 +137,9 @@ thread: CFLAGS += -fsanitize=thread -O0
 thread: re
 	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
 
-bonus: all
+bonus: $(LIBFT) $(MLX) $(NAME_BONUS)
+
+-include $(DEPS)
+-include $(DEPS_B)
 
 .PHONY: all clean fclean re bonus debug thread

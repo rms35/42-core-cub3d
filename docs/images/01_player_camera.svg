@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="100%" height="100%" fill="#1e1e2e"/>
+  
+  <!-- Grid -->
+  <g stroke="#333344" stroke-width="2">
+    <line x1="100" y1="0" x2="100" y2="600" />
+    <line x1="200" y1="0" x2="200" y2="600" />
+    <line x1="300" y1="0" x2="300" y2="600" />
+    <line x1="400" y1="0" x2="400" y2="600" />
+    <line x1="500" y1="0" x2="500" y2="600" />
+    <line x1="600" y1="0" x2="600" y2="600" />
+    <line x1="700" y1="0" x2="700" y2="600" />
+    <line x1="0" y1="100" x2="800" y2="100" />
+    <line x1="0" y1="200" x2="800" y2="200" />
+    <line x1="0" y1="300" x2="800" y2="300" />
+    <line x1="0" y1="400" x2="800" y2="400" />
+    <line x1="0" y1="500" x2="800" y2="500" />
+  </g>
+
+  <!-- FOV Area -->
+  <polygon points="300,450 318,100 582,300" fill="#00ffcc" opacity="0.1" />
+
+  <!-- Direction Vector -->
+  <defs>
+    <marker id="arrowDir" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#00ffcc" />
+    </marker>
+    <marker id="arrowCamp" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ff00cc" />
+    </marker>
+  </defs>
+
+  <line x1="300" y1="450" x2="450" y2="200" stroke="#00ffcc" stroke-width="4" marker-end="url(#arrowDir)" />
+  <text x="350" y="300" fill="#00ffcc" font-family="monospace" font-size="18" font-weight="bold" transform="rotate(-59, 350, 300)">dir_x, dir_y</text>
+  
+  <!-- Camera Plane -->
+  <line x1="318" y1="100" x2="582" y2="300" stroke="#ff00cc" stroke-width="4" stroke-dasharray="8,4"/>
+  <line x1="450" y1="200" x2="582" y2="300" stroke="#ff00cc" stroke-width="4" marker-end="url(#arrowCamp)" />
+  <text x="520" y="245" fill="#ff00cc" font-family="monospace" font-size="18" font-weight="bold" transform="rotate(37, 520, 245)">camp_x, camp_y</text>
+
+  <!-- Player Dot -->
+  <circle cx="300" cy="450" r="8" fill="#ffffff" />
+  <text x="290" y="490" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold">pos_x, pos_y</text>
+
+  <!-- Rotation annotations -->
+  <path d="M 350 450 A 50 50 0 0 0 330 400" fill="none" stroke="#ffff00" stroke-width="2" stroke-dasharray="4,4" />
+  <text x="370" y="420" fill="#ffff00" font-family="monospace" font-size="14">turn_speed</text>
+  <text x="370" y="440" fill="#ffff00" font-family="monospace" font-size="12">(cos_r, sin_r)</text>
+
+  <!-- FOV rays -->
+  <line x1="300" y1="450" x2="318" y2="100" stroke="#00ffcc" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="300" y1="450" x2="582" y2="300" stroke="#00ffcc" stroke-width="1" stroke-dasharray="4,4"/>
+  
+  <text x="350" y="50" fill="#00ffcc" font-family="monospace" font-size="16" opacity="0.8">FOV controlled by camp_mod</text>
+</svg>

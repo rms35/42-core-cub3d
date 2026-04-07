@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="100%" height="100%" fill="#1e1e2e"/>
+  
+  <g stroke="#333344" stroke-width="2">
+    <line x1="200" y1="100" x2="200" y2="500" />
+    <line x1="300" y1="100" x2="300" y2="500" />
+    <line x1="400" y1="100" x2="400" y2="500" />
+    <line x1="500" y1="100" x2="500" y2="500" />
+    
+    <line x1="100" y1="200" x2="600" y2="200" />
+    <line x1="100" y1="300" x2="600" y2="300" />
+    <line x1="100" y1="400" x2="600" y2="400" />
+  </g>
+
+  <!-- Wall Block -->
+  <rect x="400" y="200" width="100" height="100" fill="#ff4444" opacity="0.8" />
+  <text x="420" y="255" fill="#ffffff" font-family="monospace" font-size="20" font-weight="bold">hit = 1</text>
+  <line x1="400" y1="200" x2="400" y2="300" stroke="#ffffff" stroke-width="4" />
+  <text x="405" y="290" fill="#ffffff" font-family="monospace" font-size="16">side = 0 (EW)</text>
+
+  <defs>
+    <marker id="arrowSide" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L6,3 z" fill="#ffffff" />
+    </marker>
+  </defs>
+
+  <!-- Ray line -->
+  <line x1="150" y1="450" x2="420" y2="234" stroke="#00ffcc" stroke-width="2" stroke-dasharray="5,5" />
+
+  <!-- DDA Steps -->
+  <circle cx="150" cy="450" r="6" fill="#ffffff" />
+  
+  <!-- Step 1: Hit Y=400 -->
+  <line x1="150" y1="450" x2="212" y2="400" stroke="#ffaa00" stroke-width="4" marker-end="url(#arrowSide)" />
+  <circle cx="212" cy="400" r="4" fill="#ffaa00" />
+  <text x="120" y="430" fill="#ffaa00" font-family="monospace" font-size="14">map_y--</text>
+
+  <!-- Step 2: Hit X=300 -->
+  <line x1="212" y1="400" x2="300" y2="330" stroke="#ff00cc" stroke-width="4" marker-end="url(#arrowSide)" />
+  <circle cx="300" cy="330" r="4" fill="#ff00cc" />
+  <text x="250" y="380" fill="#ff00cc" font-family="monospace" font-size="14">map_x++</text>
+
+  <!-- Step 3: Hit Y=300 -->
+  <line x1="300" y1="330" x2="337" y2="300" stroke="#ffaa00" stroke-width="4" marker-end="url(#arrowSide)" />
+  <circle cx="337" cy="300" r="4" fill="#ffaa00" />
+  <text x="310" y="345" fill="#ffaa00" font-family="monospace" font-size="14">map_y--</text>
+
+  <!-- Step 4: Hit X=400 (WALL) -->
+  <line x1="337" y1="300" x2="400" y2="250" stroke="#ff00cc" stroke-width="4" marker-end="url(#arrowSide)" />
+  <circle cx="400" cy="250" r="6" fill="#ff4444" />
+  <text x="340" y="275" fill="#ff00cc" font-family="monospace" font-size="14">map_x++</text>
+
+  <!-- Code Block -->
+  <rect x="50" y="30" width="450" height="120" fill="#222233" rx="5" />
+  <text x="60" y="55" fill="#aaffaa" font-family="monospace" font-size="14">while (hit == 0) {</text>
+  <text x="80" y="75" fill="#ffffff" font-family="monospace" font-size="14">if (side_dist_x &lt; side_dist_y) {</text>
+  <text x="100" y="95" fill="#ff00cc" font-family="monospace" font-size="14">side_dist_x += delta_dist_x; map_x += step_x; side = 0;</text>
+  <text x="80" y="115" fill="#ffffff" font-family="monospace" font-size="14">} else {</text>
+  <text x="100" y="135" fill="#ffaa00" font-family="monospace" font-size="14">side_dist_y += delta_dist_y; map_y += step_y; side = 1;</text>
+  <text x="60" y="155" fill="#aaffaa" font-family="monospace" font-size="14">}</text>
+</svg>
