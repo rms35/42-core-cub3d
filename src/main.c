@@ -45,8 +45,11 @@ int	main(int argc, char **argv)
 	win.map = map;
 	win.img = &img;
 	setup_mlx(&win, win.img);
+	if (init_textures(&win))
+		return (close_win(&win), 1);
 	render_frame(&win);
 	mlx_put_image_to_window(win.mlxptr, win.winptr, img.img, 0, 0);
 	mlx_loop_hook(win.mlxptr, game_loop, &win);
 	mlx_loop(win.mlxptr);
+	return (0);
 }

@@ -53,6 +53,7 @@ SRCS_FILES  = main.c \
 			  map_mock.c \
 			  move_player.c \
 			  player_dir.c \
+			  textures.c \
 			  parsing/parsing.c \
 			  parsing/parse_config.c \
 			  parsing/parse_map.c \

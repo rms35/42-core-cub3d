@@ -26,6 +26,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 7
+# define N_TEX 4
 # define CEILING = 0x87CEEB;
 # define FLOOR = 0x4B4B4B;
 
@@ -70,6 +71,11 @@
 
 #define MASK_KEY_PRESS       1L<<0
 #define MASK_KEY_RELEASE     1L<<1
+
+#define TEX_NORTH 0
+#define TEX_SOUTH 1
+#define TEX_WEST 2
+#define TEX_EAST 3
 
 typedef struct s_map
 {
@@ -124,8 +130,12 @@ typedef struct s_ray
 	double	delta_dist_y;
 	double	perp_wall_dist;
 	double	ray_mag;
+	double	wall_x;
+	double	tex_step;
+	double	tex_pos;
 	int		map_x;
 	int		map_y;
+	int		wall_tex;
 	int		step_x;
 	int		step_y;
 	int		hit;
@@ -137,6 +147,7 @@ typedef struct s_ray
 
 typedef struct s_win
 {
+	t_img		textures[N_TEX];
 	void		*winptr;
 	void		*mlxptr;
 	t_img		*img;
@@ -159,6 +170,8 @@ int				validate_map(t_map *map);
 int				error_msg(const char *msg);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
+int				init_textures(t_win *win);
+int				load_texture(const t_win *win, t_img *tex, char *path);
 int				close_win(const t_win *win);
 
 // Player movement

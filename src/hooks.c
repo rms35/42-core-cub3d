@@ -48,29 +48,28 @@ int	game_loop(const t_win *win)
 
 int	close_win(const t_win *win)
 {
-	// Destruye la ventana y la imagen
+	int	i;
+
 	if (win->winptr)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	if (win->img && win->img->img)
 		mlx_destroy_image(win->mlxptr, win->img->img);
-
-	// Diferencia Linux / Mac
-#ifdef __linux__
+	i = 0;
+	while (i < N_TEX)
+	{
+		if (win->textures[i].img)
+			mlx_destroy_image(win->mlxptr, win->textures[i].img);
+		i++;
+	}
+#ifdef LINUX
 	if (win->mlxptr)
 	{
 		mlx_destroy_display(win->mlxptr);
 		free(win->mlxptr);
 	}
 #endif
-	// Mac libera solo lo que haga falta (MLX lo gestiona internamente)
-
-	// Libera mapa
 	if (win->map)
-	{
-		free(win->map->grid);
-		free(win->map);
-	}
-
+		free_map(win->map);
 	exit(win->exit_status);
 }
 

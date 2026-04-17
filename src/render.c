@@ -12,55 +12,72 @@
 
 #include "../includes/cub3d.h"
 
-static void	draw_line(const t_win *win, const t_ray *ray, int x, int color)
+static void	draw_wall(const t_win *win, t_ray *ray, int offset, int y)
+{
+	int		tex_y;
+	int		tex_x;
+	t_img	*tex;
+
+	tex = (t_img *)&win->textures[ray->wall_tex];
+	tex_y = (int)ray->tex_pos % tex->height;
+	if (tex_y < 0)
+		tex_y += tex->height;
+	tex_x = (int)(ray->wall_x * (double)tex->width);
+	if (tex_x < 0)
+		tex_x = 0;
+	if (tex_x >= tex->width)
+		tex_x = tex->width - 1;
+	ray->tex_pos += ray->tex_step;
+	*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
+		= *(unsigned int *)(tex->addr + (tex_y * tex->line_len
+				+ tex_x * (tex->bpp / 8)));
+}
+
+static void	draw_line(const t_win *win, t_ray *ray, int x)
 {
 	int	y;
-	int	int_x;
+	int	offset;
 
 	y = 0;
-	int_x = x * 4;
+	offset = x * (win->img->bpp / 8);
 	while (y < HEIGHT)
 	{
 		while (y < ray->draw_start)
 		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x))
+			*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
 				= win->map->ceil_color;
 			y++;
 		}
 		while (y < ray->draw_end)
 		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
-				color;
+			draw_wall(win, ray, offset, y);
 			y++;
 		}
 		while (y < HEIGHT)
 		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x))
+			*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
 				= win->map->floor_color;
 			y++;
 		}
 	}
 }
 
-static int	get_wall(const t_ray *ray)
+static void	get_wall_texture(t_ray *ray)
 {
-	int	color;
-
 	if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
-			color = 0x00FF0000;
+			ray->wall_tex = TEX_WEST;
 		else
-			color = 0x0000FF00;
+			ray->wall_tex = TEX_EAST;
 	}
 	else
 	{
 		if (ray->dir_y > 0)
-			color = 0x5F0000FF;
+			ray->wall_tex = TEX_SOUTH;
 		else
-			color = 0x00FFFF00;
+			ray->wall_tex = TEX_NORTH;
 	}
-	return (color);
 }
 
 void	render_frame(const t_win *win)
@@ -84,7 +101,12 @@ void	render_frame(const t_win *win)
 		ray.draw_end = ray.line_height / 2 + HEIGHT / 2;
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		draw_line(win, &ray, x, get_wall(&ray));
+		get_wall_texture(&ray);
+		ray.tex_step = 1.0 * win->textures[ray.wall_tex].height
+			/ ray.line_height;
+		ray.tex_pos = (ray.draw_start - HEIGHT / 2 + ray.line_height / 2)
+			* ray.tex_step;
+		draw_line(win, &ray, x);
 		x++;
 	}
 }
