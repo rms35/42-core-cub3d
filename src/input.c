@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 int	key_press(const int keysym, t_win *win)
 {

@@ -68,7 +68,9 @@ int	close_win(t_win *win)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	if (win->mlxptr)
 	{
+#ifdef LINUX
 		mlx_destroy_display(win->mlxptr);
+#endif
 		free(win->mlxptr);
 	}
 	if (win->map)
@@ -85,4 +87,3 @@ int	close_win(t_win *win)
 	free(win->sprite_order);
 	exit(win->exit_status);
 }
-

@@ -20,14 +20,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include <X11/keysym.h>
-# include <X11/X.h>
 # include <time.h>
 # include <fcntl.h>
 
 // Parsing
-
-t_map   *parsing(int argc, const char *argv);
+t_map   *parsing(const int argc, const char *argv);
 int     get_grid(const char *file, t_map *map);
 int     validate_map(t_map *map);
 int		parse_line_config(char *line, t_map *map);

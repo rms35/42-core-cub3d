@@ -1,39 +1,35 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile_emg                                       :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+         #
+#    By: rafael <rafael@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2026/04/10 19:40:32 by almorene          #+#    #+#              #
-#    Updated: 2026/04/10 19:40:34 by almorene         ###   ########.fr        #
+#    Created: 2026/02/13 12:00:00 by rafael            #+#    #+#              #
+#    Updated: 2026/03/06 18:30:00 by rafael           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
-
 NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
-
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -MMD
+CFLAGS      = -Wall -Wextra -Werror -Wno-incompatible-pointer-types -g3 \
+-fsanitize=address -O0 -MMD
 RM          = rm -rf
 
+# OS Detection
 UNAME_S := $(shell uname -s)
-
 ifeq ($(UNAME_S),Linux)
 	CFLAGS += -D LINUX
-	MLX_DIR   = minilibx-linux
-	MLX_FLAGS = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
+	MLX_DIR = minilibx-linux
+	MLX_FLAGS   = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME_S),Darwin)
 	CFLAGS += -D MACOS
-	MLX_DIR   = minilibx_macos
+	MLX_DIR = minilibx_macos
 	MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
-	MLX_MAKE_FLAGS = CFLAGS="-Wno-deprecated-declarations -Wno-deprecated-non-prototype -DGL_SILENCE_DEPRECATION"
-else
-	$(error Unsupported operating system: $(UNAME_S))
 endif
 
+# Directories
 SRC_DIR     = src
 SRC_B_DIR   = bonus
 INC_DIR     = includes
@@ -41,43 +37,41 @@ OBJ_DIR     = obj
 BUILD_DIR   = build
 LIBFT_DIR   = libft
 
+# Libraries
 LIBFT       = $(LIBFT_DIR)/libft.a
 MLX         = $(MLX_DIR)/libmlx.a
 
+# Includes
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
+# Sources
 SRCS_FILES  = main.c \
-			  hooks.c \
-			  init.c \
-			  input.c \
-			  map_mock.c \
-			  move_player.c \
-			  player_dir.c \
-			  parsing/parsing.c \
-			  parsing/parse_config.c \
-			  parsing/parse_map.c \
-			  parsing/error_messages.c \
-			  parsing/validate_map.c \
-			  ray.c \
-			  render.c
+              hooks.c \
+              init.c \
+              input.c \
+              map_mock.c \
+              move_player.c \
+              player_dir.c \
+              ray.c \
+              render.c
 
 SRCS_B_FILES = main.c \
-			   engine/hooks.c \
-			   engine/input.c \
-			   engine/move_player.c \
-			   engine/player_dir.c \
-			   engine/ray.c \
-			   engine/render.c \
-			   engine/render_sprites.c \
-			   engine/sprites.c \
-			   parsing/init.c \
-			   parsing/init2.c \
-			   parsing/init_sprites.c \
-			   parsing/map_mock.c \
-			   parsing/parsing.c \
-			   parsing/parse_config.c \
-			   parsing/get_grid.c \
-			   parsing/validate_map.c
+                engine/hooks.c \
+                engine/input.c \
+                engine/move_player.c \
+                engine/player_dir.c \
+                engine/ray.c \
+                engine/render.c \
+                engine/render_sprites.c \
+                engine/sprites.c \
+                parsing/init.c \
+                parsing/init2.c \
+                parsing/init_sprites.c \
+                parsing/map_mock.c \
+                parsing/parsing.c \
+                parsing/parse_config.c \
+                parsing/get_grid.c \
+                parsing/validate_map.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
 OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
@@ -87,16 +81,19 @@ SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_B_FILES))
 OBJS_B      = $(SRCS_B:$(SRC_B_DIR)/%.c=$(OBJ_DIR)/bonus/%.o)
 DEPS_B      = $(OBJS_B:.o=.d)
 
+# Colors
 DEF_COLOR   = \033[0;39m
+GRAY        = \033[0;90m
+RED         = \033[0;91m
 GREEN       = \033[0;92m
-MAGENTA     = \033[0;95m
-BLUE        = \033[0;94m
-CYAN        = \033[0;96m
 YELLOW      = \033[0;93m
+BLUE        = \033[0;94m
+MAGENTA     = \033[0;95m
+CYAN        = \033[0;96m
+WHITE       = \033[0;97m
 
+# Rules
 all: $(NAME)
-
-bonus: $(NAME_BONUS)
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX)
 	@mkdir -p $(BUILD_DIR)
@@ -109,10 +106,10 @@ $(NAME_BONUS): $(OBJS_B) $(LIBFT) $(MLX)
 	@echo -e "$(MAGENTA)cub3D_bonus compiled in $(BUILD_DIR)/!$(DEF_COLOR)"
 
 $(LIBFT):
-	@$(MAKE) -s -C $(LIBFT_DIR) bonus
+	@make -s -C $(LIBFT_DIR) bonus
 
 $(MLX):
-	@$(MAKE) -s -C $(MLX_DIR) $(MLX_MAKE_FLAGS)
+	@make -s -C $(MLX_DIR)
 
 $(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -124,22 +121,31 @@ $(OBJ_DIR)/bonus/%.o: $(SRC_B_DIR)/%.c
 
 clean:
 	@$(RM) $(OBJ_DIR)
-	@$(MAKE) -s -C $(LIBFT_DIR) clean
-	@$(MAKE) -s -C $(MLX_DIR) clean
+	@make -s -C $(LIBFT_DIR) clean
+	@make -s -C $(MLX_DIR) clean
 	@echo -e "$(BLUE)cub3D objects cleaned!$(DEF_COLOR)"
 
 fclean: clean
 	@$(RM) $(BUILD_DIR)
-	@$(MAKE) -s -C $(LIBFT_DIR) fclean
+	@make -s -C $(LIBFT_DIR) fclean
 	@echo -e "$(CYAN)cub3D build directory cleaned!$(DEF_COLOR)"
 
-re: fclean all
+re:
+	@$(MAKE) fclean
+	@$(MAKE) all
 
-debug: CFLAGS += -g3 -O0 -fsanitize=address
+# Debugging builds
+debug: CFLAGS += -fsanitize=address,leak -O0
 debug: re
-	@echo -e "$(YELLOW)Debug build with AddressSanitizer enabled!$(DEF_COLOR)"
+	@echo -e "$(YELLOW)Address Sanitizer enabled!$(DEF_COLOR)"
+
+thread: CFLAGS += -fsanitize=thread -O0
+thread: re
+	@echo -e "$(YELLOW)Thread Sanitizer enabled!$(DEF_COLOR)"
+
+bonus: $(NAME_BONUS)
 
 -include $(DEPS)
 -include $(DEPS_B)
 
-.PHONY: all bonus clean fclean re debug
+.PHONY: all clean fclean re bonus debug thread

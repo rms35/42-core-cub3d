@@ -28,6 +28,37 @@
 # define P1_SPEED 2.0
 # define P1_ROT_SPEED 1.0
 
+// Keys
+
+# ifdef LINUX
+#  define KEY_W 119
+#  define KEY_A 97
+#  define KEY_S 115
+#  define KEY_D 100
+#  define KEY_ESC 65307
+#  define KEY_SHIFT 65505
+# elif defined(MACOS)
+#  define KEY_W 13
+#  define KEY_A 0
+#  define KEY_S 1
+#  define KEY_D 2
+#  define KEY_ESC 53
+#  define KEY_SHIFT 257
+# endif
+
+// MiniLibX Event Codes
+
+# define EVENT_KEY_PRESS 2
+# define EVENT_KEY_RELEASE 3
+# define EVENT_MOTION_NOTIFY 6
+# define EVENT_DESTROY_NOTIFY 17
+
+// MiniLibX Event Masks
+
+# define MASK_KEY_PRESS 1L<<0
+# define MASK_KEY_RELEASE 1L<<1
+# define MASK_POINTER_MOTION 1L<<6
+
 // Textures
 
 # define TEX_WIDTH 512

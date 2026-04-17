@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 # define P1_TURNSP 0.013
 # define P1_SPEED 0.03

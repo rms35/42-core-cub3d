@@ -14,7 +14,7 @@
 
 int	key_press(int keysym, t_win *win)
 {
-	if (keysym == XK_Escape)
+	if (keysym == KEY_ESC)
 		close_win(win);
 	if (keysym < N_KEYS)
 		win->keys[keysym] = 1;
@@ -33,23 +33,23 @@ static void	update_dir(const t_win *win, t_player *p, double *dx, double *dy)
 	double move_speed;
 
 	move_speed= win->player->speed * win->delta_time;
-	if (win->keys[XK_w])
+	if (win->keys[KEY_W])
 	{
 		move_speed= win->player->fwd_speed * win->delta_time;
 		*dx += p->dir_x * move_speed;
 		*dy += p->dir_y * move_speed;
 	}
-	if (win->keys[XK_s])
+	if (win->keys[KEY_S])
 	{
 		*dx -= p->dir_x * move_speed;
 		*dy -= p->dir_y * move_speed;
 	}
-	if (win->keys[XK_a])
+	if (win->keys[KEY_A])
 	{
 		*dx += p->dir_y * move_speed;
 		*dy -= p->dir_x * move_speed;
 	}
-	if (win->keys[XK_d])
+	if (win->keys[KEY_D])
 	{
 		*dx -= p->dir_y * move_speed;
 		*dy += p->dir_x * move_speed;
@@ -70,7 +70,7 @@ int	handle_input(t_win *win)
 	update_dir(win, p, &dx, &dy);
 	if (dx != 0 || dy != 0)
 		r = move_player(win, dx, dy);
-	if (win->keys[XK_Shift_L])
+	if (win->keys[KEY_SHIFT])
 		win->player->fwd_speed = 2.5 * P1_SPEED;
 	else
 		win->player->fwd_speed = P1_SPEED;

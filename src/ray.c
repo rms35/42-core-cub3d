@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 static void init_for_dda(const t_win *win, t_ray *ray)
 {

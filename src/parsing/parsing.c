@@ -3,123 +3,128 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/26 10:32:24 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/04/02 14:15:00 by rafael-m         ###   ########.fr       */
+/*   Created: 2026/04/12 00:00:00 by almorene          #+#    #+#             */
+/*   Updated: 2026/04/12 00:00:00 by almorene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d.h"
 
-static char	*gnl(const int fd)
+static char	*read_line(int fd)
 {
-	ssize_t	br;
-	char	*line;
-	char	*t;
+	ssize_t	bytes_read;
 	char	buffer;
-	char	s_buf[2];
+	char	tmp[2];
+	char	*line;
+	char	*joined;
 
-	br = 1;
 	line = ft_strdup("");
 	if (!line)
 		return (NULL);
-	s_buf[1] = '\0';
-	while (br > 0)
+	tmp[1] = '\0';
+	bytes_read = 1;
+	while (bytes_read > 0)
 	{
-		br = read(fd, &buffer, 1);
-		if (br == -1)
+		bytes_read = read(fd, &buffer, 1);
+		if (bytes_read < 0)
 			return (free(line), NULL);
-		if (br == 0)
+		if (bytes_read == 0)
 			return (line[0] == '\0' ? (free(line), NULL) : line);
-		s_buf[0] = buffer;
-		t = ft_strjoin(line, s_buf);
+		tmp[0] = buffer;
+		joined = ft_strjoin(line, tmp);
 		free(line);
-		if (!t)
+		if (!joined)
 			return (NULL);
-		line = t;
+		line = joined;
 		if (buffer == '\n')
-			return (line);
+			break ;
 	}
 	return (line);
 }
 
-static int	extract_data(const int fd, t_map *map, t_list **grid_lst)
+static void	free_lines(t_list **lines)
 {
-	char	*line;
-	int		is_config;
+	ft_lstclear(lines, free);
+}
 
-	line = gnl(fd);
+void	free_map(t_map *map)
+{
+	if (!map)
+		return ;
+	free(map->grid);
+	free(map->no_path);
+	free(map->so_path);
+	free(map->we_path);
+	free(map->ea_path);
+	free(map);
+}
+
+static int	read_cub_file(const char *path, t_list **lines)
+{
+	int		fd;
+	char	*line;
+	t_list	*node;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (error_msg("Could not open map file"));
+	line = read_line(fd);
 	while (line)
 	{
-		if (!is_config_full(map))
-		{
-			is_config = parse_line_config(line, map);
-			if (is_config == -1)
-				return (free(line), -1);
-		}
-		else if (line[0] != '\n' || *grid_lst)
-			ft_lstadd_back(grid_lst, ft_lstnew(ft_strdup(line)));
-		free(line);
-		line = gnl(fd);
+		node = ft_lstnew(line);
+		if (!node)
+			return (close(fd), free(line), free_lines(lines),
+				error_msg("Memory allocation failed"));
+		ft_lstadd_back(lines, node);
+		line = read_line(fd);
 	}
+	close(fd);
+	if (!*lines)
+		return (error_msg("Empty map file"));
 	return (0);
 }
 
-static void	process_grid(t_map *map, t_list *grid_lst)
+static int	check_map_path(const char *path)
 {
-	t_list	*curr;
 	size_t	len;
-	int		i;
 
-	curr = grid_lst;
-	map->height = ft_lstsize(grid_lst);
-	while (curr)
-	{
-		len = ft_strlen((char *)curr->content);
-		if (len > map->width)
-			map->width = len;
-		curr = curr->next;
-	}
-	map->grid = ft_calloc(map->width * map->height + 1, sizeof(char));
-	if (!map->grid)
-		return ;
-	curr = grid_lst;
-	i = 0;
-	while (curr)
-	{
-		ft_strncpy(map->grid + (i++ * map->width), (char *)curr->content, ft_strlen((char *)curr->content));
-		curr = curr->next;
-	}
+	if (!path)
+		return (error_msg("Missing map path"));
+	len = ft_strlen(path);
+	if (len < 5 || ft_strncmp(path + len - 4, ".cub", 4))
+		return (error_msg("Invalid map extension"));
+	return (0);
 }
 
-t_map	*parsing(const int argc, const char *argv)
+int	parse_map_file(t_map **map, int argc, char **argv)
 {
-	t_map	*map;
-	t_list	*grid_lst;
-	int		fd;
+	t_list	*lines;
+	t_list	*map_lines;
 
-	grid_lst = NULL;
 	if (argc != 2)
-		return (write(2, "Error: invalid number of maps\n", 31), NULL);
-	map = ft_calloc(sizeof(t_map), 1);
-	if (!map)
-		return (NULL);
-	map->floor_color = -1;
-	map->ceil_color = -1;
-	if (ft_strncmp(&argv[ft_strlen(argv) - 4], ".cub", 4))
-		return (write(2, "Error: invalid map file extension\n", 35), free(map), NULL);
-	fd = open(argv, O_RDONLY);
-	if (fd < 0)
-		return (free(map), NULL);
-	if (extract_data(fd, map, &grid_lst) == -1)
-		return (ft_lstclear(&grid_lst, free), free(map), NULL);
-	close(fd);
-	if (!is_config_full(map))
-		return (ft_lstclear(&grid_lst, free), free(map), NULL);
-	process_grid(map, grid_lst);
-	ft_lstclear(&grid_lst, free);
-	if (validate_map(map))
-		return (free(map->grid), free(map), NULL);
-	return (map);
+		return (error_msg("Usage: ./cub3D <map.cub>"));
+	if (check_map_path(argv[1]))
+		return (1);
+	*map = ft_calloc(1, sizeof(t_map));
+	if (!*map)
+		return (error_msg("Memory allocation failed"));
+	(*map)->floor_color = -1;
+	(*map)->ceil_color = -1;
+	lines = NULL;
+	map_lines = NULL;
+	if (read_cub_file(argv[1], &lines))
+		return (free_map(*map), *map = NULL, 1);
+	if (parse_config_lines(lines, *map, &map_lines)
+		|| build_grid(*map, map_lines)
+		|| validate_map(*map))
+	{
+		free_lines(&lines);
+		free_lines(&map_lines);
+		return (free_map(*map), *map = NULL, 1);
+	}
+	free_lines(&lines);
+	free_lines(&map_lines);
+	return (0);
 }

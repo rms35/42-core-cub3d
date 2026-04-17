@@ -6,7 +6,7 @@
 /*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/04/07 19:41:53 by almorene         ###   ########.fr       */
+/*   Updated: 2026/04/08 16:20:31 by almorene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	game_loop(const t_win *win)
 	return (0);
 }*/
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 int	close_win(const t_win *win)
 {

@@ -18,8 +18,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include <fcntl.h>
 # include <unistd.h>
-#include <fcntl.h>
 
 // Map
 
@@ -74,8 +74,8 @@
 typedef struct s_map
 {
 	char	*grid;
-	size_t	width;
-	size_t	height;
+	int		width;
+	int		height;
 	int		floor_color;
 	int		ceil_color;
 	char	*no_path;
@@ -146,17 +146,17 @@ typedef struct s_win
 	int			exit_status;
 }	t_win;
 
-// Parsing
-
-t_map			*parsing(int argc, const char *argv);
-int				get_grid(const char *file, t_map *map);
-int				validate_map(t_map *map);
-int				parse_line_config(char *line, t_map *map);
-int				is_config_full(t_map *map);
-
 // Mapping
 
 t_map			*get_mock_map(void);
+void			free_map(t_map *map);
+int				parse_map_file(t_map **map, int argc, char **argv);
+int				parse_config_lines(t_list *lines, t_map *map, t_list **map_lines);
+int				is_config_full(const t_map *map);
+int				parse_rgb(const char *str, int *color);
+int				build_grid(t_map *map, t_list *map_lines);
+int				validate_map(t_map *map);
+int				error_msg(const char *msg);
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				close_win(const t_win *win);

@@ -29,7 +29,7 @@ void	init_ray1(t_ray *ray, const t_player *player, const int x)
 			* ray->delta_dist_y;
 }
 
-int	main(int argc, const char **argv)
+int	main(int argc, char **argv)
 {
 	t_player	player;
 	t_img		img;
@@ -37,7 +37,9 @@ int	main(int argc, const char **argv)
 	t_map		*map;
 
 	ft_bzero(&win, sizeof(t_win));
-	map = parsing(argc, argv);
+	map = NULL;
+	if (parse_map_file(&map, argc, argv))
+		return (1);
 	init_player(&player, map, P1_FOV);
 	win.player = &player;
 	win.map = map;

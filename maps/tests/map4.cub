@@ -1,0 +1,13 @@
+NO textures/walls/Wall1.xpm
+SO textures/walls/Wall2.xpm
+WE textures/walls/Wall3.xpm
+EA textures/walls/Wall4.xpm
+
+F 220,100,0
+C 225,30,0
+
+111111
+100001
+10N001
+100001
+111111

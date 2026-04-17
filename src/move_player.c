@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/cub3d.h"
+#include "../includes/cub3d.h"
 
 int	move_player(const t_win *win, double dx, double dy)
 {
