@@ -38,13 +38,13 @@ void			init_player(t_player *p, const t_map *map,
 					double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				init_textures(t_win *win);
-int				alloc_sprites(t_win *win);
+void			alloc_sprites(t_win *win);
 int				init_sprites(t_win *win, const t_map *map);
 int				close_win(void *win);
+int				init_doors(t_win *win);
 
 double			get_time();
 
-// Mapping
 
 // t_map			*get_mock_map(t_win *win);
 int				load_texture(const t_win *win, t_img *tex, char *path);
@@ -72,6 +72,6 @@ unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 // Sprite animation
 
 void			animate_fire(t_sprite *s, double time);
-void			animate_sprites(t_sprite *s, double time);
+void			animate_sprites(t_sprite *s, double time, size_t n_sprites);
 
 #endif

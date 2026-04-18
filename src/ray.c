@@ -78,8 +78,10 @@ void	perform_dda(const t_win *win, t_ray *ray)
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - win->player->pos_x + (1 - ray->step_x) / 2) / ray->dir_x;
+		ray->perp_wall_dist = (ray->map_x - win->player->pos_x + (1 -
+			ray->step_x) / 2) / ray->dir_x;
 	else
-		ray->perp_wall_dist = (ray->map_y - win->player->pos_y + (1 - ray->step_y) / 2) / ray->dir_y;
+		ray->perp_wall_dist = (ray->map_y - win->player->pos_y + (1 -
+			ray->step_y) / 2) / ray->dir_y;
 	get_wall_x(win, ray);
 }

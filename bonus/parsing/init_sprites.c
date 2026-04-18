@@ -12,9 +12,9 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-void	init_fires(t_sprite *s, const int total)
+static void	init_fires(t_sprite *s, const size_t total)
 {
-	int i;
+	size_t i;
 
 	i = 0;
 	while (i < total && s[i].sprite_id == FIRE)
@@ -28,46 +28,50 @@ void	init_fires(t_sprite *s, const int total)
 // TODO: Proper cleanup
 int	init_sprites(t_win *win, const t_map *map)
 {
-	size_t				i;
-	int				sprites;
+	size_t	i;
+	size_t	sprites;
 
 	i = 0;
 	sprites = 0;
-	if (alloc_sprites(win))
+	alloc_sprites(win);
+	win->door = (t_img *)ft_calloc(1, sizeof(t_img));
+	if (!win->door)
+		return (1);
+	if (load_texture(win, win->door,"textures/doors/door.xpm"))
+		return (1);
+	while (i < N_FIRES)
+	{
+		win->fire[i] = (t_img *)ft_calloc(1, sizeof(t_img));
+		if (!win->fire[i])
+			return (1);
+		i++;
+	}
+	if (load_texture(win, win->fire[0],"textures/fire/fire1.xpm") == 1
+	|| load_texture(win, win->fire[1],"textures/fire/fire2.xpm") == 1
+	|| load_texture(win, win->fire[2],"textures/fire/fire3.xpm") == 1
+	|| load_texture(win, win->fire[3],"textures/fire/fire4.xpm") == 1)
 		return (1);
 	while (i < map->width * map->height)
 	{
-		if (map->grid[i] == 'F' && sprites < N_SPRITES)
+		if (map->grid[i] == 'F' && sprites < win->n_sprites)
 		{
 			win->sprites[sprites].x = (double)(i % map->width) + 0.5;
 			win->sprites[sprites].y = (double)(i / map->width) + 0.5;
-			win->sprites[sprites].sprite_id = FIRE;
-			if (sprites == 0)
-			{
-				if (load_texture(win, &win->sprites[sprites].tex[0],
-					"textures/fire/fire1.xpm") == 1
-					|| load_texture(win, &win->sprites[sprites].tex[1],
-						"textures/fire/fire2.xpm") == 1
-					|| load_texture(win, &win->sprites[sprites].tex[2],
-						"textures/fire/fire3.xpm") == 1
-					|| load_texture(win, &win->sprites[sprites].tex[3],
-						"textures/fire/fire4.xpm") == 1)
-					return (1);
-			}
-			else
-			{
-				win->sprites[sprites].tex[0] = win->sprites[0].tex[0];
-				win->sprites[sprites].tex[1] = win->sprites[0].tex[1];
-				win->sprites[sprites].tex[2] = win->sprites[0].tex[2];
-				win->sprites[sprites].tex[3] = win->sprites[0].tex[3];
-			}
 			win->sprites[sprites].frame_count = 4;
 			win->sprites[sprites].anim_speed = FIRE_T;
 			win->sprites[sprites].sprite_id = FIRE;
 			win->sprites[sprites].next_frame = 1;
 			win->sprites[sprites].current_frame = 0;
 			win->sprites[sprites].animation = animate_fire;
-			map->grid[i] = '0';
+			sprites++;
+		}
+		else if (map->grid[i] == 'D' && sprites < win->n_sprites)
+		{
+
+			win->sprites[sprites].x = (double)(i % map->width) + 0.5;
+			win->sprites[sprites].y = (double)(i / map->width) + 0.5;
+			win->sprites[sprites].sprite_id = DOOR;
+			win->sprites[sprites].tex = win->door;
 			sprites++;
 		}
 		i++;

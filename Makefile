@@ -1,7 +1,7 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    Makefile_emg                                       :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
@@ -16,7 +16,7 @@ NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -MMD
+CFLAGS      = -Wall -Wextra -Werror -MMD -fsanitize=address,leak -g3
 RM          = rm -rf
 
 UNAME_S := $(shell uname -s)

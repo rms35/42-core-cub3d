@@ -26,8 +26,13 @@ static int	game_loop(void *param)
 {
 	t_win	*win;
 	double	now;
+	static int count;
 
 	win = (t_win *)param;
+	if (count < 1)
+	{
+		count++;
+	}
 	now = get_time();
 	win->delta_time = now - win->last_frame;
 	win->last_frame = now;
@@ -48,6 +53,7 @@ static int	game_loop(void *param)
 	}
 	render_frame(win);
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
+
 	return (0);
 }
 

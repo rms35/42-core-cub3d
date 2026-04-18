@@ -32,12 +32,12 @@ void	animate_fire(t_sprite *s, const double time)
 	}
 }
 
-void animate_sprites(t_sprite *s, const double time)
+void animate_sprites(t_sprite *s, const double time, const size_t n_sprites)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (i < N_SPRITES && s[i].sprite_id != 0)
+	while (i < n_sprites && s[i].sprite_id != 0)
 	{
 		s[i].animation(&s[i], time);
 		i++;

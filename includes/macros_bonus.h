@@ -18,7 +18,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-# define N_SPRITES 100
+// # define N_SPRITES 100
 # define FRAME_DELAY 16.6667
 
 // Player
@@ -74,6 +74,7 @@
 // Sprites
 
 # define FIRE 1
+# define DOOR 2
 # define FIRE_T 100
 # define WALK_T 150
 # define IDLE_T 300

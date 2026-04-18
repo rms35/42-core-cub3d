@@ -26,13 +26,13 @@ static int	compare_sprites(const void *a, const void *b)
 
 static void	sort_sprites(const t_win *win)
 {
-	t_pair	pairs[N_SPRITES];
+	t_pair	pairs[win->n_sprites];
 	double	dx;
 	double	dy;
-	int		i;
+	size_t	i;
 
 	i = 0;
-	while (i < N_SPRITES)
+	while (i < win->n_sprites)
 	{
 		dx = win->player->pos_x - win->sprites[i].x;
 		dy = win->player->pos_y - win->sprites[i].y;
@@ -40,9 +40,9 @@ static void	sort_sprites(const t_win *win)
 		pairs[i].index = i;
 		i++;
 	}
-	qsort(pairs, N_SPRITES, sizeof(t_pair), compare_sprites);
+	qsort(pairs, win->n_sprites, sizeof(t_pair), compare_sprites);
 	i = 0;
-	while (i < N_SPRITES)
+	while (i < win->n_sprites)
 	{
 		win->sprite_order[i] = pairs[i].index;
 		win->sprite_dist[i] = pairs[i].dist;
@@ -140,14 +140,14 @@ void	render_sprites(const t_win *win)
 	t_sprite_draw	d;
 	t_sprite		*s;
 	double			inv_det;
-	int				i;
+	size_t			i;
 	int				stripe;
 
 	sort_sprites(win);
 	inv_det = 1.0 / (win->player->camp_x * win->player->dir_y
 			- win->player->dir_x * win->player->camp_y);
 	i = -1;
-	while (++i < N_SPRITES)
+	while (++i < win->n_sprites)
 	{
 		s = &win->sprites[win->sprite_order[i]];
 		calc_sprite_pos(win, s, inv_det);

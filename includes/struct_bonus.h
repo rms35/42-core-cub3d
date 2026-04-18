@@ -16,12 +16,6 @@
 # include <stddef.h>
 # include "macros_bonus.h"
 
-typedef struct s_sprt_types
-{
-	int	fires[2];
-	int	total;
-}	t_sprt_types;
-
 typedef struct s_map
 {
 	char	*grid;
@@ -54,7 +48,6 @@ typedef struct s_sprite
 	double			trans_x;
 	double			trans_y;
 	t_img			*tex;
-	t_sprt_types	*types;
 	void			(*animation)(struct s_sprite *s, double time);
 	double			last_update;
 	long			anim_speed;
@@ -62,6 +55,7 @@ typedef struct s_sprite
 	int				current_frame;
 	int				next_frame;
 	int				sprite_id;
+	int				door_offset;
 }	t_sprite;
 
 typedef struct s_player
@@ -139,6 +133,8 @@ typedef struct s_win
 	void			*winptr;
 	void			*mlxptr;
 	t_img			*img;
+	t_img			*fire[N_FIRES];
+	t_img			*door;
 	t_map			*map;
 	t_player		*player;
 	double			current_time;
@@ -150,7 +146,7 @@ typedef struct s_win
 	double			*z_buffer;
 	int				*sprite_order;
 	int				exit_status;
-
+	size_t			n_sprites;
 }	t_win;
 
 #endif

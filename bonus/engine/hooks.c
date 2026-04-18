@@ -37,28 +37,19 @@ int	mouse_hook(int x, int y, void *param)
 int	close_win(void *param)
 {
 	t_win	*win;
-	int		i;
-	int		j;
+	size_t	i;
 
 	win = (t_win *)param;
-
-	if (win->sprites)
+	i = 0;
+	mlx_destroy_image(win->mlxptr, win->door->img);
+	free(win->door);
+	while (i < N_FIRES)
 	{
-		j = 0;
-		while (win->sprites[0].tex && j < N_FIRES)
-		{
-			if (win->sprites[0].tex[j].img)
-				mlx_destroy_image(win->mlxptr, win->sprites[0].tex[j].img);
-			j++;
-		}
-		i = 0;
-		while (i < N_SPRITES)
-		{
-			free(win->sprites[i].tex);
-			i++;
-		}
-		free(win->sprites);
+		if (win->fire[i]->img)
+			mlx_destroy_image(win->mlxptr, win->fire[i]->img);
+		i++;
 	}
+	free(win->sprites);
 	mlx_mouse_show(win->mlxptr, win->winptr);
 	i = 0;
 	while (i < N_TEX)
@@ -73,9 +64,9 @@ int	close_win(void *param)
 		mlx_destroy_window(win->mlxptr, win->winptr);
 	if (win->mlxptr)
 	{
-#ifdef LINUX
-		mlx_destroy_display(win->mlxptr);
-#endif
+		#ifdef LINUX
+			mlx_destroy_display(win->mlxptr);
+		#endif
 		free(win->mlxptr);
 	}
 	if (win->map)

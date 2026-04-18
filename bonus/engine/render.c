@@ -112,5 +112,5 @@ void	render_frame(t_win *win)
 		x++;
 	}
 	render_sprites(win);
-	animate_sprites(win->sprites,  get_time() * 1000);
+	animate_sprites(win->sprites,  get_time() * 1000, win->n_sprites);
 }
