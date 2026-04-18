@@ -32,9 +32,15 @@ static void	move_x(const t_win *win, const double next_x, const double prev_x)
 	if (win->map->grid[y[0] * win->map->width + x] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
 		return ;
+	if (win->map->grid[y[0] * win->map->width + x] == 'D'
+	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
+		return ;
 	d[1] = win->player->pos_y - (y[1] + 0.5);
 	if (win->map->grid[y[1] * win->map->width + x] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
+		return ;
+	if (win->map->grid[y[1] * win->map->width + x] == 'D'
+	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
 		return ;
 	win->player->pos_x = next_x;
 }
@@ -59,9 +65,15 @@ static void	move_y(const t_win *win, const double next_y, const double prev_y)
 	if (win->map->grid[y * win->map->width + x[0]] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
 		return ;
+	if (win->map->grid[y * win->map->width + x[0]] == 'D'
+	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
+		return ;
 	d[0] = win->player->pos_x - (x[1] + 0.5);
 	if (win->map->grid[y * win->map->width + x[1]] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
+		return ;
+	if (win->map->grid[y * win->map->width + x[1]] == 'D'
+	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
 		return ;
 	win->player->pos_y = next_y;
 }
