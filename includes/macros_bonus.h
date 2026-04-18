@@ -31,12 +31,14 @@
 // Keys
 
 # ifdef LINUX
-#  define KEY_W 119
-#  define KEY_A 97
-#  define KEY_S 115
-#  define KEY_D 100
-#  define KEY_ESC 65307
-#  define KEY_SHIFT 65505
+#  include <X11/keysym.h>
+#  define KEY_W XK_w
+#  define KEY_A XK_a
+#  define KEY_S XK_s
+#  define KEY_D XK_d
+#  define KEY_E XK_e
+#  define KEY_ESC XK_Escape
+#  define KEY_SHIFT XK_Shift_L
 # elif defined(MACOS)
 #  define KEY_W 13
 #  define KEY_A 0
@@ -80,5 +82,6 @@
 # define IDLE_T 300
 # define N_FIRES 4
 # define F_RADIUS 0.1
+# define D_RADIUS 0.1
 
 #endif
