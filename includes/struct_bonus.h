@@ -50,7 +50,7 @@ typedef struct s_sprite
 	t_img			*tex;
 	void			(*animation)(struct s_sprite *s, double time);
 	double			last_update;
-	long			anim_speed;
+	double			anim_speed;
 	int				frame_count;
 	int				current_frame;
 	int				next_frame;

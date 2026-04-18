@@ -93,14 +93,6 @@ void    alloc_sprites(t_win *win)
                write(2, "Error: malloc\n", 8);
                exit(EXIT_FAILURE);
        }
-       i = 0;
-       while (i < win->n_sprites)
-       {
-               win->sprites[i].tex = ft_calloc(N_FIRES, sizeof(t_img));
-               if (!win->sprites[i].tex)
-                       exit(EXIT_FAILURE);
-               i++;
-       }
        win->sprite_dist = ft_calloc(win->n_sprites, sizeof(double));
        if (!win->sprite_dist)
        {
