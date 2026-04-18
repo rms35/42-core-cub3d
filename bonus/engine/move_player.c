@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	move_x(t_win *win, const double next_x, const double prev_x)
+static void	move_x(const t_win *win, const double next_x, const double prev_x)
 {
 	int		y[2];
 	int		x;
@@ -39,7 +39,7 @@ static void	move_x(t_win *win, const double next_x, const double prev_x)
 	win->player->pos_x = next_x;
 }
 
-static void	move_y(t_win *win, const double next_y, const double prev_y)
+static void	move_y(const t_win *win, const double next_y, const double prev_y)
 {
 	int		x[2];
 	int		y;
@@ -66,7 +66,7 @@ static void	move_y(t_win *win, const double next_y, const double prev_y)
 	win->player->pos_y = next_y;
 }
 
-int	move_player(t_win *win, const double dx, const double dy)
+int	move_player(const t_win *win, const double dx, const double dy)
 {
 	double	next_x;
 	double	next_y;

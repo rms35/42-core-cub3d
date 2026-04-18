@@ -50,7 +50,7 @@ double			get_time();
 // Player movement
 
 int				mouse_hook(int x, int y, void *win);
-int				move_player(t_win *win, double dx, double dy);
+int				move_player(const t_win *win, double dx, double dy);
 void			rot_x_axis(t_player *p, double angle);
 int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
