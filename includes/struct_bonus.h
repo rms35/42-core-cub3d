@@ -42,20 +42,20 @@ typedef struct s_img
 
 typedef struct s_sprite
 {
-	double			x;
-	double			y;
-	double			dist;
-	double			trans_x;
-	double			trans_y;
-	t_img			*tex;
-	void			(*animation)(struct s_sprite *s, double time);
-	double			last_update;
-	double			anim_speed;
-	int				frame_count;
-	int				current_frame;
-	int				next_frame;
-	int				sprite_id;
-	int				door_offset;
+	double	x;
+	double	y;
+	double	dist;
+	double	trans_x;
+	double	trans_y;
+	t_img	*tex;
+	void	(*animation)(struct s_sprite *s, double time);
+	double	last_update;
+	double	anim_speed;
+	int		frame_count;
+	int		current_frame;
+	int		next_frame;
+	int		sprite_id;
+	int		door_offset;
 }	t_sprite;
 
 typedef struct s_player
@@ -133,7 +133,7 @@ typedef struct s_win
 	void			*winptr;
 	void			*mlxptr;
 	t_img			*img;
-	t_img			*fire[N_FIRES];
+	t_img			fire[N_FIRES];
 	t_img			*door;
 	t_map			*map;
 	t_player		*player;

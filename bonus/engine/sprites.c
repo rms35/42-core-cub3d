@@ -32,7 +32,14 @@ void	animate_fire(t_sprite *s, const double time)
 	}
 }
 
-void animate_sprites(t_sprite *s, const double time, const size_t n_sprites)
+void	animate_door(t_sprite *s, const double time)
+{
+	(void)s;
+	(void)time;
+	// if (s->door_offset != 0)
+}
+
+void	animate_sprites(t_sprite *s, const double time, const size_t n_sprites)
 {
 	size_t	i;
 

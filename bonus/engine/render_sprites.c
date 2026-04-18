@@ -93,7 +93,7 @@ static void	draw_sprite_stripe(const t_win *win, const t_sprite *s, t_sprite_dra
 	unsigned int	*dest;
 
 	tex = &s->tex[s->current_frame];
-	d->tex_x = (int)(256 * (x - (-d->sprite_width / 2 + d->sprite_screen_x))
+	d->tex_x = (256 * (x - (-d->sprite_width / 2 + d->sprite_screen_x))
 			* tex->width / d->sprite_width) / 256;
 	if (d->tex_x < 0 || d->tex_x >= tex->width)
 		return ;
@@ -112,8 +112,8 @@ static void	draw_sprite_stripe(const t_win *win, const t_sprite *s, t_sprite_dra
 		if ((color & 0x00FFFFFF) != 0)
 		{
 			dest = (unsigned int *)win->img->addr + (y * (win->img->line_len / 4) + x);
-			if (s->sprite_id == FIRE && ((color >> 16) & 0xFF) > 150
-				&& ((color >> 8) & 0xFF) > 100)
+			if ((s->sprite_id == FIRE || s->sprite_id == DOOR) && ((color >>
+				16) & 0xFF) > 150 && ((color >> 8) & 0xFF) > 100)
 				*dest = alpha_blend(*dest, color, 0.7);
 			else
 				*dest = color;

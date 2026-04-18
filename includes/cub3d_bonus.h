@@ -24,7 +24,8 @@
 # include <fcntl.h>
 
 // Parsing
-t_map			*parsing(const int argc, char **argv);
+
+t_map			*parsing(int argc, char **argv);
 int				parse_config_lines(t_list *lines, t_map *map, t_list **map_lines);
 int				build_grid(t_map *map, t_list *map_lines);
 int				validate_map(t_map *map);
@@ -42,12 +43,9 @@ void			alloc_sprites(t_win *win);
 int				init_sprites(t_win *win, const t_map *map);
 int				close_win(void *win);
 int				init_doors(t_win *win);
+int				load_texture(const t_win *win, t_img *tex, char *path);
 
 double			get_time();
-
-
-// t_map			*get_mock_map(t_win *win);
-int				load_texture(const t_win *win, t_img *tex, char *path);
 
 // Player movement
 
@@ -73,5 +71,6 @@ unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 
 void			animate_fire(t_sprite *s, double time);
 void			animate_sprites(t_sprite *s, double time, size_t n_sprites);
+void		animate_door(t_sprite *s, double time);
 
 #endif

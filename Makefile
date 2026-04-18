@@ -16,7 +16,7 @@ NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -MMD -fsanitize=address,leak -g3
+CFLAGS      = -Wall -Wextra -Werror -MMD -fsanitize=address,leak -O0 -g3
 RM          = rm -rf
 
 UNAME_S := $(shell uname -s)

@@ -51,7 +51,8 @@ static int	validate_map_chars(const t_map *map)
 	while (i < (int)(map->width * map->height))
 	{
 		if (map->grid[i] != ' ' && map->grid[i] != '0' && map->grid[i] != '1' && map->grid[i] != '2'
-			&& map->grid[i] != 'F' && !ft_strchr(PLYR_DIR, map->grid[i]))
+			&& map->grid[i] != 'F' && map->grid[i] != 'D' && !ft_strchr
+			(PLYR_DIR, map->grid[i]))
 			return (error_msg("Invalid character in map"));
 		i++;
 	}

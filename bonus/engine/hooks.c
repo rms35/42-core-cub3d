@@ -45,8 +45,8 @@ int	close_win(void *param)
 	free(win->door);
 	while (i < N_FIRES)
 	{
-		if (win->fire[i]->img)
-			mlx_destroy_image(win->mlxptr, win->fire[i]->img);
+		if (win->fire[i].img)
+			mlx_destroy_image(win->mlxptr, win->fire[i].img);
 		i++;
 	}
 	free(win->sprites);
