@@ -112,7 +112,7 @@ static void	draw_sprite_stripe(const t_win *win, const t_sprite *s, t_sprite_dra
 		if ((color & 0x00FFFFFF) != 0)
 		{
 			dest = (unsigned int *)win->img->addr + (y * (win->img->line_len / 4) + x);
-			if ((s->sprite_id == FIRE || s->sprite_id == DOOR) && ((color >>
+			if ((s->sprite_id == FIRE) && ((color >>
 				16) & 0xFF) > 150 && ((color >> 8) & 0xFF) > 100)
 				*dest = alpha_blend(*dest, color, 0.7);
 			else
@@ -129,13 +129,13 @@ static void	calc_sprite_pos(const t_win *win, t_sprite *s, const double inv_det)
 
 	spr_x = s->x - win->player->pos_x;
 	spr_y = s->y - win->player->pos_y;
-	s->trans_x = inv_det * (win->player->dir_y * spr_x
-			- win->player->dir_x * spr_y);
-	s->trans_y = inv_det * (-win->player->camp_y * spr_x
-			+ win->player->camp_x * spr_y);
+	s->trans_x = inv_det * (win->player->dir_y * spr_x - win->player->dir_x *
+		spr_y);
+	s->trans_y = inv_det * (-win->player->camp_y * spr_x +
+		win->player->camp_x * spr_y);
 }
 
-void	render_sprites(const t_win *win)
+void	render_sprites(t_win *win)
 {
 	t_sprite_draw	d;
 	t_sprite		*s;
@@ -153,6 +153,11 @@ void	render_sprites(const t_win *win)
 		calc_sprite_pos(win, s, inv_det);
 		if (s->trans_y <= 0 || !s->tex)
 			continue ;
+		if (s->sprite_id == DOOR)
+		{
+			render_door(win, s);
+			continue ;
+		}
 		calculate_draw_params(win, s, &d);
 		stripe = d.draw_start_x - 1;
 		while (++stripe < d.draw_end_x)

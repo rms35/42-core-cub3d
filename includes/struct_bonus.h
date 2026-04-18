@@ -55,7 +55,7 @@ typedef struct s_sprite
 	int		current_frame;
 	int		next_frame;
 	int		sprite_id;
-	int		door_offset;
+	int		door_off;
 }	t_sprite;
 
 typedef struct s_player
@@ -89,14 +89,12 @@ typedef struct s_ray
 	double	side_dist_y;
 	double	delta_dist_x;
 	double	delta_dist_y;
-	double	perp_wall_dist;
+	double	perp_dist;
 	double	ray_mag;
 	double	wall_x;
 	double	tex_step;
 	double	tex_pos;
-	int		wall_tex;
-	int		ceiling_tex;
-	int		floor_tex;
+	t_img	*tex;
 	int		map_x;
 	int		map_y;
 	int		step_x;

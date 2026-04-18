@@ -12,30 +12,28 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	draw_wall(t_win *win, t_ray *ray, const int int_x, int y)
+static void	draw_wall(const t_win *win, t_ray *ray, const int int_x, int y)
 {
 	int		tex_y;
 	int		tex_x;
 	int		color;
-	t_img	*tex;
 
-	tex = &win->textures[ray->wall_tex];
-	tex_y = (int)ray->tex_pos % tex->height;
+	tex_y = (int)ray->tex_pos % ray->tex->height;
 	if (tex_y < 0)
-		tex_y += tex->height;
-	tex_x = (int)(ray->wall_x * (double)tex->width);
-	if (tex_x >= tex->width)
-		tex_x = tex->width - 1;
+		tex_y += ray->tex->height;
+	tex_x = (int)(ray->wall_x * (double)ray->tex->width);
+	if (tex_x >= ray->tex->width)
+		tex_x = ray->tex->width - 1;
 	if (tex_x < 0)
 		tex_x = 0;
 	ray->tex_pos += ray->tex_step;
-	color = *(unsigned int *)(tex->addr + (tex_y * tex->line_len
-				+ tex_x * (tex->bpp / 8)));
+	color = *(unsigned int *)(ray->tex->addr + (tex_y * ray->tex->line_len
+				+ tex_x * (ray->tex->bpp / 8)));
 	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
 		color;
 }
 
-static void	draw_line(t_win *win, t_ray *ray, const int x)
+static void	draw_line(const t_win *win, t_ray *ray, const int x)
 {
 	int	y;
 	int	offset;
@@ -64,21 +62,21 @@ static void	draw_line(t_win *win, t_ray *ray, const int x)
 	}
 }
 
-static void	get_wall(t_ray *ray)
+static void	get_wall(t_ray *ray, t_img *tex)
 {
 	if (ray->side == 0)
 	{
 		if (ray->dir_x > 0)
-			ray->wall_tex = W1W;
+			ray->tex = &tex[W1W];
 		else
-			ray->wall_tex = W1E;
+			ray->tex = &tex[W1E];
 	}
 	else
 	{
 		if (ray->dir_y > 0)
-			ray->wall_tex = W1S;
+			ray->tex = &tex[W1S];
 		else
-			ray->wall_tex = W1N;
+			ray->tex = &tex[W1N];
 	}
 }
 
@@ -93,19 +91,19 @@ void	render_frame(t_win *win)
 	{
 		init_ray(win, &ray, x);
 		perform_dda(win, &ray);
-		if (ray.perp_wall_dist < 0.1)
-			ray.perp_wall_dist = 0.1;
-		win->z_buffer[x] = ray.perp_wall_dist;
+		if (ray.perp_dist < 0.1)
+			ray.perp_dist = 0.1;
+		win->z_buffer[x] = ray.perp_dist;
 		center_ofs = (HEIGHT / 2) + win->player->pitch;
-		ray.line_height = (int)((double)HEIGHT / ray.perp_wall_dist) / 2;
+		ray.line_height = (int)((double)HEIGHT / ray.perp_dist) / 2;
 		ray.draw_start = center_ofs - (ray.line_height / 2);
 		if (ray.draw_start < 0)
 			ray.draw_start = 0;
 		ray.draw_end = center_ofs + (ray.line_height / 2);
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		get_wall(&ray);
-		ray.tex_step = 1.0 * win->textures[ray.wall_tex].height / ray.line_height;
+		get_wall(&ray, win->textures);
+		ray.tex_step = 1.0 * ray.tex->height / ray.line_height;
 		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2) *
 			ray.tex_step;
 		draw_line(win, &ray, x);

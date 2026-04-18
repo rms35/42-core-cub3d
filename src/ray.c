@@ -36,9 +36,9 @@ static void init_for_dda(const t_win *win, t_ray *ray)
 static void	get_wall_x(const t_win *win, t_ray *ray)
 {
 	if (ray->side == 0)
-		ray->wall_x = win->player->pos_y + ray->perp_wall_dist * ray->dir_y;
+		ray->wall_x = win->player->pos_y + ray->perp_dist * ray->dir_y;
 	else
-		ray->wall_x = win->player->pos_x + ray->perp_wall_dist * ray->dir_x;
+		ray->wall_x = win->player->pos_x + ray->perp_dist * ray->dir_x;
 	ray->wall_x -= floor(ray->wall_x);
 	if (ray->side == 0 && ray->dir_x > 0)
 		ray->wall_x = 1.0 - ray->wall_x;
@@ -78,10 +78,10 @@ void	perform_dda(const t_win *win, t_ray *ray)
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - win->player->pos_x + (1 -
+		ray->perp_dist = (ray->map_x - win->player->pos_x + (1 -
 			ray->step_x) / 2) / ray->dir_x;
 	else
-		ray->perp_wall_dist = (ray->map_y - win->player->pos_y + (1 -
+		ray->perp_dist = (ray->map_y - win->player->pos_y + (1 -
 			ray->step_y) / 2) / ray->dir_y;
 	get_wall_x(win, ray);
 }

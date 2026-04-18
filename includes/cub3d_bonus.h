@@ -63,7 +63,8 @@ void			perform_dda(const t_win *win, t_ray *ray);
 int				key_press(int keysym, void *win);
 int				key_release(int keysym, void *win);
 int				handle_input(t_win *win);
-void			render_sprites(const t_win *win);
+void			render_sprites(t_win *win);
+void			render_door(const t_win *win, const t_sprite *door);
 unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 	float alpha);
 
@@ -71,6 +72,6 @@ unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 
 void			animate_fire(t_sprite *s, double time);
 void			animate_sprites(t_sprite *s, double time, size_t n_sprites);
-void		animate_door(t_sprite *s, double time);
+void			animate_door(t_sprite *s, double time);
 
 #endif

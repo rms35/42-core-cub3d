@@ -128,7 +128,7 @@ typedef struct s_ray
 	double	side_dist_y;
 	double	delta_dist_x;
 	double	delta_dist_y;
-	double	perp_wall_dist;
+	double	perp_dist;
 	double	ray_mag;
 	double	wall_x;
 	double	tex_step;

@@ -92,9 +92,9 @@ void	render_frame(const t_win *win)
 	{
 		init_ray(win, &ray, x);
 		perform_dda(win, &ray);
-		if (ray.perp_wall_dist < 0.1)
-			ray.perp_wall_dist = 0.1;
-		ray.line_height = (int)((double)height / ray.perp_wall_dist);
+		if (ray.perp_dist < 0.1)
+			ray.perp_dist = 0.1;
+		ray.line_height = (int)((double)height / ray.perp_dist);
 		ray.draw_start = -ray.line_height / 2 + HEIGHT / 2;
 		if (ray.draw_start < 0)
 			ray.draw_start = 0;

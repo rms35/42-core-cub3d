@@ -70,6 +70,7 @@ SRCS_B_FILES = main.c \
 			   engine/ray.c \
 			   engine/render.c \
 			   engine/render_sprites.c \
+			   engine/render_door.c \
 			   engine/sprites.c \
 			   engine/textures.c \
 			   parsing/init.c \
