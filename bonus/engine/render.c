@@ -112,57 +112,5 @@ void	render_frame(t_win *win)
 		x++;
 	}
 	render_sprites(win);
+	animate_sprites(win->sprites,  get_time() * 1000);
 }
-//
-// void	init_ray_fe(t_ray *ray, const t_player *player, const int x)
-// {
-// 	double alpha;
-//
-// 	alpha = (x - WIDTH /2) * (player->fov / WIDTH);
-// 	ray->dir_x = player->dir_x * cos(alpha) - player->dir_y * sin(alpha);
-// 	ray->dir_y = player->dir_x * sin(alpha) + player->dir_y * cos(alpha);
-// 	ray->map_x = (int)player->pos_x;
-// 	ray->map_y = (int)player->pos_y;
-// 	ray->delta_dist_x = fabs(1 / ray->dir_x);
-// 	ray->delta_dist_y = fabs(1 / ray->dir_y);
-// 	ray->hit = 0;
-// 	ray->step_x = 1 - 2 * (ray->dir_x < 0);
-// 	if (ray->dir_x < 0)
-// 		ray->side_dist_x = (player->pos_x - ray->map_x)
-// 			* ray->delta_dist_x;
-// 	else
-// 		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x)
-// 			* ray->delta_dist_x;
-// 	ray->step_y = 1 - 2 * (ray->dir_y < 0);
-// 	if (ray->dir_y < 0)
-// 		ray->side_dist_y = (player->pos_y - ray->map_y)
-// 			* ray->delta_dist_y;
-// 	else
-// 		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y)
-// 			* ray->delta_dist_y;
-// }
-//
-// void	render_fisheye(const t_win *win)
-// {
-// 	int		x;
-// 	int		height;
-// 	t_ray	ray;
-//
-// 	x = 0;
-// 	height = HEIGHT / 2;
-// 	while (x < WIDTH)
-// 	{
-// 		init_ray_fe(&ray, win->player, x);
-// 		perform_dda(win, &ray);
-// 		ray.line_height = (int)(height / ray.perp_wall_dist);
-// 		ray.draw_start = -ray.line_height / 2 + HEIGHT / 2;
-// 		if (ray.draw_start < 0)
-// 			ray.draw_start = 0;
-// 		ray.draw_end = ray.line_height / 2 + HEIGHT / 2;
-// 		if (ray.draw_end >= HEIGHT)
-// 			ray.draw_end = HEIGHT - 1;
-// 		fill_floor_ceil(win, &ray, x);
-// 		render_wall(win, &ray, x);
-// 		x++;
-// 	}
-// }

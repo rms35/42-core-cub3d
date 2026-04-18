@@ -67,7 +67,6 @@ int	init_sprites(t_win *win, const t_map *map)
 			win->sprites[sprites].next_frame = 1;
 			win->sprites[sprites].current_frame = 0;
 			win->sprites[sprites].animation = animate_fire;
-			win->sprites[sprites].last_update = get_time() * 1000;
 			map->grid[i] = '0';
 			sprites++;
 		}

@@ -14,9 +14,12 @@
 
 #define P1_FOV 1.7
 
-double	get_time(void)
+double get_time(void)
 {
-	return ((double)clock() / CLOCKS_PER_SEC);
+	struct timespec t;
+
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	return (t.tv_sec + t.tv_nsec / 1e9);
 }
 
 static int	game_loop(void *param)

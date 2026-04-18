@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-void	animate_fire(t_sprite *s, double time)
+void	animate_fire(t_sprite *s, const double time)
 {
 	if (time - s->last_update >= s->anim_speed)
 	{
@@ -32,7 +32,7 @@ void	animate_fire(t_sprite *s, double time)
 	}
 }
 
-void animate_sprites(t_sprite *s, double time)
+void animate_sprites(t_sprite *s, const double time)
 {
 	int	i;
 

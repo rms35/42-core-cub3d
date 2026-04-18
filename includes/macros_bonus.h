@@ -63,13 +63,13 @@
 
 # define TEX_WIDTH 512
 # define TEX_HEIGHT 512
-# define N_TEX 6
 # define W1N 0
 # define W1S 1
 # define W1W 2
 # define W1E 3
 # define S1 4
 # define F1 5
+# define N_TEX 6
 
 // Sprites
 

@@ -70,6 +70,7 @@ unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 	float alpha);
 
 // Sprite animation
+
 void			animate_fire(t_sprite *s, double time);
 void			animate_sprites(t_sprite *s, double time);
 
