@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init2.c                                            :+:      :+:    :+:   */
+/*   error_messages.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/20 12:50:42 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/03/20 12:50:56 by rafael-m         ###   ########.fr       */
+/*   Created: 2026/04/16 00:00:00 by almorene          #+#    #+#             */
+/*   Updated: 2026/04/18 00:00:00 by almorene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d_bonus.h"
 
-double get_time(void)
+int	error_msg(const char *msg)
 {
-	struct timespec t;
-
-	clock_gettime(CLOCK_MONOTONIC, &t);
-	return (t.tv_sec + t.tv_nsec / 1e9);
+	write(2, "Error\n", 6);
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	return (1);
 }

@@ -14,10 +14,17 @@
 
 #define P1_FOV 1.7
 
-static int	game_loop(t_win *win)
+double	get_time(void)
 {
-	double now;
+	return ((double)clock() / CLOCKS_PER_SEC);
+}
 
+static int	game_loop(void *param)
+{
+	t_win	*win;
+	double	now;
+
+	win = (t_win *)param;
 	now = get_time();
 	win->delta_time = now - win->last_frame;
 	win->last_frame = now;
@@ -37,6 +44,7 @@ static int	game_loop(t_win *win)
 		win->player->m_delta_y = 0;
 	}
 	render_frame(win);
+	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
 	return (0);
 }
 
@@ -48,7 +56,7 @@ int	main(int argc, char **argv)
 	t_map		*map;
 	static int	keys[N_KEYS];
 
-	map = parsing(argc, argv[1]);
+	map = parsing(argc, argv);
 	if (!map)
 		return (1);
 	ft_bzero(&win, sizeof(t_win));
@@ -66,7 +74,8 @@ int	main(int argc, char **argv)
 	setup_mlx(&win, &img);
 	if (init_textures(&win) || init_sprites(&win, map))
 		return (1);
-	mlx_loop_hook(win.mlxptr, game_loop, &win);
+	mlx_loop_hook(win.mlxptr, (int (*)())(void *)game_loop, &win);
 	mlx_loop(win.mlxptr);
 	return (0);
 }
+

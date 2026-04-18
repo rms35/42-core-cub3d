@@ -12,10 +12,12 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-int	mouse_hook(int x, int y, t_win *win)
+int	mouse_hook(int x, int y, void *param)
 {
+	t_win		*win;
 	static int	first_call;
 
+	win = (t_win *)param;
 	if (!first_call)
 	{
 		mlx_mouse_hide(win->mlxptr, win->winptr);
@@ -32,10 +34,13 @@ int	mouse_hook(int x, int y, t_win *win)
 }
 
 // TODO: Proper cleanup
-int	close_win(t_win *win)
+int	close_win(void *param)
 {
-	int	i;
-	int	j;
+	t_win	*win;
+	int		i;
+	int		j;
+
+	win = (t_win *)param;
 
 	if (win->sprites)
 	{

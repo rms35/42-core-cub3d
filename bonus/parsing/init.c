@@ -133,10 +133,10 @@ void   setup_mlx(t_win *win, t_img *img)
                write(2, "Error: mlx_new_window\n", 22);
                exit(1);
        }
-       mlx_hook(win->winptr, EVENT_KEY_PRESS, MASK_KEY_PRESS, key_press, win);
-       mlx_hook(win->winptr, EVENT_KEY_RELEASE, MASK_KEY_RELEASE, key_release, win);
-       mlx_hook(win->winptr, EVENT_DESTROY_NOTIFY, 0, close_win, win);
-       mlx_hook(win->winptr, EVENT_MOTION_NOTIFY, MASK_POINTER_MOTION, mouse_hook, win);
+       mlx_hook(win->winptr, EVENT_KEY_PRESS, MASK_KEY_PRESS, (int (*)())(void *)key_press, win);
+       mlx_hook(win->winptr, EVENT_KEY_RELEASE, MASK_KEY_RELEASE, (int (*)())(void *)key_release, win);
+       mlx_hook(win->winptr, EVENT_DESTROY_NOTIFY, 0, (int (*)())(void *)close_win, win);
+       mlx_hook(win->winptr, EVENT_MOTION_NOTIFY, MASK_POINTER_MOTION, (int (*)())(void *)mouse_hook, win);
        img->img = mlx_new_image(win->mlxptr, WIDTH, HEIGHT);
        if (!img->img)
        {

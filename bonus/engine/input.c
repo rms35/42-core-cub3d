@@ -12,8 +12,11 @@
 
 #include "../includes/cub3d_bonus.h"
 
-int	key_press(int keysym, t_win *win)
+int	key_press(int keysym, void *param)
 {
+	t_win	*win;
+
+	win = (t_win *)param;
 	if (keysym == KEY_ESC)
 		close_win(win);
 	if (keysym < N_KEYS)
@@ -21,8 +24,11 @@ int	key_press(int keysym, t_win *win)
 	return (0);
 }
 
-int	key_release(int keysym, t_win *win)
+int	key_release(int keysym, void *param)
 {
+	t_win	*win;
+
+	win = (t_win *)param;
 	if (keysym < N_KEYS)
 		win->keys[keysym] = 0;
 	return (0);

@@ -22,7 +22,7 @@ RM          = rm -rf
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-	CFLAGS += -D LINUX
+	CFLAGS += -D LINUX -Wno-incompatible-pointer-types
 	MLX_DIR   = minilibx-linux
 	MLX_FLAGS = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
 else ifeq ($(UNAME_S),Darwin)
@@ -71,13 +71,13 @@ SRCS_B_FILES = main.c \
 			   engine/render.c \
 			   engine/render_sprites.c \
 			   engine/sprites.c \
+			   engine/textures.c \
 			   parsing/init.c \
-			   parsing/init2.c \
 			   parsing/init_sprites.c \
-			   parsing/map_mock.c \
 			   parsing/parsing.c \
 			   parsing/parse_config.c \
-			   parsing/get_grid.c \
+			   parsing/parse_map.c \
+			   parsing/error_messages.c \
 			   parsing/validate_map.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))

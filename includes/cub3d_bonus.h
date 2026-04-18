@@ -24,11 +24,12 @@
 # include <fcntl.h>
 
 // Parsing
-t_map   *parsing(const int argc, const char *argv);
-int     get_grid(const char *file, t_map *map);
-int     validate_map(t_map *map);
-int		parse_line_config(char *line, t_map *map);
-int		is_config_full(t_map *map);
+t_map			*parsing(const int argc, char **argv);
+int				parse_config_lines(t_list *lines, t_map *map, t_list **map_lines);
+int				build_grid(t_map *map, t_list *map_lines);
+int				validate_map(t_map *map);
+int				is_config_full(t_map *map);
+int				error_msg(const char *msg);
 
 
 //  Initializing resources
@@ -39,18 +40,18 @@ void			setup_mlx(t_win *win, t_img *img);
 int				init_textures(t_win *win);
 int				alloc_sprites(t_win *win);
 int				init_sprites(t_win *win, const t_map *map);
-int				close_win(t_win *win);
+int				close_win(void *win);
 
-double get_time(void);
+double			get_time();
 
 // Mapping
 
-t_map			*get_mock_map(t_win *win);
+// t_map			*get_mock_map(t_win *win);
 int				load_texture(const t_win *win, t_img *tex, char *path);
 
 // Player movement
 
-int				mouse_hook(int x, int y, t_win *win);
+int				mouse_hook(int x, int y, void *win);
 int				move_player(t_win *win, double dx, double dy);
 void			rot_x_axis(t_player *p, double angle);
 int				rotate_left(t_player *player);
@@ -61,8 +62,8 @@ int				rotate_right(t_player *player);
 void			render_frame(t_win *win);
 void			init_ray(const t_win *win, t_ray *ray, int x);
 void			perform_dda(const t_win *win, t_ray *ray);
-int				key_press(int keysym, t_win *win);
-int				key_release(int keysym, t_win *win);
+int				key_press(int keysym, void *win);
+int				key_release(int keysym, void *win);
 int				handle_input(t_win *win);
 void			render_sprites(const t_win *win);
 unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
