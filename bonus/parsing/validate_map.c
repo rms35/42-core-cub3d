@@ -33,7 +33,8 @@ static void	fill_from(t_map *map, char *visited, int x, int y, int *open_map)
 	}
 	if (map->grid[idx] == '1')
 		return ;
-	if (map->grid[idx] != '0' && map->grid[idx] != '2' && !ft_strchr(PLYR_DIR, map->grid[idx]))
+	if (map->grid[idx] != '0' && map->grid[idx] != '2' && map->grid[idx] != 'F'
+		&& !ft_strchr(PLYR_DIR, map->grid[idx]))
 		return ;
 	visited[idx] = 1;
 	fill_from(map, visited, x + 1, y, open_map);
@@ -50,7 +51,7 @@ static int	validate_map_chars(const t_map *map)
 	while (i < (int)(map->width * map->height))
 	{
 		if (map->grid[i] != ' ' && map->grid[i] != '0' && map->grid[i] != '1' && map->grid[i] != '2'
-			&& !ft_strchr(PLYR_DIR, map->grid[i]))
+			&& map->grid[i] != 'F' && !ft_strchr(PLYR_DIR, map->grid[i]))
 			return (error_msg("Invalid character in map"));
 		i++;
 	}

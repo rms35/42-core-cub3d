@@ -156,9 +156,9 @@ static int	is_map_line(char *line)
 	while (*line && *line != '\n')
 	{
 		if (*line != ' ' && *line != '0' && *line != '1' && *line != '2'
-			&& !ft_strchr(PLYR_DIR, *line))
+			&& *line != 'F' && !ft_strchr(PLYR_DIR, *line))
 			return (0);
-		if (*line == '0' || *line == '1' || *line == '2' || ft_strchr(PLYR_DIR, *line))
+		if (*line == '0' || *line == '1' || *line == '2' || *line == 'F' || ft_strchr(PLYR_DIR, *line))
 			has_map_char = 1;
 		line++;
 	}

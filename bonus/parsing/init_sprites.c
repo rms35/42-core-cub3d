@@ -45,13 +45,13 @@ int	init_sprites(t_win *win, const t_map *map)
 			if (sprites == 0)
 			{
 				if (load_texture(win, &win->sprites[sprites].tex[0],
-					"textures/fire1.xpm") == 1
+					"textures/fire/fire1.xpm") == 1
 					|| load_texture(win, &win->sprites[sprites].tex[1],
-						"textures/fire2.xpm") == 1
+						"textures/fire/fire2.xpm") == 1
 					|| load_texture(win, &win->sprites[sprites].tex[2],
-						"textures/fire3.xpm") == 1
+						"textures/fire/fire3.xpm") == 1
 					|| load_texture(win, &win->sprites[sprites].tex[3],
-						"textures/fire4.xpm") == 1)
+						"textures/fire/fire4.xpm") == 1)
 					return (1);
 			}
 			else
@@ -68,6 +68,7 @@ int	init_sprites(t_win *win, const t_map *map)
 			win->sprites[sprites].current_frame = 0;
 			win->sprites[sprites].animation = animate_fire;
 			win->sprites[sprites].last_update = get_time() * 1000;
+			map->grid[i] = '0';
 			sprites++;
 		}
 		i++;
