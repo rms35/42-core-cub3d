@@ -67,15 +67,19 @@ SRCS_FILES  = main.c \
 SRCS_B_FILES = main.c \
 			   engine/hooks.c \
 			   engine/input.c \
+			   engine/input2.c \
 			   engine/move_player.c \
 			   engine/player_dir.c \
 			   engine/ray.c \
 			   engine/render.c \
 			   engine/render_sprites.c \
+			   engine/render_sprites2.c \
 			   engine/render_door.c \
+			   engine/render_door2.c \
 			   engine/hud.c \
 			   engine/sprites.c \
 			   engine/textures.c \
+			   engine/cleanup.c \
 			   parsing/init.c \
 			   parsing/init_sprites.c \
 			   parsing/parsing.c \

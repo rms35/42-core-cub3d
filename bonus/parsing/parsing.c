@@ -3,35 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 00:00:00 by almorene          #+#    #+#             */
-/*   Updated: 2026/04/18 00:00:00 by almorene         ###   ########.fr       */
+/*   Updated: 2026/04/19 15:40:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d_bonus.h"
 
-static char	*read_line(int fd)
+static char	*read_line_helper(int fd, char *line, char *tmp)
 {
 	ssize_t	bytes_read;
 	char	buffer;
-	char	tmp[2];
-	char	*line;
 	char	*joined;
 
-	line = ft_strdup("");
-	if (!line)
-		return (NULL);
-	tmp[1] = '\0';
-	bytes_read = 1;
+	bytes_read = read(fd, &buffer, 1);
 	while (bytes_read > 0)
 	{
-		bytes_read = read(fd, &buffer, 1);
-		if (bytes_read < 0)
-			return (free(line), NULL);
-		if (bytes_read == 0)
-			return (line[0] == '\0' ? (free(line), NULL) : line);
 		tmp[0] = buffer;
 		joined = ft_strjoin(line, tmp);
 		free(line);
@@ -40,8 +29,26 @@ static char	*read_line(int fd)
 		line = joined;
 		if (buffer == '\n')
 			break ;
+		bytes_read = read(fd, &buffer, 1);
+	}
+	if (bytes_read < 0 || (bytes_read == 0 && line[0] == '\0'))
+	{
+		free(line);
+		return (NULL);
 	}
 	return (line);
+}
+
+static char	*read_line(int fd)
+{
+	char	*line;
+	char	tmp[2];
+
+	line = ft_strdup("");
+	if (!line)
+		return (NULL);
+	tmp[1] = '\0';
+	return (read_line_helper(fd, line, tmp));
 }
 
 static void	free_lines(t_list **lines)
@@ -49,7 +56,7 @@ static void	free_lines(t_list **lines)
 	ft_lstclear(lines, free);
 }
 
-static int	read_cub_file(const char *path, t_list **lines)
+static int	read_cub_file(char *path, t_list **lines)
 {
 	int		fd;
 	char	*line;
@@ -63,8 +70,12 @@ static int	read_cub_file(const char *path, t_list **lines)
 	{
 		node = ft_lstnew(line);
 		if (!node)
-			return (close(fd), free(line), free_lines(lines),
-					error_msg("Memory allocation failed"));
+		{
+			close(fd);
+			free(line);
+			free_lines(lines);
+			return (error_msg("Memory allocation failed"));
+		}
 		ft_lstadd_back(lines, node);
 		line = read_line(fd);
 	}
@@ -74,7 +85,19 @@ static int	read_cub_file(const char *path, t_list **lines)
 	return (0);
 }
 
-static int	check_map_path(const char *path)
+static void	free_map_config(t_map *map)
+{
+	if (!map)
+		return ;
+	free(map->grid);
+	free(map->no_path);
+	free(map->so_path);
+	free(map->we_path);
+	free(map->ea_path);
+	free(map);
+}
+
+static int	check_map_path(char *path)
 {
 	size_t	len;
 
@@ -86,11 +109,28 @@ static int	check_map_path(const char *path)
 	return (0);
 }
 
-t_map	*parsing(const int argc, char **argv)
+static t_map	*finish_parsing(t_map *map, t_list *lines)
+{
+	t_list	*map_lines;
+
+	map_lines = NULL;
+	if (parse_config_lines(lines, map, &map_lines)
+		|| build_grid(map, map_lines) || validate_map(map))
+	{
+		free_lines(&lines);
+		free_lines(&map_lines);
+		free_map_config(map);
+		return (NULL);
+	}
+	free_lines(&lines);
+	free_lines(&map_lines);
+	return (map);
+}
+
+t_map	*parsing(int argc, char **argv)
 {
 	t_map	*map;
 	t_list	*lines;
-	t_list	*map_lines;
 
 	if (argc != 2)
 	{
@@ -101,23 +141,17 @@ t_map	*parsing(const int argc, char **argv)
 		return (NULL);
 	map = ft_calloc(1, sizeof(t_map));
 	if (!map)
-		return (error_msg("Memory allocation failed"), NULL);
+	{
+		error_msg("Memory allocation failed");
+		return (NULL);
+	}
 	map->floor_color = -1;
 	map->ceil_color = -1;
 	lines = NULL;
-	map_lines = NULL;
 	if (read_cub_file(argv[1], &lines))
-		return (free(map), NULL);
-	if (parse_config_lines(lines, map, &map_lines)
-		|| build_grid(map, map_lines)
-		|| validate_map(map))
 	{
-		free_lines(&lines);
-		free_lines(&map_lines);
-		return (free(map->grid), free(map->no_path), free(map->so_path), 
-				free(map->we_path), free(map->ea_path), free(map), NULL);
+		free(map);
+		return (NULL);
 	}
-	free_lines(&lines);
-	free_lines(&map_lines);
-	return (map);
+	return (finish_parsing(map, lines));
 }

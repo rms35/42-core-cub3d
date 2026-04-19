@@ -16,6 +16,12 @@
 # include <stddef.h>
 # include "macros_bonus.h"
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}	t_point;
+
 typedef struct s_map
 {
 	char	*grid;

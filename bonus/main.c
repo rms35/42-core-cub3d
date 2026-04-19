@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/04/02 14:30:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/19 12:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void	init_minimap_lookup(t_win *win)
 	win->minilu['F'] = 0x00FFBB00;
 }
 
-double get_time(void)
+double	get_time(void)
 {
-	struct timespec t;
+	struct timespec	t;
 
 	clock_gettime(CLOCK_MONOTONIC, &t);
 	return (t.tv_sec + t.tv_nsec / 1e9);
@@ -35,34 +35,35 @@ static int	game_loop(void *param)
 {
 	t_win	*win;
 	double	now;
-	static int count;
 
 	win = (t_win *)param;
-	if (count < 1)
-	{
-		count++;
-	}
 	now = get_time();
 	win->delta_time = now - win->last_frame;
 	win->last_frame = now;
 	handle_input(win);
-	if (win->player->m_delta_x != 0)
-	{
-		rot_x_axis(win->player, (double)win->player->m_delta_x * M_SENS);
-		win->player->m_delta_x = 0;
-	}
-	if (win->player->m_delta_y != 0)
-	{
-		win->player->pitch -= win->player->m_delta_y;
-		if (win->player->pitch > 400)
-			win->player->pitch = 400;
-		if (win->player->pitch < -400)
-			win->player->pitch = -400;
-		win->player->m_delta_y = 0;
-	}
+	handle_mouse_rotation(win);
 	render_frame(win);
 	mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
+	return (0);
+}
 
+static void	init_window_state(t_win *win, t_player *player, t_img *img, int
+	*keys)
+{
+	win->keys = keys;
+	win->player = player;
+	win->img = img;
+	init_minimap_lookup(win);
+}
+
+static int	start_rendering_loop(t_win *win, t_map *map)
+{
+	init_player(win->player, map, P1_FOV);
+	setup_mlx(win, win->img);
+	if (init_textures(win) || init_sprites(win, map))
+		return (1);
+	mlx_loop_hook(win->mlxptr, (void *)game_loop, win);
+	mlx_loop(win->mlxptr);
 	return (0);
 }
 
@@ -84,17 +85,9 @@ int	main(int argc, char **argv)
 		write(2, "Error: malloc\n", 8);
 		return (1);
 	}
-	init_minimap_lookup(&win);
-	win.keys = keys;
-	win.player = &player;
+	init_window_state(&win, &player, &img, keys);
 	win.map = map;
-	win.img = &img;
-	init_player(&player, map, P1_FOV);
-	setup_mlx(&win, &img);
-	if (init_textures(&win) || init_sprites(&win, map))
+	if (start_rendering_loop(&win, map))
 		return (1);
-	mlx_loop_hook(win.mlxptr, (void *)game_loop, &win);
-	mlx_loop(win.mlxptr);
 	return (0);
 }
-

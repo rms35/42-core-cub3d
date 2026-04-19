@@ -6,55 +6,13 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/20 13:40:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/19 12:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d_bonus.h"
+#include "../../includes/cub3d_bonus.h"
 
-t_sprite	*get_door(t_sprite *s, const size_t n_sprites, const int next_x,
-	const int next_y)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n_sprites)
-	{
-		if (s[i].sprite_id == DOOR && floor(s[i].x) == next_x && floor(s[i]
-			.y) == next_y)
-				return (&s[i]);
-		i++;
-	}
-	return (NULL);
-}
-
-void	open_door(const t_win *win)
-{
-	int			next_x;
-	int			next_y;
-	t_sprite	*door;
-
-	next_y = (int)(win->player->pos_y + win->player->dir_y);
-	next_x = (int)(win->player->pos_x + win->player->dir_x);
-	if (win->map->grid[next_y * win->map->width + next_x] == 'D')
-	{
-		door = get_door(win->sprites, win->n_sprites, next_x, next_y);
-		if (!door)
-			return ;
-		if (!door->closing && !door->opening)
-		{
-			if (door->open)
-			{
-				door->closing = 1;
-				door->open = 0;
-			}
-			else
-				door->opening = 1;
-		}
-	}
-}
-
-int	key_press(int keysym, const void *param)
+int	key_press(int keysym, void *param)
 {
 	t_win	*win;
 
@@ -66,7 +24,7 @@ int	key_press(int keysym, const void *param)
 	return (0);
 }
 
-int	key_release(const int keysym, const void *param)
+int	key_release(int keysym, void *param)
 {
 	t_win	*win;
 
@@ -76,14 +34,14 @@ int	key_release(const int keysym, const void *param)
 	return (0);
 }
 
-static void	update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
+static void	update_dir(t_win *win, t_player *p, double *dx, double *dy)
 {
-	double move_speed;
+	double	move_speed;
 
-	move_speed= win->player->speed * win->delta_time;
+	move_speed = win->player->speed * win->delta_time;
 	if (win->keys[KEY_W])
 	{
-		move_speed= win->player->fwd_speed * win->delta_time;
+		move_speed = win->player->fwd_speed * win->delta_time;
 		*dx += p->dir_x * move_speed;
 		*dy += p->dir_y * move_speed;
 	}
@@ -104,7 +62,7 @@ static void	update_dir(const t_win *win, const t_player *p, double *dx, double *
 	}
 }
 
-int	handle_input(const t_win *win)
+int	handle_input(t_win *win)
 {
 	t_player	*p;
 	double		dx;

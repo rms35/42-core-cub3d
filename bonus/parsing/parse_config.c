@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_config.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 00:00:00 by almorene          #+#    #+#             */
-/*   Updated: 2026/04/18 00:00:00 by almorene         ###   ########.fr       */
+/*   Updated: 2026/04/19 15:10:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,25 +40,34 @@ static int	parse_channel(const char **str, int *value)
 	return (0);
 }
 
-static int	add_map_line(t_list **map_lines, const char *line)
+static int	add_map_line(t_list **map_lines, char *line)
 {
 	t_list	*node;
+	char	*content;
 
-	node = ft_lstnew(ft_strdup(line));
-	if (!node || !node->content)
-		return (free(node), error_msg("Memory allocation failed"));
-
-ft_lstadd_back(map_lines, node);
+	content = ft_strdup(line);
+	if (!content)
+		return (error_msg("Memory allocation failed"));
+	node = ft_lstnew(content);
+	if (!node)
+	{
+		free(content);
+		return (error_msg("Memory allocation failed"));
+	}
+	ft_lstadd_back(map_lines, node);
 	return (0);
 }
 
-static int	is_valid_texture_path(const char *path)
+static int	is_valid_texture_path(char *path)
 {
 	size_t		len;
 	struct stat	path_stat;
 
 	len = ft_strlen(path);
-	if (len < 5 || (ft_strncmp(path + len - 4, ".xpm", 4) != 0 && ft_strncmp(path + len - 4, ".png", 4) != 0))
+	if (len < 5)
+		return (0);
+	if (ft_strncmp(path + len - 4, ".xpm", 4) != 0
+		&& ft_strncmp(path + len - 4, ".png", 4) != 0)
 		return (0);
 	if (stat(path, &path_stat) != 0)
 		return (0);
@@ -80,43 +89,51 @@ static int	set_texture_path(char **slot, char *line)
 		return (error_msg("Missing texture path"));
 	path = ft_strtrim(line, " \n");
 	if (!path || !*path)
-		return (free(path), error_msg("Missing texture path"));
+	{
+		free(path);
+		return (error_msg("Missing texture path"));
+	}
 	if (!is_valid_texture_path(path))
-		return (free(path), error_msg("Invalid texture path"));
+	{
+		free(path);
+		return (error_msg("Invalid texture path"));
+	}
 	*slot = path;
 	return (0);
 }
 
 int	parse_rgb(const char *str, int *color)
 {
-	int	r;
-	int	g;
-	int	b;
+	int			r;
+	int			g;
+	int			b;
+	const char	*ptr;
 
-	if (parse_channel(&str, &r))
+	ptr = str;
+	if (parse_channel(&ptr, &r))
 		return (1);
-	if (*str != ',')
+	if (*ptr != ',')
 		return (1);
-	str++;
-	if (parse_channel(&str, &g))
+	ptr++;
+	if (parse_channel(&ptr, &g))
 		return (1);
-	if (*str != ',')
+	if (*ptr != ',')
 		return (1);
-	str++;
-	if (parse_channel(&str, &b))
+	ptr++;
+	if (parse_channel(&ptr, &b))
 		return (1);
-	str = skip_spaces((char *)str);
-	if (*str && *str != '\n')
+	ptr = skip_spaces((char *)ptr);
+	if (*ptr && *ptr != '\n')
 		return (1);
 	*color = (r << 16) | (g << 8) | b;
 	return (0);
 }
 
-static int	parse_color_line(const char *line, int *color)
+static int	parse_color_line(char *line, int *color)
 {
 	if (*color != -1)
 		return (error_msg("Duplicate color identifier"));
-	line = skip_spaces((char *)line);
+	line = skip_spaces(line);
 	if (parse_rgb(line, color))
 		return (error_msg("Invalid RGB color"));
 	return (0);
@@ -145,6 +162,15 @@ static int	is_empty_line(char *line)
 	return (*line == '\0' || *line == '\n');
 }
 
+static int	is_map_char(char c)
+{
+	if (c == ' ' || c == '0' || c == '1' || c == '2' || c == 'F')
+		return (1);
+	if (ft_strchr(PLYR_DIR, c))
+		return (1);
+	return (0);
+}
+
 static int	is_map_line(char *line)
 {
 	int	has_map_char;
@@ -155,10 +181,9 @@ static int	is_map_line(char *line)
 	has_map_char = 0;
 	while (*line && *line != '\n')
 	{
-		if (*line != ' ' && *line != '0' && *line != '1' && *line != '2'
-			&& *line != 'F' && !ft_strchr(PLYR_DIR, *line))
+		if (!is_map_char(*line))
 			return (0);
-		if (*line == '0' || *line == '1' || *line == '2' || *line == 'F' || ft_strchr(PLYR_DIR, *line))
+		if (*line != ' ')
 			has_map_char = 1;
 		line++;
 	}
@@ -167,19 +192,16 @@ static int	is_map_line(char *line)
 
 static int	looks_like_map_block(char *line)
 {
-	int	has_non_space;
-
 	line = skip_spaces(line);
 	if (!*line || *line == '\n')
 		return (0);
-	has_non_space = 0;
 	while (*line && *line != '\n')
 	{
 		if (*line != ' ')
-			has_non_space = 1;
+			return (1);
 		line++;
 	}
-	return (has_non_space);
+	return (0);
 }
 
 int	is_config_full(t_map *map)
@@ -189,11 +211,37 @@ int	is_config_full(t_map *map)
 		&& map->ceil_color != -1);
 }
 
-int	parse_config_lines(const t_list *lines, t_map *map, t_list **map_lines)
+static int	handle_pre_map(char *line, t_map *map, t_list **map_lines,
+	int *seen_map)
+{
+	int	status;
+
+	if (is_empty_line(line))
+		return (0);
+	if (is_map_line(line))
+	{
+		*seen_map = 1;
+		return (add_map_line(map_lines, line));
+	}
+	status = parse_identifier(skip_spaces(line), map);
+	if (status == -1)
+		return (error_msg("Invalid configuration line"));
+	return (status);
+}
+
+static int	handle_post_map(char *line, t_list **map_lines)
+{
+	if (is_empty_line(line))
+		return (error_msg("Empty line inside map"));
+	if (!looks_like_map_block(line))
+		return (error_msg("Invalid content after map start"));
+	return (add_map_line(map_lines, line));
+}
+
+int	parse_config_lines(t_list *lines, t_map *map, t_list **map_lines)
 {
 	char	*line;
-	int	seen_map;
-	int	status;
+	int		seen_map;
 
 	seen_map = 0;
 	while (lines)
@@ -201,40 +249,14 @@ int	parse_config_lines(const t_list *lines, t_map *map, t_list **map_lines)
 		line = (char *)lines->content;
 		if (!seen_map)
 		{
-			if (is_empty_line(line))
-			{
-				lines = lines->next;
-				continue ;
-			}
-			if (is_map_line(line))
-			{
-				seen_map = 1;
-				if (add_map_line(map_lines, line))
-					return (1);
-				lines = lines->next;
-				continue ;
-			}
-			line = skip_spaces(line);
-			status = parse_identifier(line, map);
-			if (status == -1)
-				return (error_msg("Invalid configuration line"));
-			if (status == 1)
+			if (handle_pre_map(line, map, map_lines, &seen_map))
 				return (1);
 		}
-		else
-		{
-			if (is_empty_line(line))
-				return (error_msg("Empty line inside map"));
-			if (!looks_like_map_block(line))
-				return (error_msg("Invalid content after map start"));
-			if (add_map_line(map_lines, line))
-				return (1);
-		}
+		else if (handle_post_map(line, map_lines))
+			return (1);
 		lines = lines->next;
 	}
-	if (!is_config_full(map))
-		return (error_msg("Missing configuration"));
-	if (!*map_lines)
-		return (error_msg("Missing map"));
+	if (!is_config_full(map) || !*map_lines)
+		return (error_msg("Missing configuration or map"));
 	return (0);
 }

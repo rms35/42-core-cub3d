@@ -12,59 +12,8 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	get_door_wall_x(const t_win *win, t_ray *ray)
-{
-	if (ray->side == 0)
-		ray->wall_x = win->player->pos_y + ray->perp_dist * ray->dir_y;
-	else
-		ray->wall_x = win->player->pos_x + ray->perp_dist * ray->dir_x;
-	ray->wall_x -= floor(ray->wall_x);
-	if (ray->side == 0 && ray->dir_x > 0)
-		ray->wall_x = 1.0 - ray->wall_x;
-	if (ray->side == 1 && ray->dir_y < 0)
-		ray->wall_x = 1.0 - ray->wall_x;
-}
-
-static int	door_dda(const t_win *win, t_ray *ray, const t_sprite *door)
-{
-	while (ray->hit == 0)
-	{
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += ray->delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += ray->delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (win->map->grid[ray->map_y * win->map->width + ray->map_x] == '1')
-			return (1);
-		if (win->map->grid[ray->map_y * win->map->width + ray->map_x] == 'D'
-			&& ray->map_x == (int)door->x && ray->map_y == (int)door->y)
-		{
-			if (ray->side == 0)
-			{
-				ray->perp_dist = ray->side_dist_x - 0.5 * ray->delta_dist_x;
-				if (floor(win->player->pos_y + ray->perp_dist * ray->dir_y) == ray->map_y)
-					ray->hit = 1;
-			}
-			else
-			{
-				ray->perp_dist = ray->side_dist_y - 0.5 * ray->delta_dist_y;
-				if (floor(win->player->pos_x + ray->perp_dist * ray->dir_x) == ray->map_x)
-					ray->hit = 1;
-			}
-		}
-	}
-	get_door_wall_x(win, ray);
-	return (0);
-}
-
-static void	draw_door_pixel(const t_win *win, t_ray *ray, int x_offset, int y)
+static void	draw_door_pixel(const t_win *win, t_ray *ray, const int x_offset,
+	const int y)
 {
 	int				tex_y;
 	int				tex_x;
@@ -82,31 +31,50 @@ static void	draw_door_pixel(const t_win *win, t_ray *ray, int x_offset, int y)
 	color = *(unsigned int *)(ray->tex->addr + (tex_y * ray->tex->line_len
 				+ tex_x * (ray->tex->bpp / 8)));
 	if ((color & 0x00FFFFFF) != 0)
-		*(unsigned int *)(win->img->addr + (y * win->img->line_len + x_offset)) =
-			color;
+		*(unsigned int *)(win->img->addr + (y * win->img->line_len + x_offset))
+			= color;
 }
 
-static void	draw_door_column(const t_win *win, t_ray *ray, int x)
+static void	clip_door_texture(t_ray *ray, const int orig_ceiling)
 {
-	int	y;
-	int	x_offset;
-
-	y = ray->draw_start;
-	x_offset = x * (win->img->bpp / 8);
-	while (y < ray->draw_end)
+	if (ray->draw_start < orig_ceiling)
 	{
-		draw_door_pixel(win, ray, x_offset, y);
-		y++;
+		ray->tex_pos += (orig_ceiling - ray->draw_start) * ray->tex_step;
+		ray->draw_start = orig_ceiling;
 	}
+	if (ray->draw_start < 0)
+	{
+		ray->tex_pos += (0 - ray->draw_start) * ray->tex_step;
+		ray->draw_start = 0;
+	}
+	if (ray->draw_end >= HEIGHT)
+		ray->draw_end = HEIGHT - 1;
 }
 
-void    render_door(const t_win *win, const t_sprite *door)
+static void	calc_door_params(const t_win *win, t_ray *ray, const t_sprite *door)
+{
+	int	center_offset;
+	int	orig_ceiling;
+	int	pixel_offset;
+
+	if (ray->perp_dist < 0.1)
+		ray->perp_dist = 0.1;
+	ray->line_height = (int)(((double)HEIGHT / 2) / ray->perp_dist);
+	center_offset = (HEIGHT / 2) + win->player->pitch;
+	orig_ceiling = center_offset - (ray->line_height / 2);
+	pixel_offset = (int)(ray->line_height * door->door_offs);
+	ray->draw_start = orig_ceiling - pixel_offset;
+	ray->draw_end = (center_offset + ray->line_height / 2) - pixel_offset;
+	ray->tex_step = 1.0 * door->tex->height / ray->line_height;
+	ray->tex_pos = 0;
+	clip_door_texture(ray, orig_ceiling);
+}
+
+void	render_door(t_win *win, const t_sprite *door)
 {
 	t_ray	ray;
 	int		x;
-	int		center_ofs;
-	int		orig_ceiling;
-	int		pixel_offset;
+	int		x_offset;
 
 	x = 0;
 	ray.tex = win->door;
@@ -118,31 +86,14 @@ void    render_door(const t_win *win, const t_sprite *door)
 			x++;
 			continue ;
 		}
-		if (ray.perp_dist < 0.1)
-			ray.perp_dist = 0.1;
 		win->z_buffer[x] = ray.perp_dist;
-		ray.line_height = (int)(((double)HEIGHT / 2) / ray.perp_dist);
-		center_ofs = (HEIGHT / 2) + win->player->pitch;
-		orig_ceiling = center_ofs - (ray.line_height / 2);
-		pixel_offset = (int)(ray.line_height * door->door_offs);
-		ray.draw_start = orig_ceiling - pixel_offset;
-		ray.draw_end = (center_ofs + ray.line_height / 2) - pixel_offset;
-		ray.tex_step = 1.0 * door->tex->height / ray.line_height;
-		ray.tex_pos = 0;
-		if (ray.draw_start < orig_ceiling)
+		calc_door_params(win, &ray, door);
+		x_offset = x * (win->img->bpp / 8);
+		while (ray.draw_start < ray.draw_end)
 		{
-			ray.tex_pos += (orig_ceiling - ray.draw_start) * ray.tex_step;
-			ray.draw_start = orig_ceiling;
+			draw_door_pixel(win, &ray, x_offset, ray.draw_start);
+			ray.draw_start++;
 		}
-		if (ray.draw_start < 0)
-		{
-			ray.tex_pos += (0 - ray.draw_start) * ray.tex_step;
-			ray.draw_start = 0;
-		}
-		if (ray.draw_end >= HEIGHT)
-			ray.draw_end = HEIGHT - 1;
-		if (ray.draw_start < ray.draw_end)
-			draw_door_column(win, &ray, x);
 		x++;
 	}
 }

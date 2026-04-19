@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   macros_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42madrid.com>   +#+  +:+       +#+        */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/21 10:58:03 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/03/21 11:01:34 by rafael-m         ###   ########.fr       */
+/*   Updated: 2026/04/19 16:45:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-// # define N_SPRITES 100
 # define FRAME_DELAY 16.6667
 
 // Player
@@ -34,13 +33,13 @@
 
 # ifdef LINUX
 #  include <X11/keysym.h>
-#  define KEY_W XK_w
-#  define KEY_A XK_a
-#  define KEY_S XK_s
-#  define KEY_D XK_d
-#  define KEY_E XK_e
-#  define KEY_ESC XK_Escape
-#  define KEY_SHIFT XK_Shift_L
+#  define KEY_W 0x0077
+#  define KEY_A 0x0061
+#  define KEY_S 0x0073
+#  define KEY_D 0x0064
+#  define KEY_E 0x0065
+#  define KEY_ESC 0xff1b
+#  define KEY_SHIFT 0xffe1
 # elif defined(MACOS)
 #  define KEY_W 13
 #  define KEY_A 0
@@ -59,9 +58,9 @@
 
 // MiniLibX Event Masks
 
-# define MASK_KEY_PRESS 1L<<0
-# define MASK_KEY_RELEASE 1L<<1
-# define MASK_POINTER_MOTION 1L<<6
+# define MASK_KEY_PRESS 1
+# define MASK_KEY_RELEASE 2
+# define MASK_POINTER_MOTION 64
 
 // Textures
 
@@ -88,7 +87,7 @@
 
 // Minimap
 
-#define MINI_FACTOR 10
-#define PLYR_FACTOR 7
+# define MINI_FACTOR 10
+# define PLYR_FACTOR 7
 
 #endif

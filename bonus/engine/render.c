@@ -6,17 +6,17 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 21:56:33 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 18:25:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/19 12:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	draw_wall(const t_win *win, t_ray *ray, const int int_x, int y)
+static void	draw_wall(t_win *win, t_ray *ray, int int_x, int y)
 {
-	int		tex_y;
-	int		tex_x;
-	int		color;
+	int				tex_y;
+	int				tex_x;
+	unsigned int	color;
 
 	tex_y = (int)ray->tex_pos % ray->tex->height;
 	if (tex_y < 0)
@@ -29,36 +29,33 @@ static void	draw_wall(const t_win *win, t_ray *ray, const int int_x, int y)
 	ray->tex_pos += ray->tex_step;
 	color = *(unsigned int *)(ray->tex->addr + (tex_y * ray->tex->line_len
 				+ tex_x * (ray->tex->bpp / 8)));
-	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x)) =
-		color;
+	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x))
+		= color;
 }
 
-static void	draw_line(const t_win *win, t_ray *ray, const int x)
+static void	draw_line(t_win *win, t_ray *ray, int x)
 {
 	int	y;
 	int	offset;
 
 	y = 0;
 	offset = x * (win->img->bpp / 8);
+	while (y < ray->draw_start)
+	{
+		*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
+			= win->map->ceil_color;
+		y++;
+	}
+	while (y < ray->draw_end)
+	{
+		draw_wall(win, ray, offset, y);
+		y++;
+	}
 	while (y < HEIGHT)
 	{
-		while (y < ray->draw_start)
-		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
-				= win->map->ceil_color;
-			y++;
-		}
-		while (y < ray->draw_end)
-		{
-			draw_wall(win, ray, offset, y);
-			y++;
-		}
-		while (y < HEIGHT)
-		{
-			*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
-				= win->map->floor_color;
-			y++;
-		}
+		*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
+			= win->map->floor_color;
+		y++;
 	}
 }
 
@@ -80,6 +77,23 @@ static void	get_wall(t_ray *ray, t_img *tex)
 	}
 }
 
+static void	calculate_ray_bounds(t_win *win, t_ray *ray, int center_ofs)
+{
+	if (ray->perp_dist < 0.1)
+		ray->perp_dist = 0.1;
+	ray->line_height = (int)((double)HEIGHT / ray->perp_dist) / 2;
+	ray->draw_start = center_ofs - (ray->line_height / 2);
+	if (ray->draw_start < 0)
+		ray->draw_start = 0;
+	ray->draw_end = center_ofs + (ray->line_height / 2);
+	if (ray->draw_end >= HEIGHT)
+		ray->draw_end = HEIGHT - 1;
+	get_wall(ray, win->textures);
+	ray->tex_step = 1.0 * ray->tex->height / ray->line_height;
+	ray->tex_pos = (ray->draw_start - center_ofs + ray->line_height / 2)
+		* ray->tex_step;
+}
+
 void	render_frame(t_win *win)
 {
 	t_ray	ray;
@@ -91,25 +105,13 @@ void	render_frame(t_win *win)
 	{
 		init_ray(win, &ray, x);
 		perform_dda(win, &ray);
-		if (ray.perp_dist < 0.1)
-			ray.perp_dist = 0.1;
 		win->z_buffer[x] = ray.perp_dist;
 		center_ofs = (HEIGHT / 2) + win->player->pitch;
-		ray.line_height = (int)((double)HEIGHT / ray.perp_dist) / 2;
-		ray.draw_start = center_ofs - (ray.line_height / 2);
-		if (ray.draw_start < 0)
-			ray.draw_start = 0;
-		ray.draw_end = center_ofs + (ray.line_height / 2);
-		if (ray.draw_end >= HEIGHT)
-			ray.draw_end = HEIGHT - 1;
-		get_wall(&ray, win->textures);
-		ray.tex_step = 1.0 * ray.tex->height / ray.line_height;
-		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2) *
-			ray.tex_step;
+		calculate_ray_bounds(win, &ray, center_ofs);
 		draw_line(win, &ray, x);
 		x++;
 	}
 	render_sprites(win);
-	render_hud(win);
-	animate_sprites(win->sprites,  get_time() * 1000, win->n_sprites);
+	render_minimap(win->map, win->img, win);
+	animate_sprites(win->sprites, get_time() * 1000, win->n_sprites);
 }

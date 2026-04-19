@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/19 12:00:00 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/03/20 13:50:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/19 14:20:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,34 +32,38 @@ void	animate_fire(t_sprite *s, const double time)
 	}
 }
 
-void	animate_door(t_sprite *s, const double time)
+static void	update_door_state(t_sprite *s, double door_speed,
+		double max_offset, double time)
 {
-	double	door_speed;
-	double		max_door_offs;
-	double	delta_time;
-
-	door_speed = 0.000000005;
-	max_door_offs = 0.8;
-	delta_time = time;
-	if (s->opening && s->door_offs < max_door_offs)
+	if (s->opening && s->door_offs < max_offset)
 	{
-		s->door_offs += (door_speed * delta_time);
-		if (s->door_offs >= max_door_offs)
+		s->door_offs += (door_speed * time);
+		if (s->door_offs >= max_offset)
 		{
-			s->door_offs = max_door_offs;
+			s->door_offs = max_offset;
 			s->opening = 0;
 			s->open = 1;
 		}
 	}
 	else if (s->closing && s->door_offs > 0)
 	{
-		s->door_offs -= (door_speed * delta_time);
+		s->door_offs -= (door_speed * time);
 		if (s->door_offs <= 0)
 		{
 			s->door_offs = 0;
 			s->closing = 0;
 		}
 	}
+}
+
+void	animate_door(t_sprite *s, const double time)
+{
+	double	door_speed;
+	double	max_door_offset;
+
+	door_speed = 0.000000001;
+	max_door_offset = 0.8;
+	update_door_state(s, door_speed, max_door_offset, time);
 }
 
 void	animate_sprites(t_sprite *s, const double time, const size_t n_sprites)

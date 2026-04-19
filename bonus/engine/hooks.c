@@ -6,16 +6,18 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/06 17:10:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/03/06 17:10:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/19 16:25:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/cub3d_bonus.h"
 
-int	mouse_hook(const int x, const int y, const void *param)
+int	mouse_hook(int x, int y, void *param)
 {
 	t_win		*win;
 	static int	first_call;
+	int			delta_x;
+	int			delta_y;
 
 	win = (t_win *)param;
 	if (!first_call)
@@ -27,48 +29,22 @@ int	mouse_hook(const int x, const int y, const void *param)
 	}
 	if (x == WIDTH / 2 && y == HEIGHT / 2)
 		return (0);
-	win->player->m_delta_x += (x - WIDTH / 2);
-	win->player->m_delta_y += (y - HEIGHT / 2);
+	delta_x = x - (WIDTH / 2);
+	delta_y = y - (HEIGHT / 2);
+	win->player->m_delta_x += delta_x;
+	win->player->m_delta_y += delta_y;
 	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
 	return (1);
 }
 
-// TODO: Proper cleanup
-int	close_win(const void *param)
+int	close_win(void *param)
 {
 	t_win	*win;
-	size_t	i;
 
 	win = (t_win *)param;
-	i = 0;
-	mlx_destroy_image(win->mlxptr, win->door->img);
-	free(win->door);
-	while (i < N_FIRES)
-	{
-		if (win->fire[i].img)
-			mlx_destroy_image(win->mlxptr, win->fire[i].img);
-		i++;
-	}
+	cleanup_textures(win);
 	free(win->sprites);
-	mlx_mouse_show(win->mlxptr, win->winptr);
-	i = 0;
-	while (i < N_TEX)
-	{
-		if (win->textures[i].img)
-			mlx_destroy_image(win->mlxptr, win->textures[i].img);
-		i++;
-	}
-	if (win->img && win->img->img)
-		mlx_destroy_image(win->mlxptr, win->img->img);
-	if (win->winptr)
-		mlx_destroy_window(win->mlxptr, win->winptr);
-	if (win->mlxptr)
-	{
-		#ifdef LINUX
-			mlx_destroy_display(win->mlxptr);
-		#endif
-		free(win->mlxptr);
-	}
+	cleanup_mlx(win);
 	if (win->map)
 	{
 		free(win->map->no_path);
@@ -82,4 +58,5 @@ int	close_win(const void *param)
 	free(win->sprite_dist);
 	free(win->sprite_order);
 	exit(win->exit_status);
+	return (0);
 }
