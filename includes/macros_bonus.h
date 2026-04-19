@@ -86,4 +86,9 @@
 # define F_RADIUS 0.1
 # define D_RADIUS 0.4
 
+// Minimap
+
+#define MINI_FACTOR 10
+#define PLYR_FACTOR 7
+
 #endif

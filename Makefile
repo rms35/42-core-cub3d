@@ -71,6 +71,7 @@ SRCS_B_FILES = main.c \
 			   engine/render.c \
 			   engine/render_sprites.c \
 			   engine/render_door.c \
+			   engine/hud.c \
 			   engine/sprites.c \
 			   engine/textures.c \
 			   parsing/init.c \

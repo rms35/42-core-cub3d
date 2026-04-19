@@ -14,6 +14,15 @@
 
 #define P1_FOV 1.7
 
+static void	init_minimap_lookup(t_win *win)
+{
+	win->minilu['1'] = 0x00AAAAAA;
+	win->minilu['0'] = 0x00000000;
+	win->minilu[256] = 0x00FF0000;
+	win->minilu['D'] = 0x00FFFFFF;
+	win->minilu['F'] = 0x00FFBB00;
+}
+
 double get_time(void)
 {
 	struct timespec t;
@@ -75,6 +84,7 @@ int	main(int argc, char **argv)
 		write(2, "Error: malloc\n", 8);
 		return (1);
 	}
+	init_minimap_lookup(&win);
 	win.keys = keys;
 	win.player = &player;
 	win.map = map;
@@ -83,7 +93,7 @@ int	main(int argc, char **argv)
 	setup_mlx(&win, &img);
 	if (init_textures(&win) || init_sprites(&win, map))
 		return (1);
-	mlx_loop_hook(win.mlxptr, (int (*)())(void *)game_loop, &win);
+	mlx_loop_hook(win.mlxptr, (void *)game_loop, &win);
 	mlx_loop(win.mlxptr);
 	return (0);
 }

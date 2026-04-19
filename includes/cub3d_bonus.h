@@ -65,6 +65,7 @@ int				key_release(int keysym, const void *win);
 int				handle_input(const t_win *win);
 void			render_sprites(t_win *win);
 void			render_door(const t_win *win, const t_sprite *door);
+void			render_hud(const t_win *win);
 unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 	float alpha);
 

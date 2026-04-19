@@ -68,5 +68,6 @@ int	build_grid(t_map *map, t_list *map_lines)
 		current = current->next;
 		row++;
 	}
+
 	return (0);
 }

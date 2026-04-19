@@ -146,6 +146,7 @@ typedef struct s_win
 	double			*sprite_dist;
 	double			*z_buffer;
 	int				*sprite_order;
+	int				minilu[257];
 	int				exit_status;
 	size_t			n_sprites;
 }	t_win;
