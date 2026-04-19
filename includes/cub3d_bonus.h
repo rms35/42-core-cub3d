@@ -23,6 +23,7 @@
 # include <time.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <sys/stat.h>
 
 // Parsing
 
@@ -31,12 +32,22 @@ int				parse_config_lines(t_list *lines, t_map *map,
 					t_list **map_lines);
 int				build_grid(t_map *map, t_list *map_lines);
 int				validate_map(t_map *map);
-int				is_config_full(t_map *map);
 int				error_msg(const char *msg);
+int				set_texture_path(char **slot, char *line);
+int				add_map_line(t_list **map_lines, const char *line);
+int				parse_channel(const char **str, int *value);
+char			*skip_spaces(char *str);
+int				is_map_char(char c);
+int				is_empty_line(char *line);
+int				parse_identifier(char *line, t_map *map);
+int				read_cub_file(const char *path, t_list **lines);
+void			free_lines(t_list **lines);
+void			fill_from(t_map *map, char *visited, t_point p, int *open_map);
+t_point			set_point(int x, int y);
 
 //  Initializing resources
 
-void			init_player(t_player *p, t_map *map,
+void			init_player(t_player *p, const t_map *map,
 					double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				init_textures(t_win *win);
@@ -75,14 +86,15 @@ int				door_dda(t_win *win, t_ray *ray, const t_sprite *door);
 void			calculate_sprite_distances(t_win *win, t_pair *pairs);
 void			sort_sprites(t_win *win);
 void			calculate_draw_params(t_win *win, t_sprite *sprite,
-	t_sprite_draw *draw);
+					t_sprite_draw *draw);
 
 // Sprite animation
 
 void			animate_fire(t_sprite *s, double time);
 void			animate_sprites(t_sprite *s, double time, size_t n_sprites);
 void			animate_door(t_sprite *s, double time);
-t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x, int next_y);
+t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x,
+					int next_y);
 
 // Cleanup
 

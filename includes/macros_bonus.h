@@ -24,7 +24,7 @@
 
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
-# define P1_SPEED 2.0
+# define P1_SPEED 1.5
 # define P1_ROT_SPEED 1.0
 # define P1_TURNSP 0.013
 # define P1_R 0.2

@@ -12,6 +12,14 @@
 
 #include "../../includes/cub3d_bonus.h"
 
+double	get_time(void)
+{
+	struct timespec	t;
+
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	return (t.tv_sec + t.tv_nsec / 1e9);
+}
+
 int	mouse_hook(int x, int y, void *param)
 {
 	t_win		*win;

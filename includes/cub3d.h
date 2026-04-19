@@ -28,8 +28,8 @@
 # define HEIGHT 1080
 # define N_KEYS 7
 # define N_TEX 4
-# define CEILING = 0x87CEEB;
-# define FLOOR = 0x4B4B4B;
+# define CEILING 0x87CEEB
+# define FLOOR 0x4B4B4B
 
 // Player
 
@@ -37,46 +37,46 @@
 
 // Keys
 
-#ifdef LINUX
-# define W_KEY       119
-# define A_KEY       97
-# define S_KEY       115
-# define D_KEY       100
-# define LARRW_KEY   65361
-# define RARRW_KEY   65363
-# define ESC_KEY     65307
-#elif defined(MACOS)
-# define W_KEY       13
-# define A_KEY       0
-# define S_KEY       1
-# define D_KEY       2
-# define LARRW_KEY   123
-# define RARRW_KEY   124
-# define ESC_KEY     53
-#endif
+# ifdef LINUX
+#  define W_KEY       119
+#  define A_KEY       97
+#  define S_KEY       115
+#  define D_KEY       100
+#  define LARRW_KEY   65361
+#  define RARRW_KEY   65363
+#  define ESC_KEY     65307
+# elif defined(MACOS)
+#  define W_KEY       13
+#  define A_KEY       0
+#  define S_KEY       1
+#  define D_KEY       2
+#  define LARRW_KEY   123
+#  define RARRW_KEY   124
+#  define ESC_KEY     53
+# endif
 
-#define W 0
-#define A 1
-#define S 2
-#define D 3
-#define LA 4
-#define RA 5
+# define W 0
+# define A 1
+# define S 2
+# define D 3
+# define LA 4
+# define RA 5
 
 /* MiniLibX/X11 Event Codes */
 
-#define EVENT_KEY_PRESS      2
-#define EVENT_KEY_RELEASE    3
-#define EVENT_DESTROY_NOTIFY 17
+# define EVENT_KEY_PRESS      2
+# define EVENT_KEY_RELEASE    3
+# define EVENT_DESTROY_NOTIFY 17
 
 /* MiniLibX/X11 Event Masks */
 
-#define MASK_KEY_PRESS       1L<<0
-#define MASK_KEY_RELEASE     1L<<1
+# define MASK_KEY_PRESS       0x000001
+# define MASK_KEY_RELEASE     0x000002
 
-#define TEX_NORTH 0
-#define TEX_SOUTH 1
-#define TEX_WEST 2
-#define TEX_EAST 3
+# define TEX_NORTH 0
+# define TEX_SOUTH 1
+# define TEX_WEST 2
+# define TEX_EAST 3
 
 # define P1_TURNSP 0.033
 # define P1_SPEED 0.03
@@ -165,7 +165,8 @@ typedef struct s_win
 // Parsing Config
 
 int				parse_identifier(char *line, t_map *map);
-int				parse_config_lines(const t_list *lines, t_map *map, t_list **map_lines);
+int				parse_config_lines(const t_list *lines, t_map *map,
+					t_list **map_lines);
 int				is_config_full(const t_map *map);
 int				parse_rgb(const char *str, int *color);
 int				is_empty_line(char *line);
@@ -208,6 +209,7 @@ int				handle_input(const t_win *win);
 int				game_loop(const t_win *win);
 
 // Cleanup
+
 int				close_win(const t_win *win);
 void			free_lines(t_list **lines);
 void			free_map(t_map *map);

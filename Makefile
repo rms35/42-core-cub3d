@@ -81,9 +81,14 @@ SRCS_B_FILES = main.c \
 			   engine/textures.c \
 			   engine/cleanup.c \
 			   parsing/init.c \
+			   parsing/init_player.c \
 			   parsing/init_sprites.c \
 			   parsing/parsing.c \
+			   parsing/read_cub.c \
+			   parsing/flood_fill.c \
 			   parsing/parse_config.c \
+			   parsing/parse_config2.c \
+			   parsing/parse_config3.c \
 			   parsing/parse_map.c \
 			   parsing/error_messages.c \
 			   parsing/validate_map.c

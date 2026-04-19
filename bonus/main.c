@@ -23,14 +23,6 @@ static void	init_minimap_lookup(t_win *win)
 	win->minilu['F'] = 0x00FFBB00;
 }
 
-double	get_time(void)
-{
-	struct timespec	t;
-
-	clock_gettime(CLOCK_MONOTONIC, &t);
-	return (t.tv_sec + t.tv_nsec / 1e9);
-}
-
 static int	game_loop(void *param)
 {
 	t_win	*win;
@@ -47,7 +39,7 @@ static int	game_loop(void *param)
 	return (0);
 }
 
-static void	init_window_state(t_win *win, t_player *player, t_img *img, int
+void	init_window_state(t_win *win, t_player *player, t_img *img, int
 	*keys)
 {
 	win->keys = keys;
