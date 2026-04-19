@@ -17,14 +17,49 @@ The engine shoots rays from the player's position across the FOV. For each ray, 
 
 ## Instructions
 ### Compilation
+The project includes a `Makefile` with the following rules:
+- `make` or `make all`: Compiles the mandatory version of the project into `build/cub3D`.
+- `make bonus`: Compiles the bonus version into `build/cub3D_bonus`.
+- `make clean`: Removes the generated object files.
+- `make fclean`: Removes object files and the generated executables.
+- `make re`: Performs a full recompilation (`fclean` followed by `make`).
 
 ### Execution
+Run the compiled executable passing a valid `.cub` map file as an argument:
+```bash
+./build/cub3D maps/test_map.cub
+```
+For the bonus version:
+```bash
+./build/cub3D_bonus maps/test_map.cub
+```
 
 ## Usage
+- **W, A, S, D:** Move the player (forward, left, backward, right).
+- **Left/Right Arrow Keys:** Rotate the camera horizontally.
+- **Mouse Movement (Bonus):** Rotate the camera horizontally using the mouse.
+- **E (Bonus):** Open or close interactive doors.
+- **ESC** or **Close Window Button:** Exit the game cleanly.
 
 ## Features
+**Mandatory Part:**
+- Custom DDA Ray-casting engine implementation.
+- Textured walls with different assets for North, South, East, and West directions.
+- Parsing and validation of `.cub` configuration files.
+- Correct handling of floor and ceiling RGB colors.
+- Smooth movement and collision detection with walls.
+
+**Bonus Part:**
+- Rendering of animated sprites (e.g., animated fire).
+- Implementation of interactive doors that can be opened and closed.
+- Minimap system to visualize the player's position and surroundings.
+- Mouse integration for rotating the camera.
 
 ## Technical Choices
+- **DDA Algorithm:** Chosen for its efficiency in calculating ray-grid intersections, a classic and robust method for grid-based raycasting (as seen in original games like Wolfenstein 3D).
+- **miniLibX:** The project utilizes the provided 42 graphics library, utilizing image back-buffers to draw frames off-screen and prevent flickering before pushing them to the window.
+- **Cross-Platform Compatibility:** The Makefile dynamically detects the operating system (Linux vs Darwin) and links the appropriate `minilibx` library and system flags.
+- **Norminette Compliance:** The C code strictly adheres to 42's Norm (version 4), enforcing clear coding practices, a maximum of 25 lines per function, and proper memory management (verified via Valgrind/AddressSanitizer to ensure no leaks).
 
 ## Contributing
 This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for all commit messages. This ensures a clean and readable project history.
@@ -59,6 +94,6 @@ Common types:
 - [YouTube unicoos Cambio de base](https://www.youtube.com/watch?v=wGl-E5LRvac)
 
 ### AI Usage
-Used to investigate about algorithms, create good commit messages following 
-the convention, ask questions about code and implementation of mathematical 
-algorithms in code, implementing textures and finding bugs.
+Used to investigate about algorithms, create good commit messages following
+the convention, ask questions about code and implementation of mathematical
+algorithms in code, creating textures and finding bugs.
