@@ -12,7 +12,49 @@
 
 #include "../includes/cub3d_bonus.h"
 
-int	key_press(int keysym, void *param)
+t_sprite	*get_door(t_sprite *s, const size_t n_sprites, const int next_x,
+	const int next_y)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n_sprites)
+	{
+		if (s[i].sprite_id == DOOR && floor(s[i].x) == next_x && floor(s[i]
+			.y) == next_y)
+				return (&s[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+void	open_door(const t_win *win)
+{
+	int			next_x;
+	int			next_y;
+	t_sprite	*door;
+
+	next_y = (int)(win->player->pos_y + win->player->dir_y);
+	next_x = (int)(win->player->pos_x + win->player->dir_x);
+	if (win->map->grid[next_y * win->map->width + next_x] == 'D')
+	{
+		door = get_door(win->sprites, win->n_sprites, next_x, next_y);
+		if (!door)
+			return ;
+		if (!door->closing && !door->opening)
+		{
+			if (door->open)
+			{
+				door->closing = 1;
+				door->open = 0;
+			}
+			else
+				door->opening = 1;
+		}
+	}
+}
+
+int	key_press(int keysym, const void *param)
 {
 	t_win	*win;
 
@@ -24,7 +66,7 @@ int	key_press(int keysym, void *param)
 	return (0);
 }
 
-int	key_release(int keysym, void *param)
+int	key_release(const int keysym, const void *param)
 {
 	t_win	*win;
 
@@ -34,7 +76,7 @@ int	key_release(int keysym, void *param)
 	return (0);
 }
 
-static void	update_dir(const t_win *win, t_player *p, double *dx, double *dy)
+static void	update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
 {
 	double move_speed;
 
@@ -62,7 +104,7 @@ static void	update_dir(const t_win *win, t_player *p, double *dx, double *dy)
 	}
 }
 
-int	handle_input(t_win *win)
+int	handle_input(const t_win *win)
 {
 	t_player	*p;
 	double		dx;
@@ -80,5 +122,7 @@ int	handle_input(t_win *win)
 		win->player->fwd_speed = 2.5 * P1_SPEED;
 	else
 		win->player->fwd_speed = P1_SPEED;
+	if (win->keys[KEY_E])
+		open_door(win);
 	return (r);
 }

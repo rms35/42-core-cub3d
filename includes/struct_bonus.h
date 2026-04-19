@@ -55,7 +55,10 @@ typedef struct s_sprite
 	int		current_frame;
 	int		next_frame;
 	int		sprite_id;
-	int		door_off;
+	double	door_offs;
+	int		open;
+	int		opening;
+	int		closing;
 }	t_sprite;
 
 typedef struct s_player

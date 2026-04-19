@@ -12,7 +12,8 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	move_x(const t_win *win, const double next_x, const double prev_x)
+static void	move_x(const t_win *win, const double next_x, const double
+	prev_x, const t_sprite *door)
 {
 	int		y[2];
 	int		x;
@@ -29,27 +30,23 @@ static void	move_x(const t_win *win, const double next_x, const double prev_x)
 		return ;
 	d[0] = next_x - (x + 0.5);
 	d[1] = win->player->pos_y - (y[0] + 0.5);
-	if (win->map->grid[y[0] * win->map->width + x] == 'F'
+	if ((win->map->grid[y[0] * win->map->width + x] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
-		return ;
-	if (win->map->grid[y[0] * win->map->width + x] == 'D'
-	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
+		|| (door && !door->open))
 		return ;
 	d[1] = win->player->pos_y - (y[1] + 0.5);
-	if (win->map->grid[y[1] * win->map->width + x] == 'F'
-		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
-		return ;
-	if (win->map->grid[y[1] * win->map->width + x] == 'D'
-	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
+	if ((win->map->grid[y[1] * win->map->width + x] == 'F'
+		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS))
 		return ;
 	win->player->pos_x = next_x;
 }
 
-static void	move_y(const t_win *win, const double next_y, const double prev_y)
+static void	move_y(const t_win *win, const double next_y, const double
+	prev_y, const t_sprite *door)
 {
-	int		x[2];
-	int		y;
-	double	d[2];
+	int			x[2];
+	int			y;
+	double		d[2];
 
 	x[0] = (int)(win->player->pos_x - win->player->radius);
 	x[1] = (int)(win->player->pos_x + win->player->radius);
@@ -62,41 +59,38 @@ static void	move_y(const t_win *win, const double next_y, const double prev_y)
 		return ;
 	d[0] = win->player->pos_x - (x[0] + 0.5);
 	d[1] = next_y - (y + 0.5);
-	if (win->map->grid[y * win->map->width + x[0]] == 'F'
+	if ((win->map->grid[y * win->map->width + x[0]] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
-		return ;
-	if (win->map->grid[y * win->map->width + x[0]] == 'D'
-	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
+		|| (door && !door->open))
 		return ;
 	d[0] = win->player->pos_x - (x[1] + 0.5);
 	if (win->map->grid[y * win->map->width + x[1]] == 'F'
 		&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + F_RADIUS)
-		return ;
-	if (win->map->grid[y * win->map->width + x[1]] == 'D'
-	&& sqrt(d[0] * d[0] + d[1] * d[1]) < win->player->radius + D_RADIUS)
 		return ;
 	win->player->pos_y = next_y;
 }
 
 int	move_player(const t_win *win, const double dx, const double dy)
 {
-	double	next_x;
-	double	next_y;
-	double	prev_x;
-	double	prev_y;
+	double		next_x;
+	double		next_y;
+	double		prev_x;
+	double		prev_y;
+	t_sprite	*door;
 
 	next_x = win->player->pos_x + dx;
 	next_y = win->player->pos_y + dy;
+	door = get_door(win->sprites, win->n_sprites, floor(next_x), floor(next_y));
 	if (dx > 0)
 		prev_x = next_x + win->player->radius;
 	else
 		prev_x = next_x - win->player->radius;
-	move_x(win, next_x, prev_x);
+	move_x(win, next_x, prev_x, door);
 	if (dy > 0)
 		prev_y = next_y + win->player->radius;
 	else
 		prev_y = next_y - win->player->radius;
-	move_y(win, next_y, prev_y);
+	move_y(win, next_y, prev_y, door);
 	return (1);
 }
 

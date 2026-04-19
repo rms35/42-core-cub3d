@@ -34,9 +34,32 @@ void	animate_fire(t_sprite *s, const double time)
 
 void	animate_door(t_sprite *s, const double time)
 {
-	(void)s;
-	(void)time;
-	// if (s->door_offset != 0)
+	double	door_speed;
+	double		max_door_offs;
+	double	delta_time;
+
+	door_speed = 0.000000005;
+	max_door_offs = 0.8;
+	delta_time = time;
+	if (s->opening && s->door_offs < max_door_offs)
+	{
+		s->door_offs += (door_speed * delta_time);
+		if (s->door_offs >= max_door_offs)
+		{
+			s->door_offs = max_door_offs;
+			s->opening = 0;
+			s->open = 1;
+		}
+	}
+	else if (s->closing && s->door_offs > 0)
+	{
+		s->door_offs -= (door_speed * delta_time);
+		if (s->door_offs <= 0)
+		{
+			s->door_offs = 0;
+			s->closing = 0;
+		}
+	}
 }
 
 void	animate_sprites(t_sprite *s, const double time, const size_t n_sprites)

@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-int	mouse_hook(int x, int y, void *param)
+int	mouse_hook(const int x, const int y, const void *param)
 {
 	t_win		*win;
 	static int	first_call;
@@ -34,7 +34,7 @@ int	mouse_hook(int x, int y, void *param)
 }
 
 // TODO: Proper cleanup
-int	close_win(void *param)
+int	close_win(const void *param)
 {
 	t_win	*win;
 	size_t	i;

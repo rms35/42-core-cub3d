@@ -100,11 +100,13 @@ static void	draw_door_column(const t_win *win, t_ray *ray, int x)
 	}
 }
 
-void	render_door(const t_win *win, const t_sprite *door)
+void    render_door(const t_win *win, const t_sprite *door)
 {
 	t_ray	ray;
 	int		x;
 	int		center_ofs;
+	int		orig_ceiling;
+	int		pixel_offset;
 
 	x = 0;
 	ray.tex = win->door;
@@ -119,18 +121,28 @@ void	render_door(const t_win *win, const t_sprite *door)
 		if (ray.perp_dist < 0.1)
 			ray.perp_dist = 0.1;
 		win->z_buffer[x] = ray.perp_dist;
+		ray.line_height = (int)(((double)HEIGHT / 2) / ray.perp_dist);
 		center_ofs = (HEIGHT / 2) + win->player->pitch;
-		ray.line_height = (int)((double)HEIGHT / ray.perp_dist) / 2;
-		ray.draw_start = center_ofs - (ray.line_height / 2);
+		orig_ceiling = center_ofs - (ray.line_height / 2);
+		pixel_offset = (int)(ray.line_height * door->door_offs);
+		ray.draw_start = orig_ceiling - pixel_offset;
+		ray.draw_end = (center_ofs + ray.line_height / 2) - pixel_offset;
+		ray.tex_step = 1.0 * door->tex->height / ray.line_height;
+		ray.tex_pos = 0;
+		if (ray.draw_start < orig_ceiling)
+		{
+			ray.tex_pos += (orig_ceiling - ray.draw_start) * ray.tex_step;
+			ray.draw_start = orig_ceiling;
+		}
 		if (ray.draw_start < 0)
+		{
+			ray.tex_pos += (0 - ray.draw_start) * ray.tex_step;
 			ray.draw_start = 0;
-		ray.draw_end = center_ofs + (ray.line_height / 2);
+		}
 		if (ray.draw_end >= HEIGHT)
 			ray.draw_end = HEIGHT - 1;
-		ray.tex_step = 1.0 * door->tex->height / ray.line_height;
-		ray.tex_pos = (ray.draw_start - center_ofs + ray.line_height / 2)
-			* ray.tex_step;
-		draw_door_column(win, &ray, x);
+		if (ray.draw_start < ray.draw_end)
+			draw_door_column(win, &ray, x);
 		x++;
 	}
 }
