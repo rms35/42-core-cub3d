@@ -59,22 +59,15 @@ static void	draw_line(t_win *win, t_ray *ray, int x)
 	}
 }
 
-static void	get_wall(t_ray *ray, t_img *tex)
+static void	get_wall(t_ray *ray, t_img *tex, t_map *map)
 {
-	if (ray->side == 0)
-	{
-		if (ray->dir_x > 0)
-			ray->tex = &tex[W1W];
-		else
-			ray->tex = &tex[W1E];
-	}
-	else
-	{
-		if (ray->dir_y > 0)
-			ray->tex = &tex[W1S];
-		else
-			ray->tex = &tex[W1N];
-	}
+	int	pos;
+	char c;
+
+	pos = ray->map_x + (ray->map_y * map->width);
+	c = map->grid[pos];
+	fflush(stdout);
+	ray->tex = &tex[c - 49];
 }
 
 static void	calculate_ray_bounds(t_win *win, t_ray *ray, int center_ofs)
@@ -88,7 +81,7 @@ static void	calculate_ray_bounds(t_win *win, t_ray *ray, int center_ofs)
 	ray->draw_end = center_ofs + (ray->line_height / 2);
 	if (ray->draw_end >= HEIGHT)
 		ray->draw_end = HEIGHT - 1;
-	get_wall(ray, win->textures);
+	get_wall(ray, win->textures, win->map);
 	ray->tex_step = 1.0 * ray->tex->height / ray->line_height;
 	ray->tex_pos = (ray->draw_start - center_ofs + ray->line_height / 2)
 		* ray->tex_step;

@@ -43,7 +43,7 @@ static int	load_sprites_textures(t_win *win)
 	win->door = (t_img *)ft_calloc(1, sizeof(t_img));
 	if (!win->door)
 		return (1);
-	if (load_texture(win, win->door, "textures/doors/door.xpm"))
+	if (load_texture(win, win->door, "textures/doors/door1.xpm"))
 		return (1);
 	if (load_fire_textures(win))
 		return (1);

@@ -76,7 +76,7 @@ int	is_map_char(char c)
 {
 	if (c == ' ' || c == '0' || c == '1' || c == '2' || c == 'F')
 		return (1);
-	if (ft_strchr(PLYR_DIR, c))
+	if (ft_strchr(PLYR_DIR, c) || ft_strchr(WALLS, c))
 		return (1);
 	return (0);
 }

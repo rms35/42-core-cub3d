@@ -20,23 +20,23 @@ void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	set_cell(t_img *img, size_t x, size_t y, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < MINI_FACTOR)
-	{
-		j = 0;
-		while (j < MINI_FACTOR)
-		{
-			my_mlx_pixel_put(img, x + i, y + j, color);
-			j++;
-		}
-		i++;
-	}
-}
+// void	set_cell(t_img *img, size_t x, size_t y, int color)
+// {
+// 	int	i;
+// 	int	j;
+//
+// 	i = 0;
+// 	while (i < MINI_FACTOR)
+// 	{
+// 		j = 0;
+// 		while (j < MINI_FACTOR)
+// 		{
+// 			my_mlx_pixel_put(img, x + i, y + j, color);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
 
 void	set_floor(t_img *img, size_t x, size_t y, int color)
 {

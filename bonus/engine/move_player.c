@@ -39,9 +39,9 @@ static void	move_x(t_win *win, double next_x, double prev_x, t_sprite *door)
 		|| y_coords[0] >= (int)win->map->height || y_coords[1] < 0
 		|| y_coords[1] >= (int)win->map->height)
 		return ;
-	if (win->map->grid[y_coords[0] * win->map->width + x_int] == '1'
-		|| win->map->grid[y_coords[1] * win->map->width + x_int] == '1'
-		|| (door && !door->open))
+	if (ft_strchr(WALLS, win->map->grid[y_coords[0] * win->map->width + x_int])
+		|| ft_strchr(WALLS, win->map->grid[y_coords[1] * win->map->width +
+			x_int]) || (door && !door->open))
 		return ;
 	if (check_fire_collision(win, next_x, win->player->pos_y, y_coords[0])
 		|| check_fire_collision(win, next_x, win->player->pos_y, y_coords[1]))
@@ -76,9 +76,9 @@ static void	move_y(t_win *win, double next_y, double prev_y, t_sprite *door)
 		|| x_coords[0] >= (int)win->map->width || x_coords[1] < 0
 		|| x_coords[1] >= (int)win->map->width)
 		return ;
-	if (win->map->grid[y_int * win->map->width + x_coords[0]] == '1'
-		|| win->map->grid[y_int * win->map->width + x_coords[1]] == '1'
-		|| (door && !door->open))
+	if (ft_strchr(WALLS, win->map->grid[y_int * win->map->width +
+		x_coords[0]]) || ft_strchr(WALLS, win->map->grid[y_int *
+			win->map->width + x_coords[1]]) || (door && !door->open))
 		return ;
 	if (check_fire_collision_y(win, win->player->pos_x, next_y, x_coords[0])
 		|| check_fire_collision_y(win, win->player->pos_x, next_y, x_coords[1]))

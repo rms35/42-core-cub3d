@@ -73,6 +73,7 @@
 # define S1 4
 # define F1 5
 # define N_TEX 6
+# define WALLS "1234"
 
 // Sprites
 

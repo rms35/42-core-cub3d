@@ -33,7 +33,7 @@ void	fill_from(t_map *map, char *visited, t_point p, int *open_map)
 		return ;
 	}
 	idx = (p.y * map->width) + p.x;
-	if (visited[idx] || map->grid[idx] == '1')
+	if (visited[idx] || ft_strchr(WALLS, map->grid[idx]))
 		return ;
 	if (map->grid[idx] == ' ')
 	{

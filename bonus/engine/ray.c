@@ -89,7 +89,8 @@ void	perform_dda(t_win *win, t_ray *ray)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (win->map->grid[ray->map_y * win->map->width + ray->map_x] == '1')
+		if (ft_strchr(WALLS, win->map->grid[ray->map_y * win->map->width +
+			ray->map_x]))
 			ray->hit = 1;
 	}
 	if (ray->side == 0)
