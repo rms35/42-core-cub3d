@@ -20,6 +20,7 @@
 # include <math.h>
 # include <fcntl.h>
 # include <unistd.h>
+# include <sys/stat.h>
 
 // Map
 
@@ -76,6 +77,10 @@
 #define TEX_SOUTH 1
 #define TEX_WEST 2
 #define TEX_EAST 3
+
+# define P1_TURNSP 0.033
+# define P1_SPEED 0.03
+# define P1_R 0.2
 
 typedef struct s_map
 {
@@ -157,22 +162,33 @@ typedef struct s_win
 	int			exit_status;
 }	t_win;
 
-// Mapping
+// Parsing Config
 
-t_map			*get_mock_map(void);
-void			free_map(t_map *map);
-int				parse_map_file(t_map **map, int argc, char **argv);
-int				parse_config_lines(t_list *lines, t_map *map, t_list **map_lines);
+int				parse_identifier(char *line, t_map *map);
+int				parse_config_lines(const t_list *lines, t_map *map, t_list **map_lines);
 int				is_config_full(const t_map *map);
 int				parse_rgb(const char *str, int *color);
-int				build_grid(t_map *map, t_list *map_lines);
+int				is_empty_line(char *line);
+int				is_map_line(char *line);
+int				parse_channel(const char **str, int *value);
+int				set_texture_path(char **slot, char *line);
+int				looks_like_map_block(char *line);
+char			*skip_spaces(char *str);
+int				is_valid_texture_path(const char *path);
+
+// Parsing map
+
 int				validate_map(t_map *map);
+int				parse_map_file(t_map **map, int argc, char **argv);
+int				build_grid(t_map *map, t_list *map_lines);
 int				error_msg(const char *msg);
+
+// Initializing resources
+
 void			init_player(t_player *p, const t_map *map, double fov);
 void			setup_mlx(t_win *win, t_img *img);
 int				init_textures(t_win *win);
 int				load_texture(const t_win *win, t_img *tex, char *path);
-int				close_win(const t_win *win);
 
 // Player movement
 
@@ -190,5 +206,10 @@ int				key_press(int keysym, t_win *win);
 int				key_release(int keysym, t_win *win);
 int				handle_input(const t_win *win);
 int				game_loop(const t_win *win);
+
+// Cleanup
+int				close_win(const t_win *win);
+void			free_lines(t_list **lines);
+void			free_map(t_map *map);
 
 #endif

@@ -12,53 +12,32 @@
 
 #include "../../includes/cub3d.h"
 
-static char	*read_line(int fd)
+static char	*read_line(const int fd)
 {
 	ssize_t	bytes_read;
-	char	buffer;
-	char	tmp[2];
+	char	buffer[2];
 	char	*line;
 	char	*joined;
 
-	line = ft_strdup("");
-	if (!line)
-		return (NULL);
-	tmp[1] = '\0';
+	line = NULL;
+	buffer[1] = '\0';
 	bytes_read = 1;
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, &buffer, 1);
 		if (bytes_read < 0)
-			return (free(line), NULL);
+			return (error_msg("Error reading map lines"), free(line), NULL);
 		if (bytes_read == 0)
-			return (line[0] == '\0' ? (free(line), NULL) : line);
-		tmp[0] = buffer;
-		joined = ft_strjoin(line, tmp);
+			return (line);
+		joined = ft_strjoin(line, buffer);
 		free(line);
 		if (!joined)
-			return (NULL);
+			return (error_msg("Error allocating memory"), NULL);
 		line = joined;
-		if (buffer == '\n')
+		if (buffer[0] == '\n')
 			break ;
 	}
 	return (line);
-}
-
-static void	free_lines(t_list **lines)
-{
-	ft_lstclear(lines, free);
-}
-
-void	free_map(t_map *map)
-{
-	if (!map)
-		return ;
-	free(map->grid);
-	free(map->no_path);
-	free(map->so_path);
-	free(map->we_path);
-	free(map->ea_path);
-	free(map);
 }
 
 static int	read_cub_file(const char *path, t_list **lines)
@@ -71,6 +50,8 @@ static int	read_cub_file(const char *path, t_list **lines)
 	if (fd < 0)
 		return (error_msg("Could not open map file"));
 	line = read_line(fd);
+	if (!line)
+		return (11);
 	while (line)
 	{
 		node = ft_lstnew(line);
@@ -82,7 +63,7 @@ static int	read_cub_file(const char *path, t_list **lines)
 	}
 	close(fd);
 	if (!*lines)
-		return (error_msg("Empty map file"));
+		return (free(line), free_lines(lines), error_msg("Empty map file"));
 	return (0);
 }
 
@@ -121,10 +102,7 @@ int	parse_map_file(t_map **map, int argc, char **argv)
 		|| validate_map(*map))
 	{
 		free_lines(&lines);
-		free_lines(&map_lines);
-		return (free_map(*map), *map = NULL, 1);
+		return (free_lines(&map_lines), free_map(*map), *map = NULL, 1);
 	}
-	free_lines(&lines);
-	free_lines(&map_lines);
-	return (0);
+	return (free_lines(&lines), free_lines(&map_lines), 0);
 }

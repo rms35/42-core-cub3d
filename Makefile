@@ -47,20 +47,22 @@ MLX         = $(MLX_DIR)/libmlx.a
 INCLUDES    = -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 SRCS_FILES  = main.c \
-			  hooks.c \
-			  init.c \
-			  input.c \
-			  map_mock.c \
-			  move_player.c \
-			  player_dir.c \
-			  textures.c \
+			  engine/hooks.c \
+			  engine/init.c \
+			  engine/input.c \
+			  engine/move_player.c \
+			  engine/player_dir.c \
+			  engine/textures.c \
+ 			  engine/ray.c \
+			  engine/render.c\
 			  parsing/parsing.c \
 			  parsing/parse_config.c \
+			  parsing/parse_config1.c \
+			  parsing/parse_config2.c \
 			  parsing/parse_map.c \
 			  parsing/error_messages.c \
 			  parsing/validate_map.c \
-			  ray.c \
-			  render.c
+			  parsing/map_cleanup.c
 
 SRCS_B_FILES = main.c \
 			   engine/hooks.c \
@@ -83,7 +85,7 @@ SRCS_B_FILES = main.c \
 			   parsing/validate_map.c
 
 SRCS        = $(addprefix $(SRC_DIR)/, $(SRCS_FILES))
-OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/mandatory/%.o)
+OBJS        = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/src/%.o)
 DEPS        = $(OBJS:.o=.d)
 
 SRCS_B      = $(addprefix $(SRC_B_DIR)/, $(SRCS_B_FILES))
@@ -117,7 +119,7 @@ $(LIBFT):
 $(MLX):
 	@$(MAKE) -s -C $(MLX_DIR) $(MLX_MAKE_FLAGS)
 
-$(OBJ_DIR)/mandatory/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/src/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 

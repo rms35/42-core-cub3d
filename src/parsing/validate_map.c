@@ -12,34 +12,24 @@
 
 #include "../../includes/cub3d.h"
 
-static void	fill_from(t_map *map, char *visited, int x, int y, int *open_map)
+static int	fill_from(t_map *map, char *visited, int x, int y)
 {
 	int	idx;
 
-	if (*open_map)
-		return ;
 	if (x < 0 || y < 0 || x >= map->width || y >= map->height)
-	{
-		*open_map = 1;
-		return ;
-	}
+		return (1);
 	idx = (y * map->width) + x;
-	if (visited[idx])
-		return ;
+	if (visited[idx] || map->grid[idx] == '1')
+		return (0);
 	if (map->grid[idx] == ' ')
-	{
-		*open_map = 1;
-		return ;
-	}
-	if (map->grid[idx] == '1')
-		return ;
-	if (map->grid[idx] != '0' && !ft_strchr(PLYR_DIR, map->grid[idx]))
-		return ;
+		return (1);
 	visited[idx] = 1;
-	fill_from(map, visited, x + 1, y, open_map);
-	fill_from(map, visited, x - 1, y, open_map);
-	fill_from(map, visited, x, y + 1, open_map);
-	fill_from(map, visited, x, y - 1, open_map);
+	if (fill_from(map, visited, x + 1, y)
+		|| fill_from(map, visited, x - 1, y)
+		|| fill_from(map, visited, x, y + 1)
+		|| fill_from(map, visited, x, y - 1))
+		return (1);
+	return (0);
 }
 
 static int	validate_map_chars(const t_map *map)
@@ -87,10 +77,12 @@ static int	validate_map_closed(t_map *map)
 	i = 0;
 	while (i < map->width * map->height && !ft_strchr(PLYR_DIR, map->grid[i]))
 		i++;
-	open_map = 0;
 	if (i == map->width * map->height)
-		return (free(visited), error_msg("Map must contain exactly one player"));
-	fill_from(map, visited, i % map->width, i / map->width, &open_map);
+	{
+		free(visited);
+		return (error_msg("Map must contain exactly one player"));
+	}
+	open_map = fill_from(map, visited, i % map->width, i / map->width);
 	free(visited);
 	if (open_map)
 		return (error_msg("Map is not closed"));

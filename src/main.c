@@ -1,33 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/27 21:56:33 by rafael            #+#    #+#             */
+/*   Updated: 2026/04/19 16:44:47 by rafael           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 #define P1_FOV 1.7
-
-void	init_ray1(t_ray *ray, const t_player *player, const int x)
-{
-	double cam_segm;
-
-	cam_segm = 2 * x / (double)WIDTH - 1;
-	ray->dir_x = player->dir_x + player->camp_x * cam_segm;
-	ray->dir_y = player->dir_y + player->camp_y * cam_segm;
-	ray->map_x = (int)player->pos_x;
-	ray->map_y = (int)player->pos_y;
-	ray->delta_dist_x = fabs(1 / ray->dir_x);
-	ray->delta_dist_y = fabs(1 / ray->dir_y);
-	ray->hit = 0;
-	ray->step_x = 1 - 2 * (ray->dir_x < 0);
-	if (ray->dir_x < 0)
-		ray->side_dist_x = (player->pos_x - ray->map_x)
-			* ray->delta_dist_x;
-	else
-		ray->side_dist_x = (ray->map_x + 1.0 - player->pos_x)
-			* ray->delta_dist_x;
-	ray->step_y = 1 - 2 * (ray->dir_y < 0);
-	if (ray->dir_y < 0)
-		ray->side_dist_y = (player->pos_y - ray->map_y)
-			* ray->delta_dist_y;
-	else
-		ray->side_dist_y = (ray->map_y + 1.0 - player->pos_y)
-			* ray->delta_dist_y;
-}
 
 int	main(int argc, char **argv)
 {
@@ -39,7 +23,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&win, sizeof(t_win));
 	map = NULL;
 	if (parse_map_file(&map, argc, argv))
-		return (1);
+		return (free_map(map), 1);
 	init_player(&player, map, P1_FOV);
 	win.player = &player;
 	win.map = map;

@@ -26,7 +26,7 @@
 // Parsing
 
 t_map			*parsing(int argc, char **argv);
-int				parse_config_lines(t_list *lines, t_map *map, t_list **map_lines);
+int				parse_config_lines(const t_list *lines, t_map *map, t_list **map_lines);
 int				build_grid(t_map *map, t_list *map_lines);
 int				validate_map(t_map *map);
 int				is_config_full(t_map *map);

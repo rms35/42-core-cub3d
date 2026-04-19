@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 int	key_press(const int keysym, t_win *win)
 {
@@ -48,7 +48,7 @@ int	key_release(const int keysym, t_win *win)
 	return (0);
 }
 
-void update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
+void	update_dir(const t_win *win, const t_player *p, double *dx, double *dy)
 {
 	if (win->keys[W])
 	{

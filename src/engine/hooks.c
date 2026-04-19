@@ -10,41 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
-int	close_win(const t_win *win)
+#ifdef LINUX
+
+static void	destroy_display(const t_win *win)
 {
-	if (win->winptr)
-		mlx_destroy_window(win->mlxptr, win->winptr);
-	if (win->img->img)
-		mlx_destroy_image(win->mlxptr, win->img->img);
 	if (win->mlxptr)
 	{
 		mlx_destroy_display(win->mlxptr);
 		free(win->mlxptr);
 	}
-	if (win->map)
-	{
-		free(win->map->grid);
-		free(win->map);
-	}
-	exit(win->exit_status);
 }
 
-int	game_loop(const t_win *win)
+#else
+
+static void	destroy_display(const t_win *win)
 {
-	int		render;
+	(void)win;
+}
 
-	render = handle_input(win);
-	if (render)
-	{
-		render_frame(win);
-		mlx_put_image_to_window(win->mlxptr, win->winptr, win->img->img, 0, 0);
-	}
-	return (0);
-}*/
-
-#include "../includes/cub3d.h"
+#endif
 
 int	close_win(const t_win *win)
 {
@@ -61,13 +47,7 @@ int	close_win(const t_win *win)
 			mlx_destroy_image(win->mlxptr, win->textures[i].img);
 		i++;
 	}
-#ifdef LINUX
-	if (win->mlxptr)
-	{
-		mlx_destroy_display(win->mlxptr);
-		free(win->mlxptr);
-	}
-#endif
+	destroy_display(win);
 	if (win->map)
 		free_map(win->map);
 	exit(win->exit_status);

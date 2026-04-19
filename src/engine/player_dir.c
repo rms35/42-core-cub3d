@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 int	rotate_left(t_player *player)
 {
@@ -26,7 +26,8 @@ int	rotate_left(t_player *player)
 		* player->sin_l;
 	player->camp_y = old_camp_x * player->sin_l + player->camp_y
 		* player->cos_l;
-	player->dir_mag = sqrt(player->dir_x * player->dir_x + player->dir_y * player->dir_y);
+	player->dir_mag = sqrt(player->dir_x * player->dir_x + player->dir_y
+			* player->dir_y);
 	return (1);
 }
 
@@ -45,6 +46,7 @@ int	rotate_right(t_player *player)
 		* player->sin_r;
 	player->camp_y = old_camp_x * player->sin_r + player->camp_y
 		* player->cos_r;
-	player->dir_mag = sqrt(player->dir_x * player->dir_x + player->dir_y * player->dir_y);
+	player->dir_mag = sqrt(player->dir_x * player->dir_x + player->dir_y
+			* player->dir_y);
 	return (1);
 }

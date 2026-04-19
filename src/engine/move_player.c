@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/cub3d.h"
+#include "../../includes/cub3d.h"
 
 int	move_player(const t_win *win, double dx, double dy)
 {
@@ -33,10 +33,9 @@ int	move_player(const t_win *win, double dx, double dy)
 	if (dy > 0)
 		by = ny + win->player->radius;
 	if (win->map->grid[(int)by * win->map->width
-		+ (int)(win->player->pos_x - win->player->radius)] != '1' &&
-		win->map->grid[(int)by * win->map->width
-		+ (int)(win->player->pos_x + win->player->radius)] != '1')
+			+ (int)(win->player->pos_x - win->player->radius)] != '1' &&
+			win->map->grid[(int)by * win->map->width
+			+ (int)(win->player->pos_x + win->player->radius)] != '1')
 		win->player->pos_y = ny;
 	return (1);
 }
-

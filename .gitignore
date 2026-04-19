@@ -27,3 +27,4 @@ GEMINI.md
 .gemini
 *.txt
 obj/
+.vscode

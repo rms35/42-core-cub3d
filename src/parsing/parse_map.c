@@ -39,10 +39,9 @@ static void	fill_row(char *dst, const char *src, int width)
 	}
 }
 
-int	build_grid(t_map *map, t_list *map_lines)
+static int	allocate_grid(t_map *map, t_list *map_lines)
 {
 	t_list	*current;
-	int		row;
 	size_t	width;
 
 	current = map_lines;
@@ -58,6 +57,16 @@ int	build_grid(t_map *map, t_list *map_lines)
 	map->grid = ft_calloc((map->width * map->height) + 1, sizeof(char));
 	if (!map->grid)
 		return (error_msg("Memory allocation failed"));
+	return (0);
+}
+
+int	build_grid(t_map *map, t_list *map_lines)
+{
+	t_list	*current;
+	int		row;
+
+	if (allocate_grid(map, map_lines))
+		return (1);
 	current = map_lines;
 	row = 0;
 	while (current)
