@@ -61,7 +61,7 @@ void	animate_door(t_sprite *s, const double time)
 	double	door_speed;
 	double	max_door_offset;
 
-	door_speed = 0.000000001;
+	door_speed = 0.000000005;
 	max_door_offset = 0.77;
 	update_door_state(s, door_speed, max_door_offset, time);
 }
