@@ -6,7 +6,7 @@
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 11:25:32 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/04/19 16:55:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/20 12:00:00 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,20 @@ static void	apply_sprite_pixel(t_sprite *sprite, unsigned int *dest,
 	}
 }
 
-static void	draw_sprite_pixel(t_win *win, t_sprite *sprite, t_sprite_draw *draw,
+static void	draw_sprite_v_line(t_win *win, t_sprite *s, t_sprite_draw *draw,
 	int x)
 {
-	t_img			*tex;
+	int				y;
 	unsigned int	color;
 	double			t_pos;
 	double			t_step;
-	int				y;
-	unsigned int	*dest;
-	int				line_stride;
+	t_img			*tex;
 
-	tex = &sprite->tex[sprite->current_frame];
+	tex = &s->tex[s->current_frame];
 	t_step = 1.0 * tex->height / draw->sprite_height;
 	y = draw->draw_start_y;
 	t_pos = (y - win->player->pitch - HEIGHT / 2.0
 			+ draw->sprite_height / 2.0) * t_step;
-	line_stride = win->img->line_len / 4;
-	dest = (unsigned int *)win->img->addr + (y * line_stride + x);
 	while (y < draw->draw_end_y)
 	{
 		draw->tex_y = (int)t_pos;
@@ -52,9 +48,9 @@ static void	draw_sprite_pixel(t_win *win, t_sprite *sprite, t_sprite_draw *draw,
 			draw->tex_y = tex->height - 1;
 		color = ((unsigned int *)tex->addr)[draw->tex_y * (tex->line_len / 4)
 			+ draw->tex_x];
-		apply_sprite_pixel(sprite, dest, color);
+		apply_sprite_pixel(s, (unsigned int *)win->img->addr
+			+ (y * (win->img->line_len / 4) + x), color);
 		t_pos += t_step;
-		dest += line_stride;
 		y++;
 	}
 }
@@ -78,20 +74,17 @@ static void	draw_stripes(t_win *win, t_sprite *sprite, t_sprite_draw *draw)
 	t_img	*texture;
 	int		start_x;
 	double	tex_step;
-	double	tex_pos;
 
 	stripe = draw->draw_start_x;
 	texture = &sprite->tex[sprite->current_frame];
 	start_x = -draw->sprite_width / 2 + draw->sprite_screen_x;
 	tex_step = 1.0 * texture->width / draw->sprite_width;
-	tex_pos = (stripe - start_x) * tex_step;
 	while (stripe < draw->draw_end_x)
 	{
-		draw->tex_x = (int)tex_pos;
+		draw->tex_x = (int)((stripe - start_x) * tex_step);
 		if (sprite->trans_y < win->z_buffer[stripe]
 			&& draw->tex_x >= 0 && draw->tex_x < texture->width)
-			draw_sprite_pixel(win, sprite, draw, stripe);
-		tex_pos += tex_step;
+			draw_sprite_v_line(win, sprite, draw, stripe);
 		stripe++;
 	}
 }

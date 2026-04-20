@@ -18,13 +18,13 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-# define FRAME_DELAY 0.0333333333333
+# define FRAME_DELAY 0.01666667
 
 // Player
 
 # define PLYR_DIR "WNSE"
 # define M_SENS 0.0015
-# define P1_SPEED 1.5
+# define P1_SPEED 1.3
 # define P1_ROT_SPEED 1.0
 # define P1_TURNSP 0.013
 # define P1_R 0.2
