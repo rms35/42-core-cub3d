@@ -36,10 +36,22 @@ int	load_texture(const t_win *win, t_img *tex, char *path)
 
 int	init_textures(t_win *win)
 {
-	if (load_texture(win, &win->textures[W1N], win->map->no_path)
-		|| load_texture(win, &win->textures[W1S], win->map->so_path)
-		|| load_texture(win, &win->textures[W1W], win->map->we_path)
-		|| load_texture(win, &win->textures[W1E], win->map->ea_path))
+	if (load_texture(win, &win->textures[W1N], win->map->no_path))
 		return (1);
+	if (load_texture(win, &win->textures[W1S], win->map->so_path))
+	{
+		free_map(win->map);
+		return (1);
+	}
+	if (load_texture(win, &win->textures[W1W], win->map->we_path))
+	{
+		free_map(win->map);
+		return (1);
+	}
+	if (load_texture(win, &win->textures[W1E], win->map->ea_path))
+	{
+		free_map(win->map);
+		return (1);
+	}
 	return (0);
 }

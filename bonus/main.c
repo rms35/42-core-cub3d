@@ -33,6 +33,13 @@ static int	game_loop(void *param)
 
 	win = (t_win *)param;
 	now = get_time();
+	if (now - win->frame_cap < FRAME_DELAY)
+	{
+		printf("returning\n");
+		usleep(100);
+		return (0);
+	}
+	win->frame_cap = now;
 	win->delta_time = now - win->last_frame;
 	win->last_frame = now;
 	handle_input(win);
@@ -56,7 +63,13 @@ static int	start_rendering_loop(t_win *win, t_map *map)
 	init_player(win->player, map, P1_FOV);
 	setup_mlx(win, win->img);
 	if (init_textures(win) || init_sprites(win, map))
+	{
+		free_map(map);
+		if (win->textures->img)
+			cleanup_textures(win);
+		cleanup_mlx(win);
 		return (1);
+	}
 	mlx_loop_hook(win->mlxptr, (void *)game_loop, win);
 	mlx_loop(win->mlxptr);
 	return (0);
@@ -74,6 +87,7 @@ int	main(int argc, char **argv)
 	if (!map)
 		return (1);
 	ft_bzero(&win, sizeof(t_win));
+	ft_bzero(&img, sizeof(t_img));
 	win.z_buffer = ft_calloc(WIDTH, sizeof(double));
 	if (!win.z_buffer)
 	{
@@ -83,6 +97,6 @@ int	main(int argc, char **argv)
 	init_window_state(&win, &player, &img, keys);
 	win.map = map;
 	if (start_rendering_loop(&win, map))
-		return (1);
+		return (free(win.z_buffer), 1);
 	return (0);
 }

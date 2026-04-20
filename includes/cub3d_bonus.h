@@ -100,5 +100,6 @@ t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x,
 
 void			cleanup_textures(t_win *win);
 void			cleanup_mlx(t_win *win);
+void			free_map(t_map *map);
 
 #endif

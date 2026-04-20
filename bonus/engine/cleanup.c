@@ -65,3 +65,15 @@ void	cleanup_textures(t_win *win)
 		index++;
 	}
 }
+
+void	free_map(t_map *map)
+{
+	if (!map)
+		return ;
+	free(map->grid);
+	free(map->no_path);
+	free(map->so_path);
+	free(map->we_path);
+	free(map->ea_path);
+	free(map);
+}
