@@ -64,8 +64,8 @@ int	door_dda(t_win *win, t_ray *ray, const t_sprite *door)
 			ray->map_y += ray->step_y;
 			ray->side = 1;
 		}
-		if (ft_strchr(WALLS, win->map->grid[ray->map_y * win->map->width +
-			ray->map_x]))
+		if (ft_strchr(WALLS, win->map->grid[ray->map_y * win->map->width
+					+ ray->map_x]))
 			return (1);
 		if (door_dda_hit(win, ray, door))
 			ray->hit = 1;
