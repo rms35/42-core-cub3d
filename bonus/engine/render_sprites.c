@@ -84,7 +84,7 @@ static void	draw_stripes(t_win *win, t_sprite *sprite, t_sprite_draw *draw)
 		{
 			texture = &sprite->tex[sprite->current_frame];
 			start_x = -draw->sprite_width / 2 + draw->sprite_screen_x;
-			draw->tex_x = (int)((256 * (stripe - start_x) * texture->width
+			draw->tex_x = ((256 * (stripe - start_x) * texture->width
 						/ draw->sprite_width) / 256);
 			if (draw->tex_x < 0 || draw->tex_x >= texture->width)
 				return ;
