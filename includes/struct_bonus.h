@@ -147,6 +147,7 @@ typedef struct s_win
 	double			current_time;
 	double			last_frame;
 	double			delta_time;
+	double			frame_cap;
 	int				*keys;
 	t_sprite		*sprites;
 	double			*sprite_dist;

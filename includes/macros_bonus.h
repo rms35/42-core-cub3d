@@ -18,7 +18,7 @@
 # define WIDTH 1920
 # define HEIGHT 1080
 # define N_KEYS 65536
-# define FRAME_DELAY 16.6667
+# define FRAME_DELAY 0.0333333333333
 
 // Player
 
