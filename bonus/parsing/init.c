@@ -72,12 +72,14 @@ void	alloc_sprites(t_win *win)
 		i++;
 	}
 	win->sprites = ft_calloc(win->n_sprites, sizeof(t_sprite));
+	win->pairs = ft_calloc(win->n_sprites, sizeof(t_pair));
 	win->sprite_dist = ft_calloc(win->n_sprites, sizeof(double));
 	win->sprite_order = ft_calloc(win->n_sprites, sizeof(int));
-	if (!win->sprites || !win->sprite_dist || !win->sprite_order)
+	if (!win->sprites || !win->pairs || !win->sprite_dist || !win->sprite_order)
 	{
 		free(win->z_buffer);
 		free(win->sprites);
+		free(win->pairs);
 		free(win->sprite_dist);
 		free(win->sprite_order);
 		write(2, "Error: malloc\n", 8);

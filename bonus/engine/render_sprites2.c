@@ -43,22 +43,19 @@ void	calculate_sprite_distances(t_win *win, t_pair *pairs)
 
 void	sort_sprites(t_win *win)
 {
-	t_pair	*pairs;
 	size_t	index;
 
-	pairs = ft_calloc(win->n_sprites, sizeof(t_pair));
-	if (!pairs)
+	if (!win->pairs)
 		return ;
-	calculate_sprite_distances(win, pairs);
-	qsort(pairs, win->n_sprites, sizeof(t_pair), compare_sprites);
+	calculate_sprite_distances(win, win->pairs);
+	qsort(win->pairs, win->n_sprites, sizeof(t_pair), compare_sprites);
 	index = 0;
 	while (index < win->n_sprites)
 	{
-		win->sprite_order[index] = pairs[index].index;
-		win->sprite_dist[index] = pairs[index].dist;
+		win->sprite_order[index] = win->pairs[index].index;
+		win->sprite_dist[index] = win->pairs[index].dist;
 		index++;
 	}
-	free(pairs);
 }
 
 void	calculate_draw_params(t_win *win, t_sprite *sprite,
@@ -90,12 +87,14 @@ unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 	unsigned int	red;
 	unsigned int	green;
 	unsigned int	blue;
+	unsigned int	alpha_int;
 
-	red = (unsigned int)((((background >> 16) & 0xFF) * (1.0 - alpha))
-			+ (((foreground >> 16) & 0xFF) * alpha));
-	green = (unsigned int)((((background >> 8) & 0xFF) * (1.0 - alpha))
-			+ (((foreground >> 8) & 0xFF) * alpha));
-	blue = (unsigned int)(((background & 0xFF) * (1.0 - alpha))
-			+ ((foreground & 0xFF) * alpha));
+	alpha_int = (unsigned int)(alpha * 256.0f);
+	red = ((((background >> 16) & 0xFF) * (256 - alpha_int))
+			+ (((foreground >> 16) & 0xFF) * alpha_int)) >> 8;
+	green = ((((background >> 8) & 0xFF) * (256 - alpha_int))
+			+ (((foreground >> 8) & 0xFF) * alpha_int)) >> 8;
+	blue = (((background & 0xFF) * (256 - alpha_int))
+			+ ((foreground & 0xFF) * alpha_int)) >> 8;
 	return ((red << 16) | (green << 8) | blue);
 }

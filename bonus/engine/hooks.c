@@ -63,6 +63,7 @@ int	close_win(void *param)
 		free(win->map);
 	}
 	free(win->z_buffer);
+	free(win->pairs);
 	free(win->sprite_dist);
 	free(win->sprite_order);
 	exit(win->exit_status);

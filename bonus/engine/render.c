@@ -12,49 +12,51 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	draw_wall(t_win *win, t_ray *ray, int int_x, int y)
+static void	draw_wall(t_ray *ray, unsigned int *dest, int tex_x)
 {
 	int				tex_y;
-	int				tex_x;
 	unsigned int	color;
 
-	tex_y = (int)ray->tex_pos % ray->tex->height;
-	if (tex_y < 0)
-		tex_y += ray->tex->height;
+	tex_y = (int)ray->tex_pos;
+	if (tex_y >= ray->tex->height)
+		tex_y = ray->tex->height - 1;
+	ray->tex_pos += ray->tex_step;
+	color = *(unsigned int *)(ray->tex->addr + (tex_y * ray->tex->line_len
+				+ tex_x * (ray->tex->bpp / 8)));
+	*dest = color;
+}
+
+static void	draw_line(t_win *win, t_ray *ray, int x)
+{
+	int				y;
+	int				tex_x;
+	unsigned int	*dest;
+	int				line_stride;
+
+	y = 0;
+	line_stride = win->img->line_len / 4;
+	dest = (unsigned int *)win->img->addr + x;
 	tex_x = (int)(ray->wall_x * (double)ray->tex->width);
 	if (tex_x >= ray->tex->width)
 		tex_x = ray->tex->width - 1;
 	if (tex_x < 0)
 		tex_x = 0;
-	ray->tex_pos += ray->tex_step;
-	color = *(unsigned int *)(ray->tex->addr + (tex_y * ray->tex->line_len
-				+ tex_x * (ray->tex->bpp / 8)));
-	*(unsigned int *)(win->img->addr + (y * win->img->line_len + int_x))
-		= color;
-}
-
-static void	draw_line(t_win *win, t_ray *ray, int x)
-{
-	int	y;
-	int	offset;
-
-	y = 0;
-	offset = x * (win->img->bpp / 8);
 	while (y < ray->draw_start)
 	{
-		*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
-			= win->map->ceil_color;
+		*dest = win->map->ceil_color;
+		dest += line_stride;
 		y++;
 	}
 	while (y < ray->draw_end)
 	{
-		draw_wall(win, ray, offset, y);
+		draw_wall(ray, dest, tex_x);
+		dest += line_stride;
 		y++;
 	}
 	while (y < HEIGHT)
 	{
-		*(unsigned int *)(win->img->addr + (y * win->img->line_len + offset))
-			= win->map->floor_color;
+		*dest = win->map->floor_color;
+		dest += line_stride;
 		y++;
 	}
 }
@@ -66,7 +68,6 @@ static void	get_wall(t_ray *ray, t_img *tex, t_map *map)
 
 	pos = ray->map_x + (ray->map_y * map->width);
 	c = map->grid[pos];
-	fflush(stdout);
 	ray->tex = &tex[c - 49];
 }
 

@@ -12,15 +12,11 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static void	apply_sprite_pixel(t_win *win, t_sprite *sprite, t_point pos,
+static void	apply_sprite_pixel(t_sprite *sprite, unsigned int *dest,
 	unsigned int color)
 {
-	unsigned int	*dest;
-
 	if ((color & 0x00FFFFFF) != 0)
 	{
-		dest = (unsigned int *)win->img->addr
-			+ (pos.y * (win->img->line_len / 4) + pos.x);
 		if ((sprite->sprite_id == FIRE) && ((color >> 16) & 0xFF) > 150
 			&& ((color >> 8) & 0xFF) > 100)
 			*dest = alpha_blend(*dest, color, 0.7);
@@ -34,26 +30,31 @@ static void	draw_sprite_pixel(t_win *win, t_sprite *sprite, t_sprite_draw *draw,
 {
 	t_img			*tex;
 	unsigned int	color;
-	int				dist_y;
+	double			t_pos;
+	double			t_step;
 	int				y;
-	t_point			pos;
+	unsigned int	*dest;
+	int				line_stride;
 
 	tex = &sprite->tex[sprite->current_frame];
+	t_step = 1.0 * tex->height / draw->sprite_height;
 	y = draw->draw_start_y;
-	pos.x = x;
+	t_pos = (y - win->player->pitch - HEIGHT / 2.0
+			+ draw->sprite_height / 2.0) * t_step;
+	line_stride = win->img->line_len / 4;
+	dest = (unsigned int *)win->img->addr + (y * line_stride + x);
 	while (y < draw->draw_end_y)
 	{
-		dist_y = (y - win->player->pitch) * 256 - HEIGHT * 128
-			+ draw->sprite_height * 128;
-		draw->tex_y = ((dist_y * tex->height) / draw->sprite_height) / 256;
+		draw->tex_y = (int)t_pos;
 		if (draw->tex_y < 0)
 			draw->tex_y = 0;
-		if (draw->tex_y >= tex->height)
+		else if (draw->tex_y >= tex->height)
 			draw->tex_y = tex->height - 1;
 		color = ((unsigned int *)tex->addr)[draw->tex_y * (tex->line_len / 4)
 			+ draw->tex_x];
-		pos.y = y;
-		apply_sprite_pixel(win, sprite, pos, color);
+		apply_sprite_pixel(sprite, dest, color);
+		t_pos += t_step;
+		dest += line_stride;
 		y++;
 	}
 }
@@ -76,20 +77,21 @@ static void	draw_stripes(t_win *win, t_sprite *sprite, t_sprite_draw *draw)
 	int		stripe;
 	t_img	*texture;
 	int		start_x;
+	double	tex_step;
+	double	tex_pos;
 
 	stripe = draw->draw_start_x;
+	texture = &sprite->tex[sprite->current_frame];
+	start_x = -draw->sprite_width / 2 + draw->sprite_screen_x;
+	tex_step = 1.0 * texture->width / draw->sprite_width;
+	tex_pos = (stripe - start_x) * tex_step;
 	while (stripe < draw->draw_end_x)
 	{
-		if (sprite->trans_y < win->z_buffer[stripe])
-		{
-			texture = &sprite->tex[sprite->current_frame];
-			start_x = -draw->sprite_width / 2 + draw->sprite_screen_x;
-			draw->tex_x = ((256 * (stripe - start_x) * texture->width
-						/ draw->sprite_width) / 256);
-			if (draw->tex_x < 0 || draw->tex_x >= texture->width)
-				return ;
+		draw->tex_x = (int)tex_pos;
+		if (sprite->trans_y < win->z_buffer[stripe]
+			&& draw->tex_x >= 0 && draw->tex_x < texture->width)
 			draw_sprite_pixel(win, sprite, draw, stripe);
-		}
+		tex_pos += tex_step;
 		stripe++;
 	}
 }

@@ -150,6 +150,7 @@ typedef struct s_win
 	double			frame_cap;
 	int				*keys;
 	t_sprite		*sprites;
+	t_pair			*pairs;
 	double			*sprite_dist;
 	double			*z_buffer;
 	int				*sprite_order;
