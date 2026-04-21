@@ -45,6 +45,7 @@
 #  define KEY_A 0
 #  define KEY_S 1
 #  define KEY_D 2
+#  define KEY_E 14
 #  define KEY_ESC 53
 #  define KEY_SHIFT 257
 # endif
