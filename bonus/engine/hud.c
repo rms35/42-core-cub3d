@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-void	my_mlx_pixel_put(t_img *img, int x, int y, int color)
+void	my_mlx_pixel_put(const t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
@@ -75,7 +75,7 @@ void	set_player(t_img *img, size_t x, size_t y, int color)
 	}
 }
 
-void	render_minimap(t_map *map, t_img *img, t_win *win)
+void	render_minimap(const t_map *map, t_img *img, const t_win *win)
 {
 	size_t	i;
 	size_t	total;
@@ -88,9 +88,8 @@ void	render_minimap(t_map *map, t_img *img, t_win *win)
 	{
 		pos_x = i % map->width;
 		pos_y = i / map->width;
-		if (win->map->grid[i] != ' ')
-			set_floor(img, pos_x * MINI_FACTOR, pos_y * MINI_FACTOR,
-				win->minilu[(int)map->grid[i]]);
+		set_floor(img, pos_x * MINI_FACTOR, pos_y * MINI_FACTOR, win->minilu[
+			(int)map->grid[i]]);
 		i++;
 	}
 	set_player(img, win->player->pos_x * MINI_FACTOR,
