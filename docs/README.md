@@ -1,6 +1,6 @@
 # cub3D
 
-*This project has been created as part of the 42 curriculum by rafael-m.*
+*This project has been created as part of the 42 curriculum by rafael-m and almorene.*
 
 ## Description
 cub3D is a 3D graphical representation of a maze from a first-person perspective, inspired by the world-famous Wolfenstein 3D. This project explores the principles of **Ray-casting**, a 2.5D rendering technique.
