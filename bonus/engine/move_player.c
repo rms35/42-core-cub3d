@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-static int	check_fire_collision(t_win *win, double next_x, double next_y,
+static int	check_fire_collision_x(t_win *win, double next_x, double next_y,
 	int y)
 {
 	double	dist_x;
@@ -43,8 +43,8 @@ static void	move_x(t_win *win, double next_x, double prev_x, t_sprite *door)
 		|| ft_strchr(WALLS, win->map->grid[y_coords[1] * win->map->width
 				+ x_int]) || (door && !door->open))
 		return ;
-	if (check_fire_collision(win, next_x, win->player->pos_y, y_coords[0])
-		|| check_fire_collision(win, next_x, win->player->pos_y, y_coords[1]))
+	if (check_fire_collision_x(win, next_x, win->player->pos_y, y_coords[0])
+		|| check_fire_collision_x(win, next_x, win->player->pos_y, y_coords[1]))
 		return ;
 	win->player->pos_x = next_x;
 }
