@@ -25,7 +25,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
 	CFLAGS += -D LINUX -Wno-incompatible-pointer-types
 	MLX_DIR   = minilibx-linux
-	MLX_FLAGS = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -L/usr/lib -lXext -lX11 -lm -lz -Wno-unused-result
 else ifeq ($(UNAME_S),Darwin)
 	CFLAGS += -D MACOS
 	MLX_DIR   = minilibx_macos

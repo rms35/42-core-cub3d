@@ -51,7 +51,7 @@ For the bonus version:
 
 **Bonus Part:**
 - Rendering of animated sprites (e.g., animated fire).
-- Implementation of interactive doors that can be opened and closed.
+- Implementation of interactive sliding doors that can be opened and closed.
 - Minimap system to visualize the player's position and surroundings.
 - Mouse integration for rotating the camera.
 
