@@ -20,6 +20,7 @@ static void	init_minimap_lookup(t_win *win)
 	win->minilu['2'] = 0x00AAAAAA;
 	win->minilu['3'] = 0x00AAAAAA;
 	win->minilu['4'] = 0x00AAAAAA;
+	win->minilu[' '] = 0x00AAAAAA;
 	win->minilu['0'] = 0x00000000;
 	win->minilu[256] = 0x00FF0000;
 	win->minilu['D'] = 0x00FFFFFF;
@@ -35,7 +36,6 @@ static int	game_loop(void *param)
 	now = get_time();
 	if (now - win->frame_cap < FRAME_DELAY)
 	{
-		printf("returning\n");
 		usleep(100);
 		return (0);
 	}
