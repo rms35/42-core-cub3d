@@ -62,9 +62,13 @@ static void	init_sprite_data(t_sprite *s, t_map *map, size_t i, int id)
 		s->next_frame = 1;
 		s->current_frame = 0;
 		s->animation = animate_fire;
+		s->anim_speed = FIRE_T;
 	}
 	else if (id == DOOR)
+	{
 		s->animation = animate_door;
+		s->anim_speed = DOOR_T;
+	}
 }
 
 int	init_sprites(t_win *win, t_map *map)

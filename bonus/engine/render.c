@@ -110,5 +110,5 @@ void	render_frame(t_win *win)
 	}
 	render_sprites(win);
 	render_minimap(win->map, win->img, win);
-	animate_sprites(win->sprites, get_time() * 1000, win->n_sprites);
+	animate_sprites(win->sprites, win->delta_time, win->n_sprites);
 }

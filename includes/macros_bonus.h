@@ -79,12 +79,14 @@
 
 # define FIRE 1
 # define DOOR 2
-# define FIRE_T 100
+# define FIRE_T 115
 # define WALK_T 150
 # define IDLE_T 300
 # define N_FIRES 4
 # define F_RADIUS 0.1
 # define D_RADIUS 0.4
+# define DOOR_T 0.7
+# define MAX_DOOR_OFFS 0.77
 
 // Minimap
 

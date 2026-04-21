@@ -79,7 +79,7 @@ int				key_release(int keysym, void *param);
 int				handle_input(t_win *win);
 void			render_sprites(t_win *win);
 void			render_door(t_win *win, const t_sprite *door);
-void			render_minimap(t_map *map, t_img *img, t_win *win);
+void			render_minimap(const t_map *map, t_img *img, const t_win *win);
 unsigned int	alpha_blend(unsigned int background, unsigned int foreground,
 					float alpha);
 int				door_dda(t_win *win, t_ray *ray, const t_sprite *door);
@@ -90,11 +90,11 @@ void			calculate_draw_params(t_win *win, t_sprite *sprite,
 
 // Sprite animation
 
-void			animate_fire(t_sprite *s, double time);
-void			animate_sprites(t_sprite *s, double time, size_t n_sprites);
-void			animate_door(t_sprite *s, double time);
-t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x,
-					int next_y);
+void			animate_fire(t_sprite *s, double delta_time);
+void			animate_sprites(t_sprite *s, double delta_time, size_t n_sprites);
+void			animate_door(t_sprite *s, double delta_time);
+t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x, int
+		next_y);
 
 // Cleanup
 

@@ -12,11 +12,12 @@
 
 #include "../../includes/cub3d_bonus.h"
 
-void	animate_fire(t_sprite *s, const double time)
+void	animate_fire(t_sprite *s, const double delta_time)
 {
-	if (time - s->last_update >= s->anim_speed)
+	s->last_update += delta_time;
+	if (s->last_update * 1000 >= s->anim_speed)
 	{
-		s->last_update = time;
+		s->last_update = 0;
 		if (s->current_frame == 0)
 		{
 			s->current_frame = 1;
@@ -32,22 +33,21 @@ void	animate_fire(t_sprite *s, const double time)
 	}
 }
 
-static void	update_door_state(t_sprite *s, double door_speed,
-		double max_offset, double time)
+void	animate_door(t_sprite *s, const double delta_time)
 {
-	if (s->opening && s->door_offs < max_offset)
+	if (s->opening && s->door_offs < MAX_DOOR_OFFS)
 	{
-		s->door_offs += (door_speed * time);
-		if (s->door_offs >= max_offset)
+		s->door_offs += (DOOR_T * delta_time);
+		if (s->door_offs >= MAX_DOOR_OFFS)
 		{
-			s->door_offs = max_offset;
+			s->door_offs = MAX_DOOR_OFFS;
 			s->opening = 0;
 			s->open = 1;
 		}
 	}
 	else if (s->closing && s->door_offs > 0)
 	{
-		s->door_offs -= (door_speed * time);
+		s->door_offs -= (DOOR_T * delta_time);
 		if (s->door_offs <= 0)
 		{
 			s->door_offs = 0;
@@ -56,24 +56,15 @@ static void	update_door_state(t_sprite *s, double door_speed,
 	}
 }
 
-void	animate_door(t_sprite *s, const double time)
-{
-	double	door_speed;
-	double	max_door_offset;
-
-	door_speed = 0.000000001;
-	max_door_offset = 0.77;
-	update_door_state(s, door_speed, max_door_offset, time);
-}
-
-void	animate_sprites(t_sprite *s, const double time, const size_t n_sprites)
+void	animate_sprites(t_sprite *s, const double delta_time,
+		const size_t n_sprites)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < n_sprites && s[i].sprite_id != 0)
 	{
-		s[i].animation(&s[i], time);
+		s[i].animation(&s[i], delta_time);
 		i++;
 	}
 }
