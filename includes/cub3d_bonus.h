@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
+/*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 12:00:00 by rafael            #+#    #+#             */
-/*   Updated: 2026/04/19 12:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/22 20:24:35 by almorene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,12 @@
 # define CUB3D_BONUS_H
 
 # include "../libft/libft.h"
-# include "../minilibx-linux/mlx.h"
 # include "macros_bonus.h"
+# ifdef LINUX
+#  include "../minilibx-linux/mlx.h"
+# elif defined(MACOS)
+#  include "../minilibx_macos/mlx.h"
+# endif
 # include "struct_bonus.h"
 # include <stdio.h>
 # include <stdlib.h>

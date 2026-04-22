@@ -14,7 +14,11 @@
 # define CUB3D_H
 
 # include "../libft/libft.h"
-# include "../minilibx-linux/mlx.h"
+# ifdef LINUX
+#  include "../minilibx-linux/mlx.h"
+# elif defined(MACOS)
+#  include "../minilibx_macos/mlx.h"
+# endif
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>

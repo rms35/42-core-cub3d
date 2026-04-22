@@ -19,13 +19,13 @@ void	cub3d_mouse_move(t_win *win, int x, int y)
 	mlx_mouse_move(win->winptr, x, y);
 }
 
-void	cub3d_mouse_show(const t_win *win)
+void	cub3d_mouse_show(t_win *win)
 {
 	(void)win;
 	mlx_mouse_show();
 }
 
-void	cub3d_mouse_hide(const t_win *win)
+void	cub3d_mouse_hide(t_win *win)
 {
 	(void)win;
 	mlx_mouse_hide();
