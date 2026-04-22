@@ -56,8 +56,8 @@ void	setup_mlx(t_win *win, t_img *img)
 	}
 	setup_mlx_hooks(win);
 	setup_main_image(win, img);
-	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
-	mlx_mouse_hide(win->mlxptr, win->winptr);
+	cub3d_mouse_move(win, WIDTH / 2, HEIGHT / 2);
+	cub3d_mouse_hide(win);
 }
 
 void	alloc_sprites(t_win *win)

@@ -68,6 +68,9 @@ int				rotate_left(t_player *player);
 int				rotate_right(t_player *player);
 void			handle_mouse_rotation(const t_win *win);
 void			open_door(const t_win *win);
+void			cub3d_mouse_hide(t_win *win);
+void			cub3d_mouse_move(t_win *win, int x, int y);
+void			cub3d_mouse_show(t_win *win);
 
 // Rendering
 

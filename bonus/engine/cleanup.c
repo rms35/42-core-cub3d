@@ -35,7 +35,7 @@ static void	destroy_mlx_display(t_win *win)
 
 void	cleanup_mlx(t_win *win)
 {
-	mlx_mouse_show(win->mlxptr, win->winptr);
+	cub3d_mouse_show(win);
 	if (win->img && win->img->img)
 		mlx_destroy_image(win->mlxptr, win->img->img);
 	if (win->winptr)

@@ -30,8 +30,8 @@ int	mouse_hook(int x, int y, void *param)
 	win = (t_win *)param;
 	if (!first_call)
 	{
-		mlx_mouse_hide(win->mlxptr, win->winptr);
-		mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
+		cub3d_mouse_hide(win);
+		cub3d_mouse_move(win, WIDTH / 2, HEIGHT / 2);
 		first_call = 1;
 		return (0);
 	}
@@ -41,7 +41,7 @@ int	mouse_hook(int x, int y, void *param)
 	delta_y = y - (HEIGHT / 2);
 	win->player->m_delta_x += delta_x;
 	win->player->m_delta_y += delta_y;
-	mlx_mouse_move(win->mlxptr, win->winptr, WIDTH / 2, HEIGHT / 2);
+	cub3d_mouse_move(win, WIDTH / 2, HEIGHT / 2);
 	return (1);
 }
 

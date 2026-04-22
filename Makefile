@@ -16,7 +16,7 @@ NAME        = build/cub3D
 NAME_BONUS  = build/cub3D_bonus
 
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror -flto -O3 #-MMD -fno-omit-frame-pointer
+CFLAGS      = -Wall -Wextra -Werror -flto -O3 -MMD -fno-omit-frame-pointer
 #-fsanitize=address,leak -O0 -g3
 RM          = rm -rf
 
@@ -68,6 +68,8 @@ SRCS_FILES  = main.c \
 SRCS_B_FILES = main.c \
 			   engine/hooks.c \
 			   engine/input.c \
+			   engine/mouse_linux.c \
+			   engine/mouse_mcos.c \
 			   engine/input2.c \
 			   engine/move_player.c \
 			   engine/player_dir.c \
