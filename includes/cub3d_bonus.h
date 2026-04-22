@@ -91,10 +91,11 @@ void			calculate_draw_params(t_win *win, t_sprite *sprite,
 // Sprite animation
 
 void			animate_fire(t_sprite *s, double delta_time);
-void			animate_sprites(t_sprite *s, double delta_time, size_t n_sprites);
+void			animate_sprites(t_sprite *s, double delta_time,
+					size_t n_sprites);
 void			animate_door(t_sprite *s, double delta_time);
-t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x, int
-		next_y);
+t_sprite		*get_door(t_sprite *s, size_t n_sprites, int next_x,
+					int next_y);
 
 // Cleanup
 

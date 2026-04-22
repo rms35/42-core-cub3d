@@ -69,7 +69,6 @@ void	open_door(const t_win *win)
 
 	next_y = (int)(win->player->pos_y + win->player->dir_y);
 	next_x = (int)(win->player->pos_x + win->player->dir_x);
-
 	if (win->map->grid[next_y * win->map->width + next_x] == 'D')
 	{
 		door = get_door(win->sprites, win->n_sprites, next_x, next_y);
