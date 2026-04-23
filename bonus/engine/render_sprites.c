@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_sprites.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rafael-m <rafael-m@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/17 11:25:32 by rafael-m          #+#    #+#             */
-/*   Updated: 2026/04/20 12:00:00 by rafael           ###   ########.fr       */
+/*   Updated: 2026/04/23 19:36:50 by rafael-m         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,25 @@
 static void	apply_sprite_pixel(t_sprite *sprite, unsigned int *dest,
 	unsigned int color)
 {
+	unsigned int	red;
+	unsigned int	green;
+	unsigned int	blue;
+	unsigned int	alpha_int;
+
 	if ((color & 0x00FFFFFF) != 0)
 	{
 		if ((sprite->sprite_id == FIRE) && ((color >> 16) & 0xFF) > 150
 			&& ((color >> 8) & 0xFF) > 100)
-			*dest = alpha_blend(*dest, color, 0.7);
+		{
+			alpha_int = 179;
+			red = ((((*dest >> 16) & 0xFF) * (256 - alpha_int))
+					+ (((color >> 16) & 0xFF) * alpha_int)) >> 8;
+			green = ((((*dest >> 8) & 0xFF) * (256 - alpha_int))
+					+ (((color >> 8) & 0xFF) * alpha_int)) >> 8;
+			blue = (((*dest & 0xFF) * (256 - alpha_int))
+					+ ((color & 0xFF) * alpha_int)) >> 8;
+			*dest = (red << 16) | (green << 8) | blue;
+		}
 		else
 			*dest = color;
 	}
