@@ -6,7 +6,7 @@
 /*   By: almorene <almorene@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/12 00:00:00 by almorene          #+#    #+#             */
-/*   Updated: 2026/04/12 00:00:00 by almorene         ###   ########.fr       */
+/*   Updated: 2026/04/23 19:32:02 by almorene         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	read_cub_file(const char *path, t_list **lines)
 		return (error_msg("Could not open map file"));
 	line = read_line(fd);
 	if (!line)
-		return (11);
+		return (error_msg(("map empty")), 11);
 	while (line)
 	{
 		node = ft_lstnew(line);
